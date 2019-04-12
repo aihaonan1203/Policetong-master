@@ -3,312 +3,287 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
     android:background="@color/mycolor"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.example.administrator.policetong.MainActivity">
 
     <ScrollView
-        android:background="@color/text_white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/text_white"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <RelativeLayout
-                android:background="@color/mycolor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:background="@color/mycolor"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:textColor="#fff"
                     android:layout_centerInParent="true"
                     android:padding="8dp"
-                    />
+                    android:text="@string/app_name"
+                    android:textColor="#fff"
+                    android:textSize="17sp" />
 
                 <ImageView
                     android:id="@+id/main_more"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_more_vert_black_24dp"
-                    />
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_more_vert_black_24dp" />
 
             </RelativeLayout>
 
 
             <LinearLayout
-                android:background="@color/mycolor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_weight="2.1"
-                android:padding="20dp"
-                >
+                android:background="@color/mycolor"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <ImageView
                     android:id="@+id/ac_photo"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:src="@drawable/touxiang_2"
-                    />
+                    android:src="@drawable/touxiang_2" />
 
                 <TextView
                     android:id="@+id/ac_username"
-                    android:textColor="@color/text_white"
-                    android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:text="@string/ac_name"
-                    />
+                    android:textColor="@color/text_white" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
                 android:layout_weight="1"
-                >
+                android:background="#fff"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
 
                 <TextView
                     android:id="@+id/tv_location"
-                    android:gravity="center"
-                    android:layout_marginTop="15dp"
-                    android:padding="5dp"
-                    android:background="@drawable/dizhikuang"
                     android:layout_width="250dp"
-                    android:textSize="12sp"
-                    android:singleLine="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/dizhikuang"
                     android:ellipsize="marquee"
                     android:focusable="true"
-                    android:marqueeRepeatLimit="marquee_forever"
                     android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:padding="5dp"
                     android:scrollHorizontally="true"
-                    android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:text="欢迎使用二大中队台账APP，祝您工作顺利，生活愉快"
                     android:textColor="#666666"
-                    />
+                    android:textSize="12sp" />
 
                 <LinearLayout
-                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/tv_email"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/icon_yj"
-                            />
+                            android:src="@drawable/icon_yj" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="@string/youjian"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/tv_jbtz"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/icon_jbtz"
-                            />
+                            android:src="@drawable/icon_jbtz" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="@string/jbtz"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/tv_aqpc"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/icon_aqpc"
-                            />
+                            android:src="@drawable/icon_aqpc" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="@string/aupc"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                 </LinearLayout>
 
 
                 <LinearLayout
-                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/tv_zfzg"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/icon_zfzg"
-                            />
+                            android:src="@drawable/icon_zfzg" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="@string/zfzg"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/tv_rcqw"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/icon_rcqw"
-                            />
+                            android:src="@drawable/icon_rcqw" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/rcqw"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_black" />
+                            android:textColor="@color/text_black"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/tv_dltz"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/icon_dltz"
-                            />
+                            android:src="@drawable/icon_dltz" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="@string/dlzg"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                 </LinearLayout>
 
 
-
                 <LinearLayout
-                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/tv_notice"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/notice"
-                            />
+                            android:src="@drawable/notice" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="查看公告"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/tv_study"
@@ -317,24 +292,22 @@
                             android:src="@drawable/study" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="学习台账"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
 
                     </LinearLayout>
 
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/tv_manage"
@@ -343,180 +316,164 @@
                             android:src="@drawable/manage" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="管理/查看"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
 
 
-
                 <LinearLayout
-                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/iv_car"
                             android:layout_width="40dp"
                             android:layout_height="50dp"
                             android:onClick="help"
-                            android:src="@drawable/icon_tingchechang"
-                            />
+                            android:src="@drawable/icon_tingchechang" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="修改密码"
-                            android:textSize="13sp"
+                            android:layout_marginTop="3dp"
+                            android:text="停车场管理"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/iv_pwd"
                             android:layout_width="40dp"
                             android:layout_height="50dp"
                             android:onClick="help"
-                            android:src="@drawable/chage_pwd"
-                            />
+                            android:src="@drawable/chage_pwd" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="修改密码"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/tv_help"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:onClick="help"
-                            android:src="@drawable/ic_help_black_24dp"
-                            />
+                            android:src="@drawable/ic_help_black_24dp" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="帮助"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="50dp"
                             android:onClick="help"
-                            android:src="@drawable/icon_tingchechang"
-                            />
+                            android:src="@drawable/icon_tingchechang" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="修改密码"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="50dp"
                             android:onClick="help"
-                            android:src="@drawable/chage_pwd"
-                            />
+                            android:src="@drawable/chage_pwd" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="修改密码"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        >
+                        android:orientation="vertical">
+
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:onClick="help"
-                            android:src="@drawable/ic_help_black_24dp"
-                            />
+                            android:src="@drawable/ic_help_black_24dp" />
 
                         <TextView
-                            android:layout_marginTop="3dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
                             android:text="帮助"
-                            android:textSize="13sp"
                             android:textColor="@color/text_black"
-                            />
+                            android:textSize="13sp" />
                     </LinearLayout>
 
 
@@ -527,8 +484,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-
 
 
 </LinearLayout>
