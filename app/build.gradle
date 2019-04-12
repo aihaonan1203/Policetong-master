@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.example.administrator.policetong"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildToolsVersion '27.0.3'
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
+        }
+    }
+
+
+}
+
+
+
+
+dependencies {
+    androidTestCompile('com.android.support:support-annotations:26.1.0') {
+        force = true
+    }
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation files('libs/volley.jar')
+    implementation files('libs/BaiduLBS_Android.jar')
+    compile 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
+    compile 'com.master.android:permissionhelper:2.0'
+    compile 'com.yarolegovich:lovely-dialog:1.1.0'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.github.nukc.stateview:library:1.5.2'//空白页展示
+}

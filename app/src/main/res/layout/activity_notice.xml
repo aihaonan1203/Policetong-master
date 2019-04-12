@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#f4f4f4"
+    tools:context="com.example.administrator.policetong.activity.ModulesActivity">
+
+
+
+    <RelativeLayout
+        android:padding="7dp"
+        android:background="#3291FF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/ac_arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            />
+
+        <TextView
+            android:id="@+id/ac_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="公告详情"
+            android:layout_centerInParent="true"
+            android:textColor="@color/text_white"
+            />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/f_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <ListView
+            android:layout_marginTop="10dp"
+            android:id="@+id/lv_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="#f4f4f4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:divider="#f4f4f4"
+            android:dividerHeight="10dp"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>

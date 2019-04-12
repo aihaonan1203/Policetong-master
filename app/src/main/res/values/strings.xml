@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name">九江市交警警务台账</string>
+
+    <string name="zhuxiao">注销账户</string>
+    <string name="more_dian">获取位置信息</string>
+    <string name="ac_name">张三（队长）</string>
+    <string name="youjian">邮件收发</string>
+    <string name="jbtz">警保台账</string>
+    <string name="aupc">安全排查</string>
+    <string name="zfzg">走访整改</string>
+    <string name="rcqw">日常勤务</string>
+    <string name="dlzg">道路台账</string>
+    <string name="pc_title">警保台账条目:</string>
+    <string name="delete">删除</string>
+    <string name="amend">修改</string>
+    <string name="cancle">取消</string>
+    <string name="input_pwd">请输入密码</string>
+    <string name="input_userid">请输入工号</string>
+    <string name="login">登录</string>
+    <string name="notice">您有2条公告信息</string>
+    <string name="notice_button">下次登录不在提示此次公告</string>
+    <string name="verify">确认</string>
+    <string name="ip">47.106.70.175</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="emailaddress">邮件地址</string>
+
+    <string name="emailpassword">密码</string>
+
+    <string name="emaillogin">登入</string>
+
+    <string name="remenberPassword">记住密码</string>
+
+    <string name="autoLogin">自动登入</string>
+
+    <string name="tv_title">邮件收发</string>
+
+    <string name="tv_online">所有在线好友</string>
+
+    <string name="tv_my">我的好友</string>
+
+    <string name="tv_stu">我的同学</string>
+
+    <string name="back">返回</string>
+
+    <string name="writer">新邮件</string>
+
+    <string name="send">发送</string>
+
+    <string name="tv_t">收件人:</string>
+
+    <string name="tv_f">发件人:</string>
+
+    <string name="tv_zhuti">主题:</string>
+
+    <string name="acctchment">附件</string>
+
+    <string name="content">正 文</string>
+
+    <string name="tv_new">新</string>
+
+    <string name="btn_cancel">取消</string>
+
+    <string name="btn_relay">回复/转发</string>
+
+    <string name="mail_box">收件箱</string>
+
+    <string name="mail_content">邮件</string>
+
+    <string name="btn_replay">回复</string>
+
+    <string name="constant">联系人</string>
+
+    <string name="choose">确定</string>
+
+    <string name="caogaoxiang">草稿箱</string>
+
+    <string-array name="natureofunit">
+        <item>政府机关</item>
+        <item>行政单位</item>
+        <item>事业单位</item>
+        <item>企业</item>
+        <item>中小学校</item>
+        <item>幼儿园</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="Visitingpurpose">
+        <item>一般性走访</item>
+        <item>下达整改</item>
+        <item>宣传教育</item>
+        <item>其他</item>
+    </string-array>
+
+
+    <string-array name="qwtype">
+        <item>路检路查</item>
+        <item>警保卫</item>
+        <item>接警处</item>
+        <item>疏通道路</item>
+        <item>护学岗</item>
+        <item>高峰执勤</item>
+        <item>夜间巡逻</item>
+        <item>违停整治</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="path">
+        <item>城市道路</item>
+        <item>国道道路</item>
+        <item>县道</item>
+        <item>村村通道路</item>
+    </string-array>
+
+    <string-array name="num">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="daily">
+        <item>大货车</item>
+        <item>超标车</item>
+        <item>无牌无证</item>
+        <item>套牌,伪造车牌</item>
+        <item>超速</item>
+        <item>酒驾</item>
+        <item>农村面包车</item>
+        <item>其他</item>
+    </string-array>
+</resources>

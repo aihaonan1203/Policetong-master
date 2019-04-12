@@ -1,0 +1,60 @@
+package com.example.administrator.policetong.utils;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+
+import java.io.File;
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static android.os.Environment.DIRECTORY_PICTURES;
+
+/**
+ * Created by Administrator on 2018/9/14.
+ */
+
+public class FileUtils {
+    public static String getBitmapDiskFile(Context context) {
+        String cachePath;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable()) {
+            cachePath = context.getExternalFilesDir(DIRECTORY_PICTURES).getAbsolutePath();
+        } else {
+            cachePath =context.getFilesDir().getAbsolutePath();
+        }
+        return new File(cachePath +File.separator+ getBitmapFileName()).getAbsolutePath();
+    }
+
+    public static final String bitmapFormat = ".png";
+
+    /**
+     * 生成bitmap的文件名:日期，md5加密
+     *
+     * @return
+     */
+    public static String getBitmapFileName() {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            final MessageDigest mDigest = MessageDigest.getInstance("MD5");
+            String currentDate = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            mDigest.update(currentDate.getBytes("utf-8"));
+            byte[] b = mDigest.digest();
+            for (int i = 0; i < b.length; ++i) {
+                String hex = Integer.toHexString(0xFF & b[i]);
+                if (hex.length() == 1) {
+                    stringBuilder.append('0');
+                }
+                stringBuilder.append(hex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String fileName = stringBuilder.toString() + bitmapFormat;
+        return fileName;
+    }
+}

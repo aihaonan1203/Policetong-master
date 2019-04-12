@@ -1,0 +1,290 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_white"
+    android:orientation="vertical"
+    tools:context="com.example.administrator.policetong.fragment.PoliceConfirmed">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="开始时间:"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/ds_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:inputType="text"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="结束时间:"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/ds_end_time"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:inputType="text"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="出动警力:"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/ds_police"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:inputType="text"
+            android:paddingLeft="5dp"
+            android:text="X民警X协警X车" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingRight="20dp">
+
+        <Button
+            android:id="@+id/ds_btn_paddr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="道路"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/ds_paddr"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:inputType="text"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="里程/参照物:"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/ds_licheng"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:inputType="text"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingRight="20dp">
+
+        <Button
+            android:id="@+id/ds_btn_qwtype"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="勤务类型"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/ds_qwtype"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:inputType="text"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mLinerLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="重点查处违法行为:"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/ds_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:text="点击选择" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/ds_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="您还没有选择重点查处违法行为"
+        android:textColor="#ff0000"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/mLinerLayout2"
+        android:visibility="gone"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="重点查处违法行为:"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:id="@+id/input_data"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/kuang"
+            android:inputType="text"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="简要内容："
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/ds_context"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/kuang"
+        android:gravity="left|top"
+        android:hint="可以为空"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:text="检查车辆X台，其中X多少X台，X多少X台，X多少X台，二三轮车X台，查扣XX台"
+        android:textSize="20sp"
+        tools:ignore="RtlHardcoded" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/ds_add_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@color/mycolor"
+            android:text="提交"
+            android:textColor="@color/text_white" />
+
+        <Button
+            android:id="@+id/ds_add_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:background="@color/mycolor"
+            android:text="取消"
+            android:textColor="@color/text_white"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+</LinearLayout>

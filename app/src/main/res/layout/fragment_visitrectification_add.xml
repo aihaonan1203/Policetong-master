@@ -1,0 +1,143 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    tools:context="com.example.administrator.policetong.fragment.SafetyChecks">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/vr_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="走访单位"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/visit_unitname"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/vr_unit_xz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="单位性质"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/visit_unit"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:paddingLeft="5dp"  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/vr_mudi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="走访目的"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/visit_purpose"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:paddingLeft="5dp"  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="简要内容："
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/visit_context"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:gravity="top|left"
+            android:paddingLeft="5dp"
+            tools:ignore="RtlHardcoded" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/visit_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="20dp"
+            android:background="@color/mycolor"
+            android:text="提交"
+            android:textColor="@color/text_white" />
+
+        <Button
+            android:id="@+id/visit_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:background="@color/mycolor"
+            android:text="取消"
+            android:textColor="@color/text_white"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</LinearLayout>

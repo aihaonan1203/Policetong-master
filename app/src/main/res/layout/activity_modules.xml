@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#3291FF"
+    tools:context="com.example.administrator.policetong.activity.ModulesActivity">
+
+
+
+    <RelativeLayout
+        android:padding="7dp"
+        android:background="#3291FF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/ac_arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            />
+
+        <TextView
+            android:id="@+id/ac_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:textColor="@color/text_white"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ac_context"
+        android:orientation="vertical"
+        ></LinearLayout>
+
+</LinearLayout>

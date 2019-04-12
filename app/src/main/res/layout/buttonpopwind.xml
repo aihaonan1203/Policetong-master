@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    >
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:padding="10dp"
+                android:textColor="@color/mycolor"
+                android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                android:text="选中的是第"
+                />
+            <TextView
+                android:id="@+id/number"
+                android:padding="10dp"
+                android:textColor="@color/mycolor"
+                android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                android:text="5"
+                />
+            <TextView
+                android:padding="10dp"
+                android:textColor="@color/mycolor"
+                android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                android:text="条，确认操作:"
+                />
+
+        </LinearLayout>
+
+
+        <Button
+            android:layout_marginTop="1dp"
+            android:id="@+id/btn_pop_camera"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="@string/amend"
+            android:textColor="@color/text_white"
+            android:background="@color/mycolor"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btn_pop_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_white"
+            android:background="@color/mycolor"
+            android:text="@string/cancle"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

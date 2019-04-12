@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    tools:context="com.example.administrator.policetong.fragment.SafetyChecks">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="姓名："
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/stu_name"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="所属中队："
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/stu_zd"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:paddingLeft="5dp"  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="记录时间："
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/stu_time"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:paddingLeft="5dp"  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="学习内容："
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/stu_context"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:gravity="top|left"
+            android:paddingLeft="5dp"
+            tools:ignore="RtlHardcoded" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/stu_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="20dp"
+            android:background="@color/mycolor"
+            android:text="提交"
+            android:textColor="@color/text_white" />
+
+        <Button
+            android:id="@+id/stu_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:background="@color/mycolor"
+            android:text="取消"
+            android:textColor="@color/text_white"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.administrator.policetong">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <application
+        android:name=".em.app.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.administrator.policetong.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:ignore="WrongManifestParent">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="yqQbGCYzGHh3frRmZzrCc80GECUa3tis" />
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+
+        <activity android:name=".activity.RegActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.ModulesActivity" />
+        <activity
+            android:name=".em.LoginActivity"
+            android:label="@string/app_name" />
+        <activity android:name=".em.HomeActivity" />
+        <activity android:name=".em.MailEditActivity" />
+        <activity
+            android:name=".em.MailEditActivity"
+            tools:ignore="DuplicateActivity" />
+        <activity android:name=".em.MailBoxActivity" />
+        <activity android:name=".em.MailContentActivity" />
+        <activity android:name=".em.MailConstactsActivity" />
+        <activity android:name=".em.MailAddConstact" />
+        <activity android:name=".em.MailCaogaoxiangActivity" />
+
+        <provider
+            android:name=".em.provider.EmailConstantProvider"
+            android:authorities="com.emailconstantprovider" />
+        <provider
+            android:name=".em.provider.CaogaoxiangProvider"
+            android:authorities="com.caogaoxiangprovider" />
+        <provider
+            android:name=".em.provider.AttachmentProvider"
+            android:authorities="com.attachmentprovider" />
+        <provider
+            android:name=".em.provider.EmailStatusProvider"
+            android:authorities="com.emailstatusprovider" />
+
+        <activity android:name=".activity.HelpActivity" />
+        <activity android:name=".activity.NoticeActivity"></activity>
+    </application>
+
+</manifest>

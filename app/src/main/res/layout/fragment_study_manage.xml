@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/text_white"
+    tools:context="com.example.administrator.policetong.fragment.manage.PoliceConfirmed_manage">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="学习台账目录"
+        android:textColor="@color/text_black"
+        android:textSize="18sp" />
+
+    <ListView
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:divider="#cccccc"
+        android:dividerHeight="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pc_manage_listview" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/nodata"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="没有数据..."
+        android:textSize="22sp"
+        android:gravity="center"
+        />
+
+</LinearLayout>

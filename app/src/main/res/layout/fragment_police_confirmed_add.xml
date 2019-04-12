@@ -1,0 +1,205 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_white"
+    android:orientation="vertical"
+    tools:context="com.example.administrator.policetong.fragment.PoliceConfirmed">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
+            android:text="到岗时间:"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:paddingLeft="5dp"
+            android:id="@+id/pc_add_time"
+            android:inputType="text"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/kuang"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/pc_add_gd"
+            android:layout_width="match_parent"
+            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
+            android:text="岗点"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:paddingLeft="5dp"
+            android:id="@+id/pc_add_paddr"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/pc_add_dw"
+            android:layout_width="match_parent"
+            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
+            android:text="勤务单位"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:paddingLeft="5dp"
+            android:id="@+id/pc_add_unit"
+            android:inputType="text"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/kuang"
+            />
+    </LinearLayout>
+
+
+
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_weight="2.5"
+            android:layout_height="wrap_content"
+            android:text="是否调灯:"
+            android:textSize="18sp"
+            />
+
+        <RadioGroup
+            android:id="@+id/pc_add_RadioGroup"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <RadioButton
+                android:id="@+id/pc_r1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="是"
+                android:checked="true"
+                />
+
+            <RadioButton
+                android:id="@+id/pc_r2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="否"
+                android:checked="false"
+                android:layout_marginLeft="20dp"
+                />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="备注："
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        />
+
+    <EditText
+        android:gravity="left|top"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:id="@+id/pc_add_remark"
+        android:background="@drawable/kuang"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="可以为空"
+        tools:ignore="RtlHardcoded" />
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+
+    <Button
+        android:id="@+id/pc_add_submit"
+        android:textColor="@color/text_white"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:background="@color/mycolor"
+        android:text="提交" />
+
+    <Button
+        android:id="@+id/pc_add_cancle"
+        android:visibility="gone"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/text_white"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:background="@color/mycolor"
+        android:text="取消" />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
