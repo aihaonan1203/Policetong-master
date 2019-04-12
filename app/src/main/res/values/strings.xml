@@ -130,4 +130,7 @@
         <item>农村面包车</item>
         <item>其他</item>
     </string-array>
+
+
+    <string name="digits">1234567890qwertyuiopasdfghjklzxcvbnm.</string>
 </resources>

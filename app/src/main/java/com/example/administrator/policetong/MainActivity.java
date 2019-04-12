@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -27,7 +26,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -42,11 +40,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.administrator.policetong.activity.ChangePwdActivity;
 import com.example.administrator.policetong.activity.HelpActivity;
 import com.example.administrator.policetong.activity.LoginActivity;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.NoticeActivity;
-import com.example.administrator.policetong.activity.RegActivity;
 import com.example.administrator.policetong.bean.NoticeBean;
 import com.example.administrator.policetong.bean.Notice_bean;
 import com.example.administrator.policetong.httppost.getNetInfo;
@@ -54,7 +52,6 @@ import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.MorePopupWindow;
 import com.example.administrator.policetong.utils.NotificationUtils;
-import com.example.administrator.policetong.utils.OtherDialog;
 import com.example.administrator.policetong.utils.Util;
 import com.master.permissionhelper.PermissionHelper;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
@@ -91,10 +88,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView tv_dltz;
     private ImageView tv_manage;
     private ImageView iv_study;
+    private ImageView iv_change_password;
     private TextView ac_username;
     private static final int BAIDU_READ_PHONE_STATE = 100;
     private Timer timer;
-    private String json="";
+    private String json = "";
     private List<NoticeBean.MsgArrayBean> msgArrayBeans;
 
     @SuppressLint("ObsoleteSdkInt")
@@ -184,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("onSuccess: ", object.toString());
                 if (object.getString("ERRMSG").equals("成功")) {
                     JSONArray jsonArray = object.getJSONArray("MsgArray");
-                    if (msgArrayBeans!=null&&msgArrayBeans.size()>0){
+                    if (msgArrayBeans != null && msgArrayBeans.size() > 0) {
                         msgArrayBeans.clear();
                     }
                     msgArrayBeans = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), NoticeBean.MsgArrayBean.class);
@@ -197,14 +195,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (msgArrayBeans.size() > 0) {
                         NoticeBean.MsgArrayBean bean = msgArrayBeans.get(0);
                         String s = bean.toString();
-                        if (!s.equals(json)&&!json.equals("")) {
+                        if (!s.equals(json) && !json.equals("")) {
                             NotificationUtils notificationUtils = new NotificationUtils(MainActivity.this);
                             notificationUtils.sendNotification("公告通知", "您有一条新的公告通知,请及时处理!");
-                            json=s;
-                            showDialog(bean.getMsg(),bean.getDate());
-                        }else {
+                            json = s;
+                            showDialog(bean.getMsg(), bean.getDate());
+                        } else {
                             if (json.equals("")) {
-                                json=s;
+                                json = s;
                                 showDialog(String.valueOf(msgArrayBeans.size()));
                             }
                         }
@@ -223,31 +221,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void showDialog(String msg,String time){
+    private void showDialog(String msg, String time) {
         new LovelyStandardDialog(MainActivity.this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                 .setTopColorRes(R.color.ic_launcher_background)
                 .setButtonsColorRes(R.color.ic_launcher_background)
                 .setIcon(R.mipmap.ic_launcher)
-                .setTitle(getString(R.string.app_name)+"-公告")
-                .setMessage(msg+"\n\n"+time)
-                .setPositiveButton(android.R.string.ok,null)
-                .setPositiveButton("退出",null)
+                .setTitle(getString(R.string.app_name) + "-公告")
+                .setMessage(msg + "\n\n" + time)
+                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton("退出", null)
                 .show();
     }
 
-    private void showDialog(String i){
+    private void showDialog(String i) {
         new LovelyStandardDialog(MainActivity.this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                 .setTopColorRes(R.color.ic_launcher_background)
                 .setButtonsColorRes(R.color.ic_launcher_background)
                 .setIcon(R.mipmap.ic_launcher)
                 .setTitle(getString(R.string.app_name))
-                .setMessage("当前服务器共有"+i+"条未到期的公告，请确认是否需要查看。")
-                .setNegativeButton(android.R.string.no,null)
+                .setMessage("当前服务器共有" + i + "条未到期的公告，请确认是否需要查看。")
+                .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton("点击查看", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         EventBus.getDefault().postSticky(msgArrayBeans);
-                        startActivity(new Intent(MainActivity.this,NoticeActivity.class));
+                        startActivity(new Intent(MainActivity.this, NoticeActivity.class));
                     }
                 })
                 .show();
@@ -339,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().postSticky(msgArrayBeans);
-                startActivity(new Intent(MainActivity.this,NoticeActivity.class));
+                startActivity(new Intent(MainActivity.this, NoticeActivity.class));
             }
         });
         mMainMore = findViewById(R.id.main_more);
@@ -364,6 +362,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ac_username = (TextView) findViewById(R.id.ac_username);
         iv_study = findViewById(R.id.tv_study);
         iv_study.setOnClickListener(this);
+        iv_change_password = findViewById(R.id.iv_pwd);
+        iv_change_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,ChangePwdActivity.class));
+            }
+        });
         tv_manage = findViewById(R.id.tv_manage);
         tv_manage.setOnClickListener(this);
         SharedPreferences sharedPreferences = getSharedPreferences("userinfo", MODE_PRIVATE);
