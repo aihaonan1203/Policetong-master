@@ -3,141 +3,263 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/text_white"
-    android:gravity="center"
+    android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingTop="10dp"
-    tools:context="com.example.administrator.policetong.fragment.SafetyChecks">
+    tools:ignore="RtlSymmetry">
 
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        >
 
-        <Button
-            android:id="@+id/vr_unit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="走访单位"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/visit_unitname"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/vr_unit_xz"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="单位性质"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/visit_unit"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp"  />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/vr_mudi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="走访目的"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/visit_purpose"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp"  />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:text="简要内容："
-            android:textSize="18sp" />
+            android:orientation="vertical"
+            >
+            <TextView
+                android:text="走访时间:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/txt_color"
+                android:textSize="18sp"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_5"
+                />
 
-        <EditText
-            android:id="@+id/visit_context"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:gravity="top|left"
-            android:paddingLeft="5dp"
-            tools:ignore="RtlHardcoded" />
-    </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_5"
+                android:layout_marginEnd="@dimen/magrgin_txt_5"
+                >
+
+                <EditText
+                    android:paddingStart="5dp"
+                    android:id="@+id/visit_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/k_height"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/kuang"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/vr_select_time"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/icon_xiala" />
+            </RelativeLayout>
+
+            <TextView
+                android:text="走访单位:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/txt_color"
+                android:textSize="18sp"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_5"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_5"
+                android:layout_marginEnd="@dimen/magrgin_txt_5"
+                >
+
+                <EditText
+                    android:paddingStart="5dp"
+                    android:id="@+id/visit_unitname"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/k_height"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/kuang"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/vr_unit"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/icon_xiala" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:text="单位性质:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/txt_color"
+                android:textSize="18sp"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_5"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_5"
+                android:layout_marginEnd="@dimen/magrgin_txt_5"
+                >
+
+                <EditText
+                    android:paddingStart="5dp"
+                    android:id="@+id/visit_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/k_height"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/kuang"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/vr_unit_xz"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/icon_xiala" />
+            </RelativeLayout>
+
+            <TextView
+                android:text="走访目的:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/txt_color"
+                android:textSize="18sp"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_5"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_5"
+                android:layout_marginEnd="@dimen/magrgin_txt_5"
+                >
+
+                <EditText
+                    android:paddingStart="5dp"
+                    android:id="@+id/visit_purpose"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/k_height"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/kuang"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/vr_mudi"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/icon_xiala" />
+            </RelativeLayout>
 
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:text="简要内容:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/txt_color"
+                android:textSize="18sp"
+                android:layout_marginStart="@dimen/magrgin_txt_5"
+                android:layout_marginTop="@dimen/magrgin_txt_1"
+                />
 
-        <Button
-            android:id="@+id/visit_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_margin="20dp"
-            android:background="@color/mycolor"
-            android:text="提交"
-            android:textColor="@color/text_white" />
+            <EditText
+                android:id="@+id/visit_context"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="@dimen/magrgin_txt_5"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/kuang"
+                android:gravity="top|left"
+                android:paddingLeft="5dp"
+                tools:ignore="RtlHardcoded" />
 
-        <Button
-            android:id="@+id/visit_cancle"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:background="@color/mycolor"
-            android:text="取消"
-            android:textColor="@color/text_white"
-            android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                >
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_photo"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/magrgin_txt_5"
+                    android:layout_height="wrap_content"
+                    android:text="@string/photo"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_take_photo"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/icon_take_photo"
+                    android:layout_marginEnd="10dp"
+                    />
+
+                <Button
+                    android:id="@+id/btn_preview"
+                    android:text="预览"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mycolor"
+                    android:textColor="@color/text_white"
+                    android:layout_marginEnd="10dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/visit_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:background="@color/mycolor"
+                    android:text="提交"
+                    android:textColor="@color/text_white" />
+
+                <Button
+                    android:id="@+id/visit_cancle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/mycolor"
+                    android:text="取消"
+                    android:textColor="@color/text_white"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+
 </LinearLayout>

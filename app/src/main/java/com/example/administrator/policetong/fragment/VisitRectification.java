@@ -27,19 +27,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.codbking.widget.DatePickDialog;
+import com.codbking.widget.OnSureLisener;
+import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.BuildConfig;
 import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
+import com.example.administrator.policetong.activity.PreviewActivity;
+import com.example.administrator.policetong.base.BaseFragment;
+import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.example.administrator.policetong.utils.FileUtils;
 import com.example.administrator.policetong.utils.Util;
+import com.luck.picture.lib.entity.LocalMedia;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +62,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,14 +71,17 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VisitRectification extends Fragment implements View.OnClickListener {
+public class VisitRectification extends BaseFragment implements View.OnClickListener {
 
-
+    private Button btn_preview;
+    private ImageView iv_take_photo;
+    private TextView tv_photo;
     private EditText visit_unitname;
     private EditText visit_unit;
     private EditText visit_purpose;
     private EditText visit_context;
-    private Button visit_submit,vr_danwei,vr_mudi,vr_xz;
+    private EditText visit_time;
+    private Button visit_submit,vr_danwei,vr_mudi,vr_xz,visit_select_time;
     private static String SD_CARD_TEMP_DIR;
     public VisitRectification() {
         // Required empty public constructor
@@ -106,7 +121,35 @@ public class VisitRectification extends Fragment implements View.OnClickListener
         vr_danwei = (Button) view.findViewById(R.id.vr_unit);
         vr_mudi = (Button) view.findViewById(R.id.vr_mudi);
         vr_xz = (Button) view.findViewById(R.id.vr_unit_xz);
+        visit_time=view.findViewById(R.id.visit_time);
+        visit_select_time=view.findViewById(R.id.vr_select_time);
         visit_submit.setOnClickListener(this);
+        visit_select_time.setOnClickListener(this);
+        visit_time.setText(LoadingDialog.getTime());
+        btn_preview = (Button) view.findViewById(R.id.btn_preview);
+        iv_take_photo=view.findViewById(R.id.iv_take_photo);
+        tv_photo=view.findViewById(R.id.tv_photo);
+        btn_preview = (Button) view.findViewById(R.id.btn_preview);
+        iv_take_photo=view.findViewById(R.id.iv_take_photo);
+        tv_photo=view.findViewById(R.id.tv_photo);
+        tv_photo.setText(String.format(getResources().getString(R.string.photo),"0"));
+        iv_take_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
+        btn_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectList==null||selectList.size()==0){
+                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                EventBus.getDefault().postSticky(new EvenMsg<>("",selectList));
+                startActivity(new Intent(getActivity(),PreviewActivity.class));
+            }
+        });
         Util.RequestOption(getActivity(), "option1", new Util.RequestOptionCallBack() {
             @Override
             public void CallBack(List<String> list) {
@@ -165,6 +208,26 @@ public class VisitRectification extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.visit_submit:
                 submit();
+                break;
+            case R.id.vr_select_time:
+                DatePickDialog dialog = new DatePickDialog(getActivity());
+                //设置上下年分限制
+                dialog.setYearLimt(5);
+                //设置标题
+                dialog.setTitle("选择时间");
+                //设置类型
+                dialog.setType(DateType.TYPE_ALL);
+                //设置消息体的显示格式，日期格式
+                dialog.setMessageFormat("yyyy-MM-dd HH:mm");
+                //设置点击确定按钮回调
+                dialog.setOnSureLisener(new OnSureLisener() {
+                    @Override
+                    public void onSure(Date date) {
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+                        visit_time.setText(string);
+                    }
+                });
+                dialog.show();
                 break;
         }
     }
@@ -408,5 +471,10 @@ public class VisitRectification extends Fragment implements View.OnClickListener
             handler.sendEmptyMessage(2);
         }
         return rsp;
+    }
+
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+        tv_photo.setText(String.format(getResources().getString(R.string.photo),selectList.size()+""));
     }
 }

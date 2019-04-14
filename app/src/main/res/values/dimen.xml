@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="k_height">35dp</dimen>
+
+    <dimen name="txt_et_size">16sp</dimen>
+
+
+
+
+    <dimen name="magrgin_txt_1">18dp</dimen>
+    <dimen name="magrgin_txt_2">20dp</dimen>
+    <dimen name="magrgin_txt_3">25dp</dimen>
+    <dimen name="magrgin_txt_4">28dp</dimen>
+    <dimen name="magrgin_txt_5">10dp</dimen>
+
+</resources>

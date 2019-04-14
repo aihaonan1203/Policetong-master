@@ -121,12 +121,12 @@ public class Study_manage extends Fragment {
         Button submit = view.findViewById(R.id.stu_submit);
         submit.setText("修改");
         cancle.setVisibility(View.VISIBLE);
-        final EditText stu_name = view.findViewById(R.id.stu_name);
+        final EditText stu_study_time = view.findViewById(R.id.stu_study_time);
         final EditText stu_time = view.findViewById(R.id.stu_time);
         final EditText stu_zd = view.findViewById(R.id.stu_zd);
         final EditText stu_context = view.findViewById(R.id.stu_context);
         final Study_bean bean = listbean.get(id);
-        stu_name.setText(bean.getUsername());
+        stu_study_time.setText(bean.getUsername());
         stu_time.setText(bean.getDate());
         stu_zd.setText(bean.getDetachment());
         stu_context.setText(bean.getContent());
@@ -141,7 +141,7 @@ public class Study_manage extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = stu_name.getText().toString().trim();
+                String name = stu_study_time.getText().toString().trim();
                 if (TextUtils.isEmpty(name)) {
                     Toast.makeText(getContext(), "姓名不能为空", Toast.LENGTH_SHORT).show();
                     return;

@@ -27,6 +27,7 @@ public class MorePopupWindow extends PopupWindow {
         View contentView = LayoutInflater.from(context).inflate(R.layout.popupwindow_layout,
                 null, false);
         TextView textView=contentView.findViewById(R.id.pop_yijian);
+        TextView changepwd=contentView.findViewById(R.id.pop_change_pwd);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,6 +35,14 @@ public class MorePopupWindow extends PopupWindow {
                 callback.onSuccess(0);
             }
         });
+        changepwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+                callback.onSuccess(1);
+            }
+        });
+
         setContentView(contentView);
     }
 

@@ -133,4 +133,5 @@
 
 
     <string name="digits">1234567890qwertyuiopasdfghjklzxcvbnm.</string>
+    <string name="photo">当前选择照片%1$s张</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.administrator.policetong.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,32 +13,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.activity.ModulesActivity;
+import com.example.administrator.policetong.activity.PreviewActivity;
+import com.example.administrator.policetong.base.BaseFragment;
+import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
+import com.luck.picture.lib.entity.LocalMedia;
 
-import org.json.JSONArray;
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StuddyFragment extends Fragment implements View.OnClickListener {
+public class StuddyFragment extends BaseFragment implements View.OnClickListener {
 
     SharedPreferences sp;
-    private EditText stu_name;
+    private EditText stu_study_time;
     private EditText stu_zd;
     private EditText stu_time;
     private EditText stu_context;
     private Button stu_submit;
+    private Button btn_preview;
+    private ImageView iv_take_photo;
+    private TextView tv_photo;
 
     public StuddyFragment() {
         // Required empty public constructor
@@ -55,16 +68,37 @@ public class StuddyFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        stu_name = (EditText) view.findViewById(R.id.stu_name);
+        stu_study_time = (EditText) view.findViewById(R.id.stu_study_time);
         stu_zd = (EditText) view.findViewById(R.id.stu_zd);
         stu_time = (EditText) view.findViewById(R.id.stu_time);
         stu_context = (EditText) view.findViewById(R.id.stu_context);
         stu_submit = (Button) view.findViewById(R.id.stu_submit);
+        btn_preview = (Button) view.findViewById(R.id.btn_preview);
+        iv_take_photo=view.findViewById(R.id.iv_take_photo);
+        tv_photo=view.findViewById(R.id.tv_photo);
         stu_submit.setOnClickListener(this);
         sp=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        stu_name.setText(sp.getString("username"," "));
-        stu_zd.setText(sp.getString("detachment"," "));
+        stu_study_time.setText(sp.getString("username",""));
+        stu_zd.setText(sp.getString("detachment",""));
         stu_time.setText(LoadingDialog.getTime());
+        tv_photo.setText(String.format(getResources().getString(R.string.photo),"0"));
+        iv_take_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
+        btn_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectList==null||selectList.size()==0){
+                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                EventBus.getDefault().postSticky(new EvenMsg<>("",selectList));
+                startActivity(new Intent(getActivity(),PreviewActivity.class));
+            }
+        });
     }
 
     @Override
@@ -78,7 +112,7 @@ public class StuddyFragment extends Fragment implements View.OnClickListener {
 
     private void submit() {
         // validate
-        String name = stu_name.getText().toString().trim();
+        String name = stu_study_time.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(getContext(), "姓名不能为空", Toast.LENGTH_SHORT).show();
             return;
@@ -137,4 +171,10 @@ public class StuddyFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+        tv_photo.setText(String.format(getResources().getString(R.string.photo),selectList.size()+""));
+    }
+
 }

@@ -6,107 +6,130 @@
     android:orientation="vertical"
     tools:context="com.example.administrator.policetong.fragment.PoliceConfirmed">
 
-    <LinearLayout
-        android:gravity="center"
-        android:layout_marginLeft="20dp"
-        android:paddingRight="20dp"
+    <TextView
+        android:text="到岗时间:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:orientation="horizontal"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
+        android:layout_marginStart="@dimen/magrgin_txt_1"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
+        android:layout_marginStart="@dimen/magrgin_txt_1"
+        android:layout_marginEnd="@dimen/magrgin_txt_1"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_weight="2.5"
-            android:layout_height="wrap_content"
-            android:text="到岗时间:"
-            android:textSize="18sp"
-            />
 
         <EditText
             android:paddingLeft="5dp"
             android:id="@+id/pc_add_time"
-            android:inputType="text"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/k_height"
+            android:layout_centerVertical="true"
             android:background="@drawable/kuang"
-            />
-    </LinearLayout>
+            android:inputType="text" />
 
-    <LinearLayout
-        android:gravity="center"
-        android:layout_marginLeft="20dp"
-        android:paddingRight="20dp"
+        <Button
+            android:id="@+id/pc_time"
+            android:layout_width="25dp"
+            android:layout_centerVertical="true"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/icon_xiala"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:text="岗点:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:orientation="horizontal"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
+        android:layout_marginStart="@dimen/magrgin_txt_1"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
+        android:layout_marginStart="@dimen/magrgin_txt_1"
+        android:layout_marginEnd="@dimen/magrgin_txt_1"
         >
-        <Button
-            android:id="@+id/pc_add_gd"
-            android:layout_width="match_parent"
-            android:layout_weight="2.5"
-            android:layout_height="wrap_content"
-            android:text="岗点"
-            android:textSize="18sp"
-            />
 
         <EditText
             android:paddingLeft="5dp"
             android:id="@+id/pc_add_paddr"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
+            android:layout_height="@dimen/k_height"
+            android:layout_centerVertical="true"
             android:background="@drawable/kuang"
             android:inputType="text" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/pc_add_gd"
+            android:layout_width="25dp"
+            android:layout_centerVertical="true"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/icon_xiala"
+            />
+    </RelativeLayout>
 
-
-    <LinearLayout
-        android:gravity="center"
-        android:layout_marginLeft="20dp"
-        android:paddingRight="20dp"
+    <TextView
+        android:text="勤务单位:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:orientation="horizontal"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
+        android:layout_marginStart="@dimen/magrgin_txt_1"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
+        android:layout_marginStart="@dimen/magrgin_txt_1"
+        android:layout_marginEnd="@dimen/magrgin_txt_1"
         >
-        <Button
-            android:id="@+id/pc_add_dw"
-            android:layout_width="match_parent"
-            android:layout_weight="2.5"
-            android:layout_height="wrap_content"
-            android:text="勤务单位"
-            android:textSize="18sp"
-            />
 
         <EditText
             android:paddingLeft="5dp"
             android:id="@+id/pc_add_unit"
-            android:inputType="text"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/k_height"
+            android:layout_centerVertical="true"
             android:background="@drawable/kuang"
-            />
-    </LinearLayout>
+            android:inputType="text" />
 
-
+        <Button
+            android:id="@+id/pc_add_dw"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/icon_xiala" />
+    </RelativeLayout>
 
 
 
     <LinearLayout
         android:gravity="center"
-        android:layout_marginLeft="20dp"
-        android:paddingRight="20dp"
+        android:layout_marginStart="20dp"
+        android:paddingEnd="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
         android:orientation="horizontal"
         >
         <TextView
@@ -151,8 +174,8 @@
         android:layout_height="wrap_content"
         android:text="备注："
         android:textSize="18sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
         />
 
     <EditText

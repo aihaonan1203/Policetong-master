@@ -19,11 +19,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="姓名："
+            android:text="学习时间："
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/stu_name"
+            android:id="@+id/stu_study_time"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="学习地点："
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/stu_study_site"
             android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -83,6 +108,8 @@
             android:paddingLeft="5dp"  />
     </LinearLayout>
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,7 +135,41 @@
             tools:ignore="RtlHardcoded" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        >
 
+        <TextView
+            android:id="@+id/tv_photo"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/photo"
+            />
+
+        <ImageView
+            android:id="@+id/iv_take_photo"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/icon_take_photo"
+            android:layout_marginEnd="10dp"
+             />
+
+        <Button
+            android:id="@+id/btn_preview"
+            android:text="预览"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:background="@color/mycolor"
+            android:textColor="@color/text_white"
+            android:layout_marginEnd="10dp"
+            />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -137,4 +198,5 @@
             android:visibility="gone" />
 
     </LinearLayout>
+
 </LinearLayout>

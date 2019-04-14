@@ -22,15 +22,35 @@
             android:text="时间："
             android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/safety_time"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
+            android:layout_marginRight="5dp"
+            >
+
+            <EditText
+                android:paddingLeft="5dp"
+                android:id="@+id/safety_time"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/k_height"
+                android:layout_centerVertical="true"
+                android:background="@drawable/kuang"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/safety_select_time"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_xiala"
+                />
+        </RelativeLayout>
+
     </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,22 +59,40 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/safety_paddr_btn"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
             android:text="道路"
             android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/safety_paddr"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
+            android:layout_marginRight="5dp"
+            >
+
+            <EditText
+                android:paddingLeft="5dp"
+                android:id="@+id/safety_paddr"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/k_height"
+                android:layout_centerVertical="true"
+                android:background="@drawable/kuang"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/safety_paddr_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_xiala"
+                />
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -72,9 +110,9 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/safety_licheng"
+            android:id="@+id/safety_lidao"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/k_height"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/kuang"
@@ -88,22 +126,39 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/safety_unit_btn"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
             android:text="所属行政单位"
             android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/safety_unit"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
+            android:layout_marginEnd="5dp"
+            >
+
+            <EditText
+                android:paddingLeft="5dp"
+                android:id="@+id/safety_unit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/k_height"
+                android:layout_centerVertical="true"
+                android:background="@drawable/kuang"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/safety_unit_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_xiala" />
+        </RelativeLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -113,22 +168,38 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/safety_fxunit_btn"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
             android:text="发现单位："
             android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/safety_fxunit"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
+            android:layout_marginRight="5dp"
+            >
+
+            <EditText
+                android:paddingLeft="5dp"
+                android:id="@+id/safety_fxunit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/k_height"
+                android:layout_centerVertical="true"
+                android:background="@drawable/kuang"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/safety_fxunit_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_xiala" />
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -148,7 +219,7 @@
         <EditText
             android:id="@+id/safety_shangbao"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/k_height"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/kuang"
@@ -175,7 +246,7 @@
             android:text="是"
             android:id="@+id/safety_zhenggai"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/k_height"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/kuang"
@@ -199,11 +270,47 @@
         <EditText
             android:id="@+id/safety_zgtime"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/k_height"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/kuang"
             android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/tv_photo"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/photo"
+            />
+
+        <ImageView
+            android:id="@+id/iv_take_photo"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/icon_take_photo"
+            android:layout_marginEnd="10dp"
+            />
+
+        <Button
+            android:id="@+id/btn_preview"
+            android:text="预览"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:background="@color/mycolor"
+            android:textColor="@color/text_white"
+            android:layout_marginEnd="10dp"
+            />
+
     </LinearLayout>
 
 

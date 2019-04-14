@@ -48,7 +48,7 @@ public class LoadingDialog {
 	@SuppressLint("SimpleDateFormat")
 	public static String getTime(){
 		data=new Date(System.currentTimeMillis());
-		format=new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+		format=new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 		String string=format.format(data);
 		return string;
 	}

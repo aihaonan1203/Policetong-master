@@ -28,19 +28,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.codbking.widget.DatePickDialog;
+import com.codbking.widget.OnSureLisener;
+import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
+import com.example.administrator.policetong.activity.PreviewActivity;
+import com.example.administrator.policetong.base.BaseFragment;
+import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.example.administrator.policetong.utils.Util;
+import com.luck.picture.lib.entity.LocalMedia;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,6 +62,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +71,7 @@ import java.util.Map;
 /**
  * 日常勤务
  */
-public class DailyService extends Fragment implements View.OnClickListener {
+public class DailyService extends BaseFragment implements View.OnClickListener {
 
 
     private EditText ds_start_time;
@@ -73,6 +84,8 @@ public class DailyService extends Fragment implements View.OnClickListener {
     private EditText ds_text;
     private EditText ds_context;
     private Button ds_add_submit;
+    private Button ds_start_select_time;
+    private Button ds_end_select_time;
     private static String SD_CARD_TEMP_DIR;
     private File file;
 
@@ -82,6 +95,9 @@ public class DailyService extends Fragment implements View.OnClickListener {
 
     double lontitude,latitude;
     boolean state;
+    private Button btn_preview;
+    private ImageView iv_take_photo;
+    private TextView tv_photo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -113,6 +129,10 @@ public class DailyService extends Fragment implements View.OnClickListener {
         ds_licheng = (EditText) view.findViewById(R.id.ds_licheng);
         ds_qwtype = (EditText) view.findViewById(R.id.ds_qwtype);
         ds_select = (Button) view.findViewById(R.id.ds_select);
+        ds_start_select_time = (Button) view.findViewById(R.id.ds_start_select_time);
+        ds_end_select_time = (Button) view.findViewById(R.id.ds_end_select_time);
+        ds_start_select_time.setOnClickListener(this);
+        ds_end_select_time.setOnClickListener(this);
         ds_paddr_btn = (Button) view.findViewById(R.id.ds_btn_paddr);
         ds_qwtype_btn = (Button) view.findViewById(R.id.ds_btn_qwtype);
         ds_text = (EditText) view.findViewById(R.id.ds_text);
@@ -121,6 +141,27 @@ public class DailyService extends Fragment implements View.OnClickListener {
         ds_end_time.setText(LoadingDialog.getTime());
         ds_start_time.setText(LoadingDialog.getTime());
         ds_add_submit.setOnClickListener(this);
+        btn_preview = (Button) view.findViewById(R.id.btn_preview);
+        iv_take_photo=view.findViewById(R.id.iv_take_photo);
+        tv_photo=view.findViewById(R.id.tv_photo);
+        tv_photo.setText(String.format(getResources().getString(R.string.photo),"0"));
+        iv_take_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
+        btn_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectList==null||selectList.size()==0){
+                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                EventBus.getDefault().postSticky(new EvenMsg<>("",selectList));
+                startActivity(new Intent(getActivity(),PreviewActivity.class));
+            }
+        });
         Util.RequestOption(getActivity(), "option5", new Util.RequestOptionCallBack() {
             @Override
             public void CallBack(List<String> list) {
@@ -451,7 +492,51 @@ public class DailyService extends Fragment implements View.OnClickListener {
             case R.id.ds_add_submit:
                 submit();
                 break;
+            case R.id.ds_start_select_time:
+                DatePickDialog dialog = new DatePickDialog(getActivity());
+                //设置上下年分限制
+                dialog.setYearLimt(5);
+                //设置标题
+                dialog.setTitle("选择时间");
+                //设置类型
+                dialog.setType(DateType.TYPE_ALL);
+                //设置消息体的显示格式，日期格式
+                dialog.setMessageFormat("yyyy-MM-dd HH:mm");
+                //设置点击确定按钮回调
+                dialog.setOnSureLisener(new OnSureLisener() {
+                    @Override
+                    public void onSure(Date date) {
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+                        ds_start_time.setText(string);
+                    }
+                });
+                dialog.show();
+                break;
+            case R.id.ds_end_select_time:
+                DatePickDialog dialog2 = new DatePickDialog(getActivity());
+                //设置上下年分限制
+                dialog2.setYearLimt(5);
+                //设置标题
+                dialog2.setTitle("选择时间");
+                //设置类型
+                dialog2.setType(DateType.TYPE_ALL);
+                //设置消息体的显示格式，日期格式
+                dialog2.setMessageFormat("yyyy-MM-dd HH:mm");
+                //设置点击确定按钮回调
+                dialog2.setOnSureLisener(new OnSureLisener() {
+                    @Override
+                    public void onSure(Date date) {
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+                        ds_end_time.setText(string);
+                    }
+                });
+                dialog2.show();
+                break;
         }
     }
 
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+        tv_photo.setText(String.format(getResources().getString(R.string.photo),selectList.size()+""));
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,16 +15,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.fragment.DailyService;
 import com.example.administrator.policetong.fragment.Email;
 import com.example.administrator.policetong.fragment.Fragment_manage;
 import com.example.administrator.policetong.fragment.PathParameter;
 import com.example.administrator.policetong.fragment.PoliceConfirmed;
+import com.example.administrator.policetong.fragment.PoliceFragment;
 import com.example.administrator.policetong.fragment.SafetyChecks;
 import com.example.administrator.policetong.fragment.StuddyFragment;
 import com.example.administrator.policetong.fragment.VisitRectification;
 import com.example.administrator.policetong.utils.LocationUtil;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+
+import java.util.List;
+
+import static com.luck.picture.lib.config.PictureConfig.CHOOSE_REQUEST;
 
 public class ModulesActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -32,6 +42,7 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
     public boolean tv_state=false;
     public double tv_latitude,tv_lontitude;
     LocationUtil locationUtil;
+    public List<LocalMedia> selectList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +83,7 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
                     ac_tv_title.setText("邮件收发");
                     break;
                 case 2:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new PoliceConfirmed()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new PoliceFragment()).commit();
                     ac_tv_title.setText("警保台账");
                     break;
                 case 3:
@@ -105,6 +116,8 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
+
     private void initView() {
         ac_arrow_back = (ImageView) findViewById(R.id.ac_arrow_back);
         ac_arrow_back.setOnClickListener(this);
@@ -127,17 +140,17 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
     Myjiekou myjiekou;
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-// TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.e("onActivityResult: ",resultCode+"    "+(resultCode == RESULT_OK) );
-        if ( resultCode == RESULT_OK) {
-            myjiekou.callback("拍照");
-        }else {
-            Toast.makeText(this, "已取消本次上传！", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//// TODO Auto-generated method stub
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.e("onActivityResult: ",resultCode+"    "+(resultCode == RESULT_OK) );
+//        if ( resultCode == RESULT_OK) {
+//            myjiekou.callback("拍照");
+//        }else {
+//            Toast.makeText(this, "已取消本次上传！", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     protected void onDestroy() {

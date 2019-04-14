@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView tv_dltz;
     private ImageView tv_manage;
     private ImageView iv_study;
-    private ImageView iv_change_password;
+    private ImageView iv_tingchechang;
+    private ImageView iv_shigu;
     private TextView ac_username;
     private static final int BAIDU_READ_PHONE_STATE = 100;
     private Timer timer;
@@ -309,6 +310,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 break;
+                            case 1:
+                                startActivity(new Intent(MainActivity.this,ChangePwdActivity.class));
+                                break;
                         }
 
                     }
@@ -362,11 +366,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ac_username = (TextView) findViewById(R.id.ac_username);
         iv_study = findViewById(R.id.tv_study);
         iv_study.setOnClickListener(this);
-        iv_change_password = findViewById(R.id.iv_pwd);
-        iv_change_password.setOnClickListener(new View.OnClickListener() {
+        iv_tingchechang = findViewById(R.id.iv_tingchecgang);
+        iv_shigu = findViewById(R.id.iv_shigu);
+        iv_tingchechang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,ChangePwdActivity.class));
+
+            }
+        });
+        iv_shigu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
         tv_manage = findViewById(R.id.tv_manage);

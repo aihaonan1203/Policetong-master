@@ -27,17 +27,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.example.administrator.policetong.MainActivity;
+import com.codbking.widget.DatePickDialog;
+import com.codbking.widget.OnSureLisener;
+import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
+import com.example.administrator.policetong.activity.PreviewActivity;
+import com.example.administrator.policetong.base.BaseFragment;
+import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.example.administrator.policetong.utils.Util;
+import com.luck.picture.lib.entity.LocalMedia;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +59,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +68,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SafetyChecks extends Fragment implements View.OnClickListener {
+public class SafetyChecks extends BaseFragment implements View.OnClickListener {
 
     private Button safety_add_submit;
     private EditText safety_time;
@@ -68,9 +79,13 @@ public class SafetyChecks extends Fragment implements View.OnClickListener {
     private EditText safety_shangbao;
     private EditText safety_zhenggai;
     private EditText safety_zgtime;
+    private Button safety_select_time;
     private static String SD_CARD_TEMP_DIR;
     private Button unit_btn,fxunit_btn,paddr_btn;
     private File file;
+    private Button btn_preview;
+    private ImageView iv_take_photo;
+    private TextView tv_photo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -223,17 +238,40 @@ public class SafetyChecks extends Fragment implements View.OnClickListener {
         safety_add_submit.setOnClickListener(this);
         safety_time = (EditText) view.findViewById(R.id.safety_time);
         safety_paddr = (EditText) view.findViewById(R.id.safety_paddr);
-        safety_licheng = (EditText) view.findViewById(R.id.safety_licheng);
+        safety_licheng = (EditText) view.findViewById(R.id.safety_lidao);
         safety_unit = (EditText) view.findViewById(R.id.safety_unit);
         safety_fxunit = (EditText) view.findViewById(R.id.safety_fxunit);
         safety_shangbao = (EditText) view.findViewById(R.id.safety_shangbao);
         safety_zhenggai = (EditText) view.findViewById(R.id.safety_zhenggai);
         safety_zgtime = (EditText) view.findViewById(R.id.safety_zgtime);
+        safety_select_time = (Button) view.findViewById(R.id.safety_select_time);
+        safety_select_time.setOnClickListener(this);
         safety_time.setText(LoadingDialog.getTime());
         safety_zgtime.setText(LoadingDialog.getTime());
         fxunit_btn=view.findViewById(R.id.safety_fxunit_btn);
         paddr_btn=view.findViewById(R.id.safety_paddr_btn);
         unit_btn=view.findViewById(R.id.safety_unit_btn);
+        btn_preview = (Button) view.findViewById(R.id.btn_preview);
+        iv_take_photo=view.findViewById(R.id.iv_take_photo);
+        tv_photo=view.findViewById(R.id.tv_photo);
+        tv_photo.setText(String.format(getResources().getString(R.string.photo),"0"));
+        iv_take_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
+        btn_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectList==null||selectList.size()==0){
+                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                EventBus.getDefault().postSticky(new EvenMsg<>("",selectList));
+                startActivity(new Intent(getActivity(),PreviewActivity.class));
+            }
+        });
         Util.RequestOption(getActivity(), "option5", new Util.RequestOptionCallBack() {
             @Override
             public void CallBack(List<String> list) {
@@ -286,8 +324,23 @@ public class SafetyChecks extends Fragment implements View.OnClickListener {
                 });
             }
         });
-
-
+        iv_take_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
+        btn_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectList==null||selectList.size()==0){
+                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                EventBus.getDefault().postSticky(new EvenMsg<>("",selectList));
+                startActivity(new Intent(getActivity(),PreviewActivity.class));
+            }
+        });
     }
 
 
@@ -349,7 +402,31 @@ public class SafetyChecks extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        submit();
+        switch (view.getId()){
+            case R.id.stu_submit:
+                submit();
+                break;
+            case R.id.safety_select_time:
+                DatePickDialog dialog = new DatePickDialog(getActivity());
+                //设置上下年分限制
+                dialog.setYearLimt(5);
+                //设置标题
+                dialog.setTitle("选择时间");
+                //设置类型
+                dialog.setType(DateType.TYPE_ALL);
+                //设置消息体的显示格式，日期格式
+                dialog.setMessageFormat("yyyy-MM-dd HH:mm");
+                //设置点击确定按钮回调
+                dialog.setOnSureLisener(new OnSureLisener() {
+                    @Override
+                    public void onSure(Date date) {
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+                        safety_time.setText(string);
+                    }
+                });
+                dialog.show();
+                break;
+        }
     }
 
 
@@ -443,5 +520,10 @@ public class SafetyChecks extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+        tv_photo.setText(String.format(getResources().getString(R.string.photo),selectList.size()+""));
     }
 }

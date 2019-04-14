@@ -1,6 +1,7 @@
 package com.example.administrator.policetong.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +18,10 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.codbking.widget.DatePickDialog;
+import com.codbking.widget.OnChangeLisener;
+import com.codbking.widget.OnSureLisener;
+import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
@@ -29,6 +34,8 @@ import com.example.administrator.policetong.utils.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +53,7 @@ public class PoliceConfirmed extends Fragment implements View.OnClickListener {
     private Button pc_add_submit;
     private Button pc_add_gd;
     private Button pc_add_dw;
+    private Button pc_time;
 
 
     LocationUtil locationUtil;
@@ -71,6 +79,8 @@ public class PoliceConfirmed extends Fragment implements View.OnClickListener {
         pc_add_submit = (Button) view.findViewById(R.id.pc_add_submit);
         pc_add_gd=view.findViewById(R.id.pc_add_gd);
         pc_add_dw=view.findViewById(R.id.pc_add_dw);
+        pc_time=view.findViewById(R.id.pc_time);
+        pc_time.setOnClickListener(this);
         pc_add_submit.setOnClickListener(this);
         rb1=view.findViewById(R.id.pc_r1);
         rb2=view.findViewById(R.id.pc_r2);
@@ -119,6 +129,26 @@ public class PoliceConfirmed extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.pc_add_submit:
                 submit();
+                break;
+            case R.id.pc_time:
+                DatePickDialog dialog = new DatePickDialog(getActivity());
+                //设置上下年分限制
+                dialog.setYearLimt(5);
+                //设置标题
+                dialog.setTitle("选择时间");
+                //设置类型
+                dialog.setType(DateType.TYPE_ALL);
+                //设置消息体的显示格式，日期格式
+                dialog.setMessageFormat("yyyy-MM-dd HH:mm");
+                //设置点击确定按钮回调
+                dialog.setOnSureLisener(new OnSureLisener() {
+                    @Override
+                    public void onSure(Date date) {
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+                        pc_add_time.setText(string);
+                    }
+                });
+                dialog.show();
                 break;
         }
     }

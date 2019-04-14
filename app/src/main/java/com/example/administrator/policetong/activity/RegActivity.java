@@ -59,6 +59,8 @@ public class RegActivity extends AppCompatActivity {
         if (sharedPreferences.getBoolean("first",true)){
             Util.saveSetting("117.40.180.2","37777",this);
             sharedPreferences.edit().putBoolean("first",false);
+//            Util.saveSetting("googlezg.top/","",this);
+//            sharedPreferences.edit().putBoolean("first",false);
         }
         timer=new Timer();
         timer.schedule(new TimerTask() {
