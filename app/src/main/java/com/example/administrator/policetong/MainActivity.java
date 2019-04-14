@@ -288,6 +288,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tv_study:
                 bundle.putInt("id", 8);
                 break;
+            case R.id.iv_shigu:
+                bundle.putInt("id", 9);
+                break;
 
         }
         intent.putExtra("data", bundle);
@@ -311,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 startActivity(intent);
                                 break;
                             case 1:
-                                startActivity(new Intent(MainActivity.this,ChangePwdActivity.class));
+                                startActivity(new Intent(MainActivity.this, ChangePwdActivity.class));
                                 break;
                         }
 
@@ -374,12 +377,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-        iv_shigu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        iv_shigu.setOnClickListener(this);
         tv_manage = findViewById(R.id.tv_manage);
         tv_manage.setOnClickListener(this);
         SharedPreferences sharedPreferences = getSharedPreferences("userinfo", MODE_PRIVATE);

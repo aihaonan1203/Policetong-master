@@ -88,6 +88,7 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
     private Button ds_end_select_time;
     private static String SD_CARD_TEMP_DIR;
     private File file;
+    private ModulesActivity activity;
 
     public DailyService() {
         // Required empty public constructor
@@ -220,8 +221,12 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
     public void get_data_form_server() {
         Map info=new HashMap();
         SharedPreferences sp=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        info.put("longitude",lontitude+"");
-        info.put("latitude",latitude+"");
+        try {
+            info.put("longitude",activity.j.getString("longitude"));
+            info.put("latitude",activity.j.getString("latitude"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         info.put("username",sp.getString("username",""));
         info.put("userid",sp.getString("userid",""));
         info.put("begintime",starttime);
@@ -259,10 +264,12 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
     }
 
     private void submit() {
-        ModulesActivity activity= (ModulesActivity) getActivity();
-        state=activity.tv_state;
-        latitude=activity.tv_latitude;
-        lontitude=activity.tv_lontitude;
+        activity = (ModulesActivity) getActivity();
+        assert activity != null;
+        if (activity.j==null) {
+            Toast.makeText(getActivity(), "位置信息获取失败，请检查网络", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // validate
         if (!state){
             Toast.makeText(getContext(), "没有获取到位置信息，请检查网络重试", Toast.LENGTH_SHORT).show();

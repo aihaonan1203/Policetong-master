@@ -145,7 +145,7 @@ public class PoliceConfirmed_manage extends Fragment {
     private void showDialog(final int id) {
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
         View view=View.inflate(getActivity(),R.layout.fragment_police_confirmed_add,null);
-        Button cancle=view.findViewById(R.id.pc_add_cancle);
+        Button cancle=view.findViewById(R.id.sg_add_cancle);
         Button submit=view.findViewById(R.id.pc_add_submit);
         submit.setText("修改");
         cancle.setVisibility(View.VISIBLE);

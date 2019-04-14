@@ -211,7 +211,7 @@
         android:text="提交" />
 
     <Button
-        android:id="@+id/pc_add_cancle"
+        android:id="@+id/sg_add_cancle"
         android:visibility="gone"
         android:layout_marginLeft="20dp"
         android:textColor="@color/text_white"

@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
-            android:text="道路"
+            android:text="类型:"
             android:textSize="16sp" />
 
 
@@ -106,17 +106,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
-            android:text="里程："
+            android:text="参与方："
             android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/sg_canyu"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/k_height"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
+            android:layout_marginRight="5dp"
+            >
+
+            <EditText
+                android:paddingLeft="5dp"
+                android:id="@+id/sg_canyu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/k_height"
+                android:layout_centerVertical="true"
+                android:background="@drawable/kuang"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/sg_canyu_s"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_xiala" />
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -130,7 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
-            android:text="所属行政单位"
+            android:text="车辆类型:"
             android:textSize="16sp" />
 
         <RelativeLayout
@@ -172,7 +189,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
-            android:text="发现单位："
+            android:text="受伤情况："
             android:textSize="16sp" />
 
         <RelativeLayout
@@ -213,69 +230,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
-            android:text="是否上报："
+            android:text="车损："
             android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/sg_chesun"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/k_height"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp"
-            android:text="是"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2.5"
-            android:text="是否整改："
-            android:textSize="16sp" />
-
-        <EditText
-            android:text="是"
-            android:id="@+id/safety_zhenggai"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/k_height"
-            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
+            android:layout_marginRight="5dp"
+            >
+
+            <EditText
+                android:paddingLeft="5dp"
+                android:id="@+id/sg_chesun"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/k_height"
+                android:layout_centerVertical="true"
+                android:background="@drawable/kuang"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/sg_chesun_s"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_xiala" />
+        </RelativeLayout>
+
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.5"
-            android:text="整改时间："
-            android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/safety_zgtime"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/k_height"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

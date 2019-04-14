@@ -3,13 +3,11 @@ package com.example.administrator.policetong.fragment;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +115,7 @@ public class PoliceFragment extends BaseFragment {
     private void initView(View view) {
         btnPath = view.findViewById(R.id.btn_path);
         recyclerView = view.findViewById(R.id.rv_RecyclerView);
-        safetyLicheng = view.findViewById(R.id.safety_lidao);
+        safetyLicheng = view.findViewById(R.id.sg_canyu);
         pcAddTime = view.findViewById(R.id.pc_add_time);
         pcTime = view.findViewById(R.id.pc_time);
         tv_title = view.findViewById(R.id.tv_title);

@@ -143,16 +143,16 @@ public class SafetyChecks_manage extends Fragment {
     private void showDialog(final int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = View.inflate(getActivity(), R.layout.fragment_safety_checks_add, null);
-        Button cancle = view.findViewById(R.id.pc_add_cancle);
-        Button submit = view.findViewById(R.id.safety_add_submit);
+        Button cancle = view.findViewById(R.id.sg_add_cancle);
+        Button submit = view.findViewById(R.id.sg_add_submit);
         submit.setText("修改");
         cancle.setVisibility(View.VISIBLE);
-        final EditText safety_time = view.findViewById(R.id.safety_time);
-        final EditText safety_paddr = view.findViewById(R.id.safety_paddr);
-        final EditText safety_licheng = view.findViewById(R.id.safety_lidao);
-        final EditText safety_unit = view.findViewById(R.id.safety_unit);
-        final EditText safety_fxunit = view.findViewById(R.id.safety_fxunit);
-        final EditText safety_shangbao = view.findViewById(R.id.safety_shangbao);
+        final EditText safety_time = view.findViewById(R.id.sg_time);
+        final EditText safety_paddr = view.findViewById(R.id.sg_type);
+        final EditText safety_licheng = view.findViewById(R.id.sg_canyu);
+        final EditText safety_unit = view.findViewById(R.id.sg_car_type);
+        final EditText safety_fxunit = view.findViewById(R.id.sg_shoushang);
+        final EditText safety_shangbao = view.findViewById(R.id.sg_chesun);
         final EditText safety_zhenggai = view.findViewById(R.id.safety_zhenggai);
         final EditText safety_zgtime = view.findViewById(R.id.safety_zgtime);
         final SafetyChecks_bean bean = listbean.get(id);

@@ -234,23 +234,23 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
     String str;
 
     private void initView(View view) {
-        safety_add_submit=view.findViewById(R.id.safety_add_submit);
+        safety_add_submit=view.findViewById(R.id.sg_add_submit);
         safety_add_submit.setOnClickListener(this);
-        safety_time = (EditText) view.findViewById(R.id.safety_time);
-        safety_paddr = (EditText) view.findViewById(R.id.safety_paddr);
-        safety_licheng = (EditText) view.findViewById(R.id.safety_lidao);
-        safety_unit = (EditText) view.findViewById(R.id.safety_unit);
-        safety_fxunit = (EditText) view.findViewById(R.id.safety_fxunit);
-        safety_shangbao = (EditText) view.findViewById(R.id.safety_shangbao);
+        safety_time = (EditText) view.findViewById(R.id.sg_time);
+        safety_paddr = (EditText) view.findViewById(R.id.sg_type);
+        safety_licheng = (EditText) view.findViewById(R.id.sg_canyu);
+        safety_unit = (EditText) view.findViewById(R.id.sg_car_type);
+        safety_fxunit = (EditText) view.findViewById(R.id.sg_shoushang);
+        safety_shangbao = (EditText) view.findViewById(R.id.sg_chesun);
         safety_zhenggai = (EditText) view.findViewById(R.id.safety_zhenggai);
         safety_zgtime = (EditText) view.findViewById(R.id.safety_zgtime);
-        safety_select_time = (Button) view.findViewById(R.id.safety_select_time);
+        safety_select_time = (Button) view.findViewById(R.id.sg_select_time);
         safety_select_time.setOnClickListener(this);
         safety_time.setText(LoadingDialog.getTime());
         safety_zgtime.setText(LoadingDialog.getTime());
-        fxunit_btn=view.findViewById(R.id.safety_fxunit_btn);
-        paddr_btn=view.findViewById(R.id.safety_paddr_btn);
-        unit_btn=view.findViewById(R.id.safety_unit_btn);
+        fxunit_btn=view.findViewById(R.id.sg_shoushang_s);
+        paddr_btn=view.findViewById(R.id.sg_type_btn);
+        unit_btn=view.findViewById(R.id.safety_car_type_select);
         btn_preview = (Button) view.findViewById(R.id.btn_preview);
         iv_take_photo=view.findViewById(R.id.iv_take_photo);
         tv_photo=view.findViewById(R.id.tv_photo);
@@ -406,7 +406,7 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
             case R.id.stu_submit:
                 submit();
                 break;
-            case R.id.safety_select_time:
+            case R.id.sg_select_time:
                 DatePickDialog dialog = new DatePickDialog(getActivity());
                 //设置上下年分限制
                 dialog.setYearLimt(5);

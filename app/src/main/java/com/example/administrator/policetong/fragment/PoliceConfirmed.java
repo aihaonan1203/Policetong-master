@@ -7,27 +7,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.codbking.widget.DatePickDialog;
-import com.codbking.widget.OnChangeLisener;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
-import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.utils.LoadingDialog;
-import com.example.administrator.policetong.utils.LocationUtil;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.example.administrator.policetong.utils.Util;
 
@@ -54,11 +49,9 @@ public class PoliceConfirmed extends Fragment implements View.OnClickListener {
     private Button pc_add_gd;
     private Button pc_add_dw;
     private Button pc_time;
-
-
-    LocationUtil locationUtil;
-    boolean state=false;
     double latitude,lontitude;
+    private ModulesActivity activity;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -154,12 +147,9 @@ public class PoliceConfirmed extends Fragment implements View.OnClickListener {
     }
 
     private void submit() {
-        ModulesActivity activity= (ModulesActivity) getActivity();
-        state=activity.tv_state;
-        latitude=activity.tv_latitude;
-        lontitude=activity.tv_lontitude;
-        // validate
-        if (!state){
+        activity = (ModulesActivity) getActivity();
+        assert activity != null;
+        if (activity.j==null) {
             Toast.makeText(getActivity(), "位置信息获取失败，请检查网络", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -205,8 +195,13 @@ public class PoliceConfirmed extends Fragment implements View.OnClickListener {
         info.put("username",sp.getString("username",""));
         info.put("userid",sp.getString("userid",""));
         info.put("place",paddr);
-        info.put("longitude",lontitude+"");
-        info.put("latitude",latitude+"");
+        try {
+            info.put("longitude",activity.j.getString("longitude"));
+            info.put("latitude",activity.j.getString("latitude"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         info.put("unit",unit);
         info.put("turn",tiaodeng);
         info.put("date",time);

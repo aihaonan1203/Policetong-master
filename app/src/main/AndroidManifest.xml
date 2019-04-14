@@ -49,10 +49,6 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="yqQbGCYzGHh3frRmZzrCc80GECUa3tis" />
 
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" />
 
         <activity android:name=".activity.RegActivity">
             <intent-filter>
@@ -96,6 +92,13 @@
         <activity android:name=".activity.ChangePwdActivity" />
         <activity android:name=".activity.PreviewActivity" />
         <activity android:name=".activity.SelectPathActivity"></activity>
+
+
+        <service android:name="com.amap.api.location.APSService" />
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="0f7190b90f2b6591cf0a5472fbc9aae4"/>
+
     </application>
 
 </manifest>

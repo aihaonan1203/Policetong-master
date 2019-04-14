@@ -36,7 +36,7 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/safety_lidao"
+            android:id="@+id/sg_canyu"
             android:layout_width="match_parent"
             android:layout_height="@dimen/k_height"
             android:background="@drawable/kuang"
