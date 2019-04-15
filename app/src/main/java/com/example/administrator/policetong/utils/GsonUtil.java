@@ -1,7 +1,5 @@
 package com.example.administrator.policetong.utils;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,26 +19,24 @@ public class GsonUtil {
             T result = gson.fromJson(jsonData, type);
             return result;
         }catch (Exception e){
-            Log.e("==","json解析异常--"+e.toString());
             return null;
         }
-
     }
 
-    public static <T> List<T> parseJsonArrayWithGson(String jsonData, Class<T> type) {
-        List<T> list = new ArrayList<>();
+    public static <T> List<T> parseJsonArrayWithGson(String jsonData,
+                                                     Class<T> type) {
         try {
             JsonParser parser = new JsonParser();
             JsonArray jsonArray = parser.parse(jsonData).getAsJsonArray();
             Gson gson = new Gson();
-
+            List<T> list = new ArrayList<>();
             for (JsonElement jsonElement : jsonArray) {
                 list.add(gson.fromJson(jsonElement,type)); //cls
             }
             return list;
         }catch (Exception e){
-            Log.e("==","json解析异常--"+e.toString());
-            return list;
+            return new ArrayList<>();
         }
     }
+
 }

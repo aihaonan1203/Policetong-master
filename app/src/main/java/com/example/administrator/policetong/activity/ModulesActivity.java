@@ -24,6 +24,7 @@ import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.fragment.DailyService;
 import com.example.administrator.policetong.fragment.Email;
 import com.example.administrator.policetong.fragment.Fragment_manage;
+import com.example.administrator.policetong.fragment.ParkManageFragment;
 import com.example.administrator.policetong.fragment.PathParameter;
 import com.example.administrator.policetong.fragment.PoliceFragment;
 import com.example.administrator.policetong.fragment.SafetyChecks;
@@ -45,6 +46,7 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
     private TextView ac_tv_title;
     public List<LocalMedia> selectList;
     public JSONObject j;
+    public int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +67,13 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
             setContentView(R.layout.activity_modules);
             initView();
             Bundle bundle = getIntent().getBundleExtra("data");
-            int id = bundle.getInt("id");
+            id = bundle.getInt("id");
             switch (id) {
                 case 1:
                     getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new Email()).commit();
                     ac_tv_title.setText("邮件收发");
                     break;
+                case 11:
                 case 2:
                     getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new PoliceFragment()).commit();
                     ac_tv_title.setText("警保台账");
@@ -102,6 +105,10 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
                 case 9:
                     getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new ShiGuFragment()).commit();
                     ac_tv_title.setText("事故接警");
+                    break;
+                case 10:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new ParkManageFragment()).commit();
+                    ac_tv_title.setText("停车场管理");
                     break;
             }
         } catch (Exception e) {

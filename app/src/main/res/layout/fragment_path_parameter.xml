@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/text_white"
     android:orientation="vertical"
-    tools:context="com.example.administrator.policetong.fragment.PoliceConfirmed">
+    tools:context="com.example.administrator.policetong.fragment.CarInFragment">
 
 
     <ScrollView

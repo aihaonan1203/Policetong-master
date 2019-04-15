@@ -110,7 +110,7 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/sg_canyu"
+            android:id="@+id/jb_lingdao"
             android:layout_width="match_parent"
             android:layout_height="@dimen/k_height"
             android:layout_marginRight="5dp"

@@ -85,7 +85,7 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
         sg_add_submit.setOnClickListener(this);
         sg_time = (EditText) view.findViewById(R.id.sg_time);
         sg_type = (EditText) view.findViewById(R.id.sg_type);
-        sg_canyu = (EditText) view.findViewById(R.id.sg_canyu);
+        sg_canyu = (EditText) view.findViewById(R.id.jb_lingdao);
         sg_car_type = (EditText) view.findViewById(R.id.sg_car_type);
         sg_shoushang = (EditText) view.findViewById(R.id.sg_shoushang);
         sg_chesun = (EditText) view.findViewById(R.id.sg_chesun);

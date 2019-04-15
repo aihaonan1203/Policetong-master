@@ -22,7 +22,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.PopupWindowCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -45,14 +44,20 @@ import com.example.administrator.policetong.activity.HelpActivity;
 import com.example.administrator.policetong.activity.LoginActivity;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.NoticeActivity;
+import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.bean.NoticeBean;
 import com.example.administrator.policetong.bean.Notice_bean;
 import com.example.administrator.policetong.httppost.getNetInfo;
+import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.GongGaoBean;
+import com.example.administrator.policetong.new_bean.JingBaoBean;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.MorePopupWindow;
 import com.example.administrator.policetong.utils.NotificationUtils;
 import com.example.administrator.policetong.utils.Util;
+import com.example.administrator.policetong.utils.Utils;
 import com.master.permissionhelper.PermissionHelper;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -77,7 +82,12 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import io.reactivex.functions.Consumer;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView notice;
     private ImageView mMainMore;
     private ImageView tv_email;
@@ -90,11 +100,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_study;
     private ImageView iv_tingchechang;
     private ImageView iv_shigu;
+    private ImageView tv_tx;
     private TextView ac_username;
     private static final int BAIDU_READ_PHONE_STATE = 100;
     private Timer timer;
     private String json = "";
     private List<NoticeBean.MsgArrayBean> msgArrayBeans;
+    private List<GongGaoBean> data = new ArrayList<>();
 
     @SuppressLint("ObsoleteSdkInt")
     @Override
@@ -126,13 +138,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    get_notice2();
+//                    get_notice2();
+                    getGuard();
                 }
             }, 0, 10000);
         } catch (Exception e) {
 
         }
     }
+
 
     private void updata_mag() {
         myPermission();
@@ -172,6 +186,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void dingwei() {
     }
 
+    private void getGuard() {
+        Map<String, String> map = new HashMap<>();
+        map.put("userid", userInfo.getUserId());
+        disposable = Network.getPoliceApi().getNotice(RequestBody.create(MediaType.parse("application/json"), new JSONObject(map).toString()))
+                .compose(BaseActivity.<BaseBean<List<GongGaoBean>>>applySchedulers())
+                .subscribe(new Consumer<BaseBean<List<GongGaoBean>>>() {
+                    @Override
+                    public void accept(BaseBean<List<GongGaoBean>> bean) throws Exception {
+                        if (!bean.getErrMsg().equals("SUCCESS")) {
+                            return;
+                        }
+                        if (data != null && data.size() > 0) {
+                            data.clear();
+                        }
+                        data = bean.getData();
+                        String s = data.get(data.size() - 1).getMsg();
+                        if (!s.equals(json) && !json.equals("")) {
+                            NotificationUtils notificationUtils = new NotificationUtils(MainActivity.this);
+                            notificationUtils.sendNotification("公告通知", "您有一条新的公告通知,请及时处理!");
+                            json = s;
+                            showDialog(data.get(0).getMsg(), Utils.stampToDate(data.get(0).getBeginTime()));
+                        } else {
+                            if (json.equals("")) {
+                                json = s;
+                                showDialog(String.valueOf(data.size()));
+                            }
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("accept: ", "");
+                    }
+                });
+    }
 
     public void get_notice2() {
         noticelist3 = new ArrayList<>();
@@ -245,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setPositiveButton("点击查看", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        EventBus.getDefault().postSticky(msgArrayBeans);
+                        EventBus.getDefault().postSticky(data);
                         startActivity(new Intent(MainActivity.this, NoticeActivity.class));
                     }
                 })
@@ -290,6 +339,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.iv_shigu:
                 bundle.putInt("id", 9);
+                break;
+            case R.id.iv_tingchecgang:
+                bundle.putInt("id", 10);
                 break;
 
         }
@@ -343,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().postSticky(msgArrayBeans);
+                EventBus.getDefault().postSticky(data);
                 startActivity(new Intent(MainActivity.this, NoticeActivity.class));
             }
         });
@@ -371,17 +423,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         iv_study.setOnClickListener(this);
         iv_tingchechang = findViewById(R.id.iv_tingchecgang);
         iv_shigu = findViewById(R.id.iv_shigu);
-        iv_tingchechang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        tv_tx = findViewById(R.id.ac_photo);
+        iv_tingchechang.setOnClickListener(this);
         iv_shigu.setOnClickListener(this);
         tv_manage = findViewById(R.id.tv_manage);
         tv_manage.setOnClickListener(this);
-        SharedPreferences sharedPreferences = getSharedPreferences("userinfo", MODE_PRIVATE);
-        ac_username.setText(sharedPreferences.getString("username", "未获取用户名"));
+        ac_username.setText(userInfo.getUserName());
+        if (userInfo.getSex().equals("女")) {
+            tv_tx.setImageResource(R.drawable.touxiang_1);
+        }
     }
 
     long exitTime = 0;

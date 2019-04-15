@@ -11,10 +11,21 @@ import android.view.View;
 
 
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.new_bean.UserBean;
+import com.example.administrator.policetong.utils.SPUtils;
 import com.example.administrator.policetong.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusException;
+
+import javax.xml.transform.Transformer;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -27,6 +38,7 @@ import org.greenrobot.eventbus.EventBusException;
 @Keep
 public abstract class BaseActivity extends AppCompatActivity {
 
+    protected UserBean userInfo;
 
     /**
      * 封装的findViewByID方法
@@ -40,6 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userInfo=SPUtils.getUserInfo(this);
         try {
             EventBus.getDefault().register(this);
         }catch (EventBusException e){
@@ -48,12 +61,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         ViewManager.getInstance().addActivity(this);
     }
 
-
+    protected Disposable disposable;
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().unregister(this);
+        }
+        if (disposable!=null&&disposable.isDisposed()){
+            disposable.dispose();
         }
         ViewManager.getInstance().finishActivity(this);
     }
@@ -153,6 +169,17 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .remove(fragment)
                 .commitAllowingStateLoss();
 
+    }
+
+    public static <T> ObservableTransformer<T, T> applySchedulers() {
+        return (ObservableTransformer<T, T>) new ObservableTransformer() {
+            @Override
+            public ObservableSource apply(Observable upstream) {
+                return upstream
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
     }
 
 

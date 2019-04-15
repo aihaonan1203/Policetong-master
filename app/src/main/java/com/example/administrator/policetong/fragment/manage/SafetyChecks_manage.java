@@ -149,7 +149,7 @@ public class SafetyChecks_manage extends Fragment {
         cancle.setVisibility(View.VISIBLE);
         final EditText safety_time = view.findViewById(R.id.sg_time);
         final EditText safety_paddr = view.findViewById(R.id.sg_type);
-        final EditText safety_licheng = view.findViewById(R.id.sg_canyu);
+        final EditText safety_licheng = view.findViewById(R.id.jb_lingdao);
         final EditText safety_unit = view.findViewById(R.id.sg_car_type);
         final EditText safety_fxunit = view.findViewById(R.id.sg_shoushang);
         final EditText safety_shangbao = view.findViewById(R.id.sg_chesun);

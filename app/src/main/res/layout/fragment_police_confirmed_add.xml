@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:background="@color/text_white"
     android:orientation="vertical"
-    tools:context="com.example.administrator.policetong.fragment.PoliceConfirmed">
+    tools:context="com.example.administrator.policetong.fragment.CarInFragment">
 
     <TextView
-        android:text="到岗时间:"
+        android:text="入场时间:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/txt_color"
@@ -47,7 +47,7 @@
     </RelativeLayout>
 
     <TextView
-        android:text="岗点:"
+        android:text="车辆类型:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/txt_color"
@@ -73,19 +73,19 @@
             android:background="@drawable/kuang"
             android:inputType="text" />
 
-        <Button
-            android:id="@+id/pc_add_gd"
-            android:layout_width="25dp"
-            android:layout_centerVertical="true"
-            android:layout_height="25dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/icon_xiala"
-            />
+        <!--<Button-->
+            <!--android:id="@+id/pc_add_gd"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_marginEnd="5dp"-->
+            <!--android:background="@drawable/icon_xiala"-->
+            <!--/>-->
     </RelativeLayout>
 
     <TextView
-        android:text="勤务单位:"
+        android:text="车牌号:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/txt_color"
@@ -111,62 +111,78 @@
             android:background="@drawable/kuang"
             android:inputType="text" />
 
-        <Button
-            android:id="@+id/pc_add_dw"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/icon_xiala" />
+        <!--<Button-->
+            <!--android:id="@+id/pc_add_dw"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_marginEnd="5dp"-->
+            <!--android:background="@drawable/icon_xiala" />-->
     </RelativeLayout>
 
 
+    <TextView
+        android:text="类型:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/txt_color"
+        android:textSize="18sp"
+        android:layout_marginTop="@dimen/magrgin_txt_5"
+        android:layout_marginStart="@dimen/magrgin_txt_1"
+        />
 
-    <LinearLayout
-        android:gravity="center"
-        android:layout_marginStart="20dp"
-        android:paddingEnd="20dp"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/magrgin_txt_5"
-        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/magrgin_txt_1"
+        android:layout_marginEnd="@dimen/magrgin_txt_1"
         >
+
+    <EditText
+        android:paddingLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/k_height"
+        android:layout_centerVertical="true"
+        android:background="@drawable/kuang"
+        android:inputType="text" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        >
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_weight="2.5"
+            android:id="@+id/tv_photo"
+            android:layout_marginStart="20dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="是否调灯:"
-            android:textSize="18sp"
+            android:text="@string/photo"
             />
 
-        <RadioGroup
-            android:id="@+id/pc_add_RadioGroup"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+        <ImageView
+            android:id="@+id/iv_take_photo"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/icon_take_photo"
+            android:layout_marginEnd="10dp"
+            />
 
-            <RadioButton
-                android:id="@+id/pc_r1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="是"
-                android:checked="true"
-                />
+        <Button
+            android:id="@+id/btn_preview"
+            android:text="预览"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:background="@color/mycolor"
+            android:textColor="@color/text_white"
+            android:layout_marginEnd="10dp"
+            />
 
-            <RadioButton
-                android:id="@+id/pc_r2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="否"
-                android:checked="false"
-                android:layout_marginLeft="20dp"
-                />
-
-        </RadioGroup>
     </LinearLayout>
 
     <TextView
@@ -190,7 +206,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:hint="可以为空"
         tools:ignore="RtlHardcoded" />
 
     <LinearLayout

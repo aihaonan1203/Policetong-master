@@ -238,7 +238,7 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
         safety_add_submit.setOnClickListener(this);
         safety_time = (EditText) view.findViewById(R.id.sg_time);
         safety_paddr = (EditText) view.findViewById(R.id.sg_type);
-        safety_licheng = (EditText) view.findViewById(R.id.sg_canyu);
+        safety_licheng = (EditText) view.findViewById(R.id.jb_lingdao);
         safety_unit = (EditText) view.findViewById(R.id.sg_car_type);
         safety_fxunit = (EditText) view.findViewById(R.id.sg_shoushang);
         safety_shangbao = (EditText) view.findViewById(R.id.sg_chesun);

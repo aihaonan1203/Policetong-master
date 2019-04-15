@@ -4,6 +4,7 @@ package com.example.administrator.policetong.fragment.manage;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,13 +25,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
-import com.example.administrator.policetong.bean.PoliceConfirmed_bean;
+import com.example.administrator.policetong.activity.ModulesActivity;
+import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.base.BaseBean;
+import com.example.administrator.policetong.base.BaseFragment;
+import com.example.administrator.policetong.bean.EvenMsg;
+import com.example.administrator.policetong.bean.PathBean;
+import com.example.administrator.policetong.bean.PoliceMent;
 import com.example.administrator.policetong.fragment.Fragment_manage;
+import com.example.administrator.policetong.fragment.PoliceFragment;
 import com.example.administrator.policetong.httppost.getNetInfo;
+import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.JingBaoBean;
+import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
+import com.luck.picture.lib.entity.LocalMedia;
 
-import org.json.JSONArray;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,15 +55,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.functions.Consumer;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PoliceConfirmed_manage extends Fragment {
+public class PoliceConfirmed_manage extends BaseFragment {
 
     private ListView pc_manage_listview;
-    private List<PoliceConfirmed_bean> listbean;
-    MyAdapter myAdapter;
-    TextView nodata;
+    private List<JingBaoBean> listbean;
+    private MyAdapter myAdapter;
+    private TextView nodata;
 
     public PoliceConfirmed_manage() {
         // Required empty public constructor
@@ -61,8 +80,8 @@ public class PoliceConfirmed_manage extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_police_confirmed_manage, container, false);
         view.setClickable(true);
-        initValues();
         initView(view);
+        initValues();
         return view;
     }
 
@@ -114,8 +133,14 @@ public class PoliceConfirmed_manage extends Fragment {
         bt_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(id);
+//                showDialog(id);
                 popupWindow.dismiss();
+                Intent intent = new Intent(getActivity(), ModulesActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", 11);
+                intent.putExtra("data", bundle);
+                EventBus.getDefault().postSticky(listbean.get(id));
+                startActivity(intent);
 
             }
 
@@ -142,165 +167,79 @@ public class PoliceConfirmed_manage extends Fragment {
 
     }
 
-    private void showDialog(final int id) {
-        AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-        View view=View.inflate(getActivity(),R.layout.fragment_police_confirmed_add,null);
-        Button cancle=view.findViewById(R.id.sg_add_cancle);
-        Button submit=view.findViewById(R.id.pc_add_submit);
-        submit.setText("修改");
-        cancle.setVisibility(View.VISIBLE);
-        final EditText pc_add_time=view.findViewById(R.id.pc_add_time);
-        final EditText pc_add_paddr=view.findViewById(R.id.pc_add_paddr);
-        final EditText pc_add_unit=view.findViewById(R.id.pc_add_unit);
-        final EditText pc_add_remark=view.findViewById(R.id.pc_add_remark);
-        pc_add_paddr.setText(listbean.get(id).getPlace());
-        pc_add_time.setText(listbean.get(id).getDate());
-        pc_add_unit.setText(listbean.get(id).getUnit());
-        pc_add_remark.setText(listbean.get(id).getOther());
-        final RadioButton rb1=view.findViewById(R.id.pc_r1);
-        RadioButton rb2=view.findViewById(R.id.pc_r2);
-        if (listbean.get(id).getTurn().equals("是")){
-            rb1.setChecked(true);
-        }else {
-            rb2.setChecked(true);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void XXX(String msg) {
+        if (msg.equals("1")){
+            initValues();
         }
-        builder.setView(view);
-        final AlertDialog dialog=builder.create();
-        cancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String time = pc_add_time.getText().toString().trim();
-                if (TextUtils.isEmpty(time)) {
-                    Toast.makeText(getContext(), "到岗时间不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String paddr = pc_add_paddr.getText().toString().trim();
-                if (TextUtils.isEmpty(paddr)) {
-                    Toast.makeText(getContext(), "岗点不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String unit = pc_add_unit.getText().toString().trim();
-                if (TextUtils.isEmpty(unit)) {
-                    Toast.makeText(getContext(), "勤务单位不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String remark = pc_add_remark.getText().toString().trim();
-                if (remark.equals("")){
-                    remark="无";
-                }
-                String tiaodeng;
-                if (rb1.isChecked()){
-                    tiaodeng="是";
-                }else {
-                    tiaodeng="否";
-                }
-                dialog.dismiss();
-                LoadingDialog.showDialog(getActivity(),"正在提交内容！");
-                amend_data(time,listbean.get(0).getUserid(),id,time,paddr,unit,tiaodeng,remark);
-            }
-        });
-        dialog.show();
     }
 
-    private void submitData(final int id, String time, String paddr, String unit, String tiaodeng, String remark) {
-        Map info=new HashMap();
-        SharedPreferences sp=getActivity().getSharedPreferences("userinfo",Context.MODE_PRIVATE);
-        info.put("userid",sp.getString("userid",""));
-        info.put("place",paddr);
-        info.put("longitude",listbean.get(id).getLongitude());
-        info.put("latitude",listbean.get(id).getLatitude());
-        info.put("unit",unit);
-        info.put("turn",tiaodeng);
-        info.put("date",time);
-        info.put("other",remark);
-        info.put("group",sp.getString("group",""));
-        info.put("detachment",sp.getString("detachment",""));
-        getNetInfo.NetInfo(getActivity(), "atdservlet", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                if (object.getString("RESULT").equals("S")){
-                    LoadingDialog.disDialog();
-                    Toast.makeText(getActivity(), "修改成功", Toast.LENGTH_SHORT).show();
-                    getNetData();
-                }else {
-                    Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void amend_data(String date, String userid, final int id, final String time, final String paddr, final String unit, final String tiaodeng, final String remark) {
-        Map info=new HashMap();
-        info.put("userid",userid);
-        info.put("date",date);
-        getNetInfo.NetInfo(getActivity(), "updateatdservlet", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                if (object.getString("RESULT").equals("S")){
-                    submitData(id,time,paddr,unit,tiaodeng,remark);
-                }else {
-                    Toast.makeText(getActivity(), "修改失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     public void getNetData() {
-        listbean.clear();
-        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        Map map=new HashMap();
-        map.put("userid",sharedPreferences.getString("userid",""));
-        getNetInfo.NetInfoArray(getActivity(), "selectatdservlet", new JSONObject(map), new getNetInfo.VolleyArrayCallback() {
-            @Override
-            public void onSuccess(JSONArray object) throws JSONException {
-                for (int i = 0; i < object.length(); i++) {
-                    JSONObject j= (JSONObject) object.get(i);
-                    if (j.getString("modify").equals("未修改")){
-                        listbean.add(new PoliceConfirmed_bean(j.getString("userid"),j.getString("place"),j.getString("unit")
-                        ,j.getString("turn"),j.getString("date"),j.getString("other"),j.getString("latitude"),j.getString("longitude")));
+        Map<String,String> map=new HashMap<>();
+        map.put("userid",userInfo.getUserId());
+        disposable=Network.getPoliceApi().getGuard(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
+                .compose(BaseActivity.<BaseBean<List<JingBaoBean>>>applySchedulers())
+                .subscribe(new Consumer<BaseBean<List<JingBaoBean>>>() {
+                    @Override
+                    public void accept(BaseBean<List<JingBaoBean>> bean) throws Exception {
+                        if (bean.getCode()==0){
+                            listbean=bean.getData();
+                            if (bean.getData().size()==0){
+                                nodata.setVisibility(View.VISIBLE);
+                                pc_manage_listview.setVisibility(View.GONE);
+                            }else {
+                                Collections.reverse(listbean);
+                                nodata.setVisibility(View.GONE);
+                                pc_manage_listview.setVisibility(View.VISIBLE);
+                            }
+                            LoadingDialog.disDialog();
+                            shuaxinListview();
+                        }
                     }
-                }
-                if (listbean.size()==0){
-                    nodata.setVisibility(View.VISIBLE);
-                    pc_manage_listview.setVisibility(View.GONE);
-                }else {
-                    Collections.reverse(listbean);
-                    nodata.setVisibility(View.GONE);
-                    pc_manage_listview.setVisibility(View.VISIBLE);
-                }
-                LoadingDialog.disDialog();
-                shuaxinListview();
-            }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
 
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                LoadingDialog.showToast_shibai(getActivity());
-            }
-        });
+                    }
+                });
+//        listbean.clear();
+//        SharedPreferences sharedPreferences=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+//        Map map=new HashMap();
+//        map.put("userid",sharedPreferences.getString("userid",""));
+//        getNetInfo.NetInfoArray(getActivity(), "selectatdservlet", new JSONObject(map), new getNetInfo.VolleyArrayCallback() {
+//            @Override
+//            public void onSuccess(JSONArray object) throws JSONException {
+//                for (int i = 0; i < object.length(); i++) {
+//                    JSONObject j= (JSONObject) object.get(i);
+//                    if (j.getString("modify").equals("未修改")){
+//                        listbean.add(new PoliceConfirmed_bean(j.getString("userid"),j.getString("place"),j.getString("unit")
+//                        ,j.getString("turn"),j.getString("date"),j.getString("other"),j.getString("latitude"),j.getString("longitude")));
+//                    }
+//                }
+//                if (listbean.size()==0){
+//                    nodata.setVisibility(View.VISIBLE);
+//                    pc_manage_listview.setVisibility(View.GONE);
+//                }else {
+//                    Collections.reverse(listbean);
+//                    nodata.setVisibility(View.GONE);
+//                    pc_manage_listview.setVisibility(View.VISIBLE);
+//                }
+//                LoadingDialog.disDialog();
+//                shuaxinListview();
+//            }
+//
+//            @Override
+//            public void onError(VolleyError volleyError) {
+//                LoadingDialog.disDialog();
+//                LoadingDialog.showToast_shibai(getActivity());
+//            }
+//        });
+    }
+
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+
     }
 
 
@@ -332,28 +271,43 @@ public class PoliceConfirmed_manage extends Fragment {
         }
 
         @SuppressLint("SetTextI18n")
-        private void Set_data_into_layout(int id, PoliceConfirmed_bean bean, ViewHolder holder) {
+        private void Set_data_into_layout(int id, JingBaoBean bean, ViewHolder holder) {
             holder.pc_item_id.setText(id+1+"");
-            holder.pc_item_date.setText("时间："+bean.getDate());
+            holder.pc_item_date.setText("时间："+bean.getTaskDate()+" "+bean.getDutyTime());
             holder.pc_item_other.setText("备注："+bean.getOther());
-            holder.pc_item_unit.setText("单位："+bean.getUnit());
-            holder.pc_item_turn.setText("是否调灯："+bean.getTurn());
-            holder.pc_item_paddr.setText("岗点："+bean.getPlace());
+            holder.pc_title.setText(bean.getTitle());
+            holder.pc_luxian.setText("路线:"+bean.getRoadMap());
+            holder.pc_miaoshu.setText("描述："+bean.getDescription());
+            holder.pc_lingdao.setText("领导："+bean.getTaskLeader());
+            List<PoliceMent> list = GsonUtil.parseJsonArrayWithGson(bean.getPoliceMent(), PoliceMent.class);
+            StringBuilder string=new StringBuilder();
+            string.append("\n");
+            for (int i = 0; i < list.size(); i++) {
+                string.append(list.get(i).getPlace()).append(":").append(list.get(i).getSquName()).append(list.get(i).getNumer()).append(list.get(i).getDiaodeng());
+                if (i!=list.size()-1){
+                    string.append("\n");
+                }
+            }
+            holder.pc_jingli.setText("警力部署："+string.toString());
         }
 
         private class ViewHolder {
             public TextView pc_item_id;
-            public TextView pc_item_unit;
-            public TextView pc_item_paddr;
-            public TextView pc_item_turn;
+            public TextView pc_title;
+            public TextView pc_miaoshu;
             public TextView pc_item_date;
             public TextView pc_item_other;
+            public TextView pc_luxian;
+            public TextView pc_jingli;
+            public TextView pc_lingdao;
 
             public ViewHolder(View rootView) {
                 this.pc_item_id = (TextView) rootView.findViewById(R.id.pc_item_id);
-                this.pc_item_unit = (TextView) rootView.findViewById(R.id.pc_item_unit);
-                this.pc_item_paddr = (TextView) rootView.findViewById(R.id.pc_item_paddr);
-                this.pc_item_turn = (TextView) rootView.findViewById(R.id.pc_item_turn);
+                this.pc_title = (TextView) rootView.findViewById(R.id.pc_title);
+                this.pc_miaoshu = (TextView) rootView.findViewById(R.id.pc_miaoshu);
+                this.pc_lingdao = (TextView) rootView.findViewById(R.id.pc_lingdao);
+                this.pc_luxian = (TextView) rootView.findViewById(R.id.pc_luxian);
+                this.pc_jingli = (TextView) rootView.findViewById(R.id.pc_jingli);
                 this.pc_item_date = (TextView) rootView.findViewById(R.id.pc_item_date);
                 this.pc_item_other = (TextView) rootView.findViewById(R.id.pc_item_other);
             }

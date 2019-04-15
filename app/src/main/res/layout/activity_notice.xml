@@ -44,6 +44,7 @@
         android:orientation="vertical"
         >
         <ListView
+            android:overScrollMode="never"
             android:layout_marginTop="10dp"
             android:id="@+id/lv_content"
             android:layout_marginStart="20dp"

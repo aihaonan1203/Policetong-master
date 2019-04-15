@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,9 +30,14 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.httppost.getNetInfo;
+import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.UserBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.OtherDialog;
+import com.example.administrator.policetong.utils.SPUtils;
 import com.master.permissionhelper.BuildConfig;
 import com.master.permissionhelper.PermissionHelper;
 
@@ -43,7 +47,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 登录
@@ -52,14 +61,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText password;
     private Button btn_login;
     private PermissionHelper permissionHelper;
-    private SharedPreferences sharedPreferences;
+
     @SuppressLint("ObsoleteSdkInt")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences=getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean("save",false)){
-            userlogin(sharedPreferences.getString("userid","null"),sharedPreferences.getString("userpwd","null"));
+        if (SPUtils.getBoolean("save", false)) {
+            userlogin(SPUtils.getString("userid", ""), SPUtils.getString("password", ""));
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -145,6 +153,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final int REQUEST_EXTERNAL_STORAGE = 9;
     private static String[] PERMISSIONS_STORAGE = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
+
     public void verifyStoragePermissions(Activity activity) {
         try { //检测是否有写的权限
             int permission = ActivityCompat.checkSelfPermission(activity, "android.permission.WRITE_EXTERNAL_STORAGE");
@@ -188,22 +197,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login:
-                final String username=userid.getText().toString().trim();
-                String userpwd=password.getText().toString().trim();
-                if(username.isEmpty()){
+                final String username = userid.getText().toString().trim();
+                String userpwd = password.getText().toString().trim();
+                if (username.isEmpty()) {
                     Toast.makeText(this, "请输入你的账号！", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (userpwd.isEmpty()){
+                if (userpwd.isEmpty()) {
                     Toast.makeText(this, "请输入你的密码！", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                userlogin(username,userpwd);
+                userlogin(username, userpwd);
                 break;
         }
     }
 
-    private void userlogin(final String name, final String pwd){
+    private void userlogin(final String name, final String pwd) {
         LoadingDialog.showDialog(this);
         LoadingDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -218,57 +227,86 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         lp.alpha = 0.5f;
         getWindow().setAttributes(lp);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        Map input=new HashMap();
-        input.put("userid",name);
-        input.put("password",pwd);
-        getNetInfo.NetInfo(LoginActivity.this, "loginservlet", new JSONObject(input), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("ERRMSG").equals("成功")){
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("userid",name).commit();
-                    editor.putString("userpwd",pwd).commit();
-                    editor.putString("group",object.getString("group")).commit();
-                    editor.putString("detachment",object.getString("detachment")).commit();
-                    getUserInfo(name);
-                }else {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            LoadingDialog.disDialog();
-                            Toast.makeText(LoginActivity.this, "用户名或密码错误！", Toast.LENGTH_SHORT).show();
-                        }
-                    },1000);
-                }
-            }
-            @Override
-            public void onError(VolleyError volleyError) {
-                Log.e("onError: ","========" );
-                new Handler().postDelayed(new Runnable() {
+        Map<String, String> input = new HashMap<String, String>();
+        input.put("userid", name);
+        input.put("password", pwd);
+        JSONObject jsonObject = new JSONObject(input);
+        disposable = Network.getPoliceApi().login(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString()))
+                .compose(BaseActivity.<BaseBean<UserBean>>applySchedulers())
+                .subscribe(new Consumer<BaseBean<UserBean>>() {
                     @Override
-                    public void run() {
+                    public void accept(BaseBean<UserBean> userBean) throws Exception {
+                        LoadingDialog.disDialog();
+                        if (userBean.getCode()!=0){
+                            Toast.makeText(LoginActivity.this, "账号或密码错误!", Toast.LENGTH_SHORT).show();
+                            SPUtils.saveBoolean("save", false);
+                            return;
+                        }
+                        SPUtils.setUserInfo(LoginActivity.this, userBean.getData());
+                        SPUtils.saveBoolean("save", true);
+                        SPUtils.saveString("userid", name);
+                        SPUtils.saveString("password", pwd);
+                        finish();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
                         Toast.makeText(LoginActivity.this, "登陆失败，请检查网络是否连接!", Toast.LENGTH_SHORT).show();
                         LoadingDialog.disDialog();
-                        sharedPreferences.edit().putBoolean("save", false).apply();
+                        SPUtils.saveBoolean("save", false);
                     }
-                },1500);
-            }
-        });
+                });
+
+//        getNetInfo.NetInfo(LoginActivity.this, "loginservlet", new JSONObject(input), new getNetInfo.VolleyCallback() {
+//            @Override
+//            public void onSuccess(JSONObject object) throws JSONException {
+//                Log.e("onSuccess: ",object.toString() );
+//                if (object.getString("ERRMSG").equals("成功")){
+//                    SharedPreferences.Editor editor=sharedPreferences.edit();
+//                    editor.putString("userid",name).commit();
+//                    editor.putString("userpwd",pwd).commit();
+//                    editor.putString("group",object.getString("group")).commit();
+//                    editor.putString("detachment",object.getString("detachment")).commit();
+//                    getUserInfo(name);
+//                }else {
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            LoadingDialog.disDialog();
+//                            Toast.makeText(LoginActivity.this, "用户名或密码错误！", Toast.LENGTH_SHORT).show();
+//                        }
+//                    },1000);
+//                }
+//            }
+//            @Override
+//            public void onError(VolleyError volleyError) {
+//                Log.e("onError: ","========" );
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(LoginActivity.this, "登陆失败，请检查网络是否连接!", Toast.LENGTH_SHORT).show();
+//                        LoadingDialog.disDialog();
+//                        sharedPreferences.edit().putBoolean("save", false).apply();
+//                    }
+//                },1500);
+//            }
+//        });
     }
 
-    private void getUserInfo(String id){
-        Map input=new HashMap();
-        input.put("userid",id);
+    private void getUserInfo(String id) {
+        Map input = new HashMap();
+        input.put("userid", id);
         getNetInfo.NetInfo(this, "selectuserinfo", new JSONObject(input), new getNetInfo.VolleyCallback() {
             @Override
             public void onSuccess(JSONObject object) throws JSONException {
                 Log.e("onSuccess: ", object.toString());
                 LoadingDialog.disDialog();
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString("username",object.getString("username")).apply();
-                editor.putBoolean("save",true).commit();
-                editor.putString("sex",object.getString("usersex")).commit();
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putString("username", object.getString("username")).apply();
+//                editor.putBoolean("save", true).commit();
+//                editor.putString("sex", object.getString("usersex")).commit();
                 finish();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -280,4 +318,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
 }

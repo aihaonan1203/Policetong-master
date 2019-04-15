@@ -1,15 +1,25 @@
 package com.example.administrator.policetong.base;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Keep;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.example.administrator.policetong.new_bean.UserBean;
+import com.example.administrator.policetong.utils.SPUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.EventBusException;
+
 import java.util.List;
+import java.util.Objects;
+
+import io.reactivex.disposables.Disposable;
 
 import static android.app.Activity.RESULT_OK;
 import static com.luck.picture.lib.config.PictureConfig.CHOOSE_REQUEST;
@@ -24,6 +34,19 @@ import static com.luck.picture.lib.config.PictureConfig.CHOOSE_REQUEST;
 @Keep
 public abstract class BaseFragment extends Fragment {
 
+
+    protected UserBean userInfo;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        try {
+            EventBus.getDefault().register(this);
+        }catch (EventBusException e){
+
+        }
+        userInfo = SPUtils.getUserInfo(Objects.requireNonNull(getActivity()));
+    }
 
     protected List<LocalMedia> selectList;
 
@@ -50,8 +73,21 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+    protected Disposable disposable;
+
 
     public abstract void getPhoto(List<LocalMedia> selectList);
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (disposable!=null&&disposable.isDisposed()){
+            disposable.dispose();
+        }
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
+    }
 
     //
 //    protected BaseActivity mActivity;

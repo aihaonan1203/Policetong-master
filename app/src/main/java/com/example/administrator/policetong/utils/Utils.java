@@ -17,6 +17,7 @@ import android.view.View;
 import com.luck.picture.lib.tools.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -64,6 +65,12 @@ public class Utils {
             sdf.applyPattern(strPattern);
         }
         return sdf == null ? "NULL" : sdf.format(l);
+    }
+
+    public static String stampToDate(long timeMillis){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(timeMillis*1000);
+        return simpleDateFormat.format(date);
     }
 
     /**

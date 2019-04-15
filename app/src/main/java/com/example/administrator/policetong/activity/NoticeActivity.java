@@ -1,5 +1,6 @@
 package com.example.administrator.policetong.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -7,15 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
-import com.example.administrator.policetong.bean.NoticeBean;
+import com.example.administrator.policetong.new_bean.GongGaoBean;
+import com.example.administrator.policetong.new_bean.JingBaoBean;
+import com.example.administrator.policetong.utils.Utils;
 import com.github.nukc.stateview.StateView;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -23,6 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,7 +33,7 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
 
     private ImageView acArrowBack;
     private ListView listView;
-    private List<NoticeBean.MsgArrayBean> list;
+    private List<GongGaoBean> list=new ArrayList<>();
     private StateView mStateView;
     private LinearLayout frameLayout;
 
@@ -44,8 +46,8 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void getMsg(List<NoticeBean.MsgArrayBean> list) {
-        this.list = list;
+    public void getMsg(List<GongGaoBean> list) {
+        this.list.addAll(list);
     }
 
     private void initView() {
@@ -66,7 +68,7 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    showDialog(list.get(i).getMsg(),list.get(i).getDate());
+                    showDialog(list.get(i).getMsg(),list.get(i).getBeginTime()+"");
                 }
             });
         }
@@ -112,6 +114,7 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
             return i;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             ViewHolder holder=null;
@@ -122,8 +125,10 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
             }else {
                 holder= (ViewHolder) view.getTag();
             }
-            holder.tv_msg.setText(list.get(i).getMsg());
-            holder.tv_time.setText(list.get(i).getDate());
+            GongGaoBean bean = list.get(i);
+            holder.taskDate.setText("失效日期:"+Utils.stampToDate(bean.getEndTime()));
+            holder.tv_msg.setText(bean.getMsg());
+            holder.tv_time.setText("发布日期:"+Utils.stampToDate(bean.getEndTime()));
             return view;
         }
 
@@ -131,11 +136,13 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
             public View rootView;
             public TextView tv_msg;
             public TextView tv_time;
+            public TextView taskDate;
 
             public ViewHolder(View rootView) {
                 this.rootView = rootView;
                 this.tv_msg = (TextView) rootView.findViewById(R.id.tv_msg);
                 this.tv_time = (TextView) rootView.findViewById(R.id.tv_time);
+                this.taskDate = (TextView) rootView.findViewById(R.id.tv_taskDate);
             }
 
         }
