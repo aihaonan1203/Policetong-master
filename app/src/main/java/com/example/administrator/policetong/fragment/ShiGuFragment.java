@@ -278,7 +278,7 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
                         if (bean.getCode()==0){
                             LoadingDialog.disDialog();
                             Toast.makeText(getActivity(), "提交成功...", Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
+                            Objects.requireNonNull(getActivity()).finish();
                         }
                     }
                 }, new Consumer<Throwable>() {
