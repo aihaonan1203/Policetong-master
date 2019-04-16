@@ -49,7 +49,6 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="yqQbGCYzGHh3frRmZzrCc80GECUa3tis" />
 
-
         <activity android:name=".activity.RegActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,14 +90,17 @@
         <activity android:name=".activity.NoticeActivity" />
         <activity android:name=".activity.ChangePwdActivity" />
         <activity android:name=".activity.PreviewActivity" />
-        <activity android:name=".activity.SelectPathActivity"></activity>
-
+        <activity android:name=".activity.SelectPathActivity" />
 
         <service android:name="com.amap.api.location.APSService" />
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="0f7190b90f2b6591cf0a5472fbc9aae4"/>
+            android:value="0f7190b90f2b6591cf0a5472fbc9aae4" />
 
+        <activity android:name=".activity.ParkActivity" />
+        <activity android:name=".activity.ParkOutActivity" />
+        <activity android:name=".activity.AccidentActivity"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.example.administrator.policetong.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.base.App;
 import com.example.administrator.policetong.fragment.DailyService;
 import com.example.administrator.policetong.fragment.Email;
 import com.example.administrator.policetong.fragment.Fragment_manage;
@@ -48,9 +50,20 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
     public JSONObject j;
     public int id;
 
+    public static ModulesActivity getmContext() {
+        return mContext;
+    }
+
+    public static void setmContext(ModulesActivity mContext) {
+        ModulesActivity.mContext = mContext;
+    }
+
+    private static ModulesActivity mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext=this;
         initLocation();
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -102,6 +115,7 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
                     getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new StuddyFragment()).commit();
                     ac_tv_title.setText("学习台账");
                     break;
+                case 12:
                 case 9:
                     getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new ShiGuFragment()).commit();
                     ac_tv_title.setText("事故接警");

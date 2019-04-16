@@ -22,15 +22,30 @@
             android:text="学习时间："
             android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/stu_study_time"
-            android:inputType="text"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
+            android:layout_marginEnd="5dp"
+            >
+
+            <EditText
+                android:paddingLeft="5dp"
+                android:id="@+id/stu_study_time"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/k_height"
+                android:layout_centerVertical="true"
+                android:background="@drawable/kuang"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/stu_study_time_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_xiala" />
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -83,30 +98,7 @@
             android:paddingLeft="5dp"  />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="记录时间："
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/stu_time"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp"  />
-    </LinearLayout>
 
 
 
@@ -136,6 +128,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llyt_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

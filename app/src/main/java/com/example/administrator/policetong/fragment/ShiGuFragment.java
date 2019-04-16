@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,16 +34,26 @@ import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.activity.AccidentActivity;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.PreviewActivity;
+import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.httppost.getNetInfo;
+import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.AccidentBean;
+import com.example.administrator.policetong.new_bean.JingBaoBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
+import com.example.administrator.policetong.utils.Utils;
+import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +63,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class ShiGuFragment extends BaseFragment implements View.OnClickListener {
 
@@ -63,6 +84,7 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
     private EditText sg_shoushang;
     private EditText sg_chesun;
     private Button sg_select_time;
+    private LinearLayout llyt_photo;
     private static String SD_CARD_TEMP_DIR;
 
     private File file;
@@ -70,14 +92,22 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
     private ImageView iv_take_photo;
     private TextView tv_photo;
     private ModulesActivity activity;
+    private ImageView iv_right;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        activity = (ModulesActivity) getActivity();
         View view=inflater.inflate(R.layout.fragment_shi_gu, container, false);
         view.setClickable(true);
         initView(view);
         return view;
+    }
+
+    private AccidentBean bean;
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void XX(AccidentBean bean) {
+        this.bean = bean;
     }
 
     private void initView(View view) {
@@ -90,8 +120,8 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
         sg_shoushang = (EditText) view.findViewById(R.id.sg_shoushang);
         sg_chesun = (EditText) view.findViewById(R.id.sg_chesun);
         sg_select_time = (Button) view.findViewById(R.id.sg_select_time);
+        llyt_photo =view.findViewById(R.id.llyt_photo);
         sg_select_time.setOnClickListener(this);
-        sg_time.setText(LoadingDialog.getTime());
         btn_preview = (Button) view.findViewById(R.id.btn_preview);
         iv_take_photo=view.findViewById(R.id.iv_take_photo);
         tv_photo=view.findViewById(R.id.tv_photo);
@@ -130,65 +160,144 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
                 startActivity(new Intent(getActivity(),PreviewActivity.class));
             }
         });
+        iv_right = ModulesActivity.getmContext().findViewById(R.id.ac_tv_right);
+        iv_right.setVisibility(View.VISIBLE);
+        iv_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),AccidentActivity.class));
+            }
+        });
+        if (bean!=null&& activity.id==12){
+            llyt_photo.setVisibility(View.INVISIBLE);
+            sg_time.setText(bean.getDate());
+            sg_type.setText(bean.getType());
+            sg_canyu.setText(bean.getParticipant());
+            sg_car_type.setText(bean.getCarType());
+            sg_shoushang.setText(bean.getHurtType());
+            sg_chesun.setText(bean.getCarAmage());
+        }
     }
 
 
-    private void submit() {
-        activity = (ModulesActivity) getActivity();
+    private void submit() throws JSONException{
         assert activity != null;
         if (activity.j==null) {
             Toast.makeText(getActivity(), "位置信息获取失败，请检查网络", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (selectList==null||selectList.size()==0){
+            if (activity.id!=12){
+                Toast.makeText(getActivity(), "请先选择上传的图片!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         // validate
-        time = sg_time.getText().toString().trim();
+        String time = sg_time.getText().toString().trim();
         if (TextUtils.isEmpty(time)) {
             Toast.makeText(getContext(), "时间不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        paddr = sg_type.getText().toString().trim();
-        if (TextUtils.isEmpty(paddr)) {
-            Toast.makeText(getContext(), "道路不能为空", Toast.LENGTH_SHORT).show();
+        String type = sg_type.getText().toString().trim();
+        if (TextUtils.isEmpty(type)) {
+            Toast.makeText(getContext(), "类型不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        licheng = sg_canyu.getText().toString().trim();
-        if (TextUtils.isEmpty(licheng)) {
-            Toast.makeText(getContext(), "里程不能为空", Toast.LENGTH_SHORT).show();
+        String canyu = sg_canyu.getText().toString().trim();
+        if (TextUtils.isEmpty(canyu)) {
+            Toast.makeText(getContext(), "参与方不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        unit = sg_car_type.getText().toString().trim();
-        if (TextUtils.isEmpty(unit)) {
-            Toast.makeText(getContext(), "所属单位不能为空", Toast.LENGTH_SHORT).show();
+        String car_type = sg_car_type.getText().toString().trim();
+        if (TextUtils.isEmpty(car_type)) {
+            Toast.makeText(getContext(), "车辆类型不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        fxunit = sg_shoushang.getText().toString().trim();
-        if (TextUtils.isEmpty(fxunit)) {
-            Toast.makeText(getContext(), "发现不能为空", Toast.LENGTH_SHORT).show();
+        String shoushang = sg_shoushang.getText().toString().trim();
+        if (TextUtils.isEmpty(shoushang)) {
+            Toast.makeText(getContext(), "受伤情况不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        shangbao = sg_chesun.getText().toString().trim();
-        if (TextUtils.isEmpty(shangbao)) {
-            Toast.makeText(getContext(), "是否上报不能为空", Toast.LENGTH_SHORT).show();
+        String chesun = sg_chesun.getText().toString().trim();
+        if (TextUtils.isEmpty(chesun)) {
+            Toast.makeText(getContext(), "车损不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (NetworkChangeListener.onAvailable){
-            showDialog("请选择是否要上传照片");
+        AccidentBean bean=new AccidentBean();
+        bean.setUserId(userInfo.getUserId());
+        bean.setDate(time);
+        bean.setLongitude(activity.j.getString("longitude"));
+        bean.setLatitude(activity.j.getString("latitude"));
+        bean.setType(type);
+        bean.setParticipant(canyu);
+        bean.setCarType(car_type);
+        bean.setHurtType(shoushang);
+        bean.setCarAmage(chesun);
+        if (activity.id==12){
+            bean.setId(this.bean.getId());
+            bean.setOperate("2");
         }else {
-            Toast.makeText(getActivity(), "您的网络出现了问题", Toast.LENGTH_SHORT).show();
+            bean.setOperate("1");
         }
+        String s = new Gson().toJson(bean);
+        LoadingDialog.showDialog(getActivity(),"正在提交...");
+        disposable=Network.getPoliceApi().addAccident(RequestBody.create(MediaType.parse("application/json"),s))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<BaseBean>() {
+                    @Override
+                    public void accept(BaseBean bean) throws Exception {
+                        if (bean.getCode()==0&&activity.id==12){
+                            LoadingDialog.disDialog();
+                            Toast.makeText(getActivity(), "修改成功!", Toast.LENGTH_SHORT).show();
+                            disposable.dispose();
+                            EventBus.getDefault().post("1");
+                            Objects.requireNonNull(getActivity()).finish();
+                        }
+                    }
+                }).observeOn(Schedulers.io())
+                .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
+                    @Override
+                    public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
+                        MultipartBody.Part[] part = new MultipartBody.Part[selectList.size()];
+                        for (int i = 0; i < selectList.size(); i++) {
+                            createFilePart(part, i, new File(selectList.get(i).getPath()));
+                        }
+                        return Network.getPoliceApi().uploadImage("accident/uploadImg",part);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseBean>() {
+                    @Override
+                    public void accept(BaseBean bean) throws Exception {
+                        if (bean.getCode()==0){
+                            LoadingDialog.disDialog();
+                            Toast.makeText(getActivity(), "提交成功...", Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("accept: ","" );
+                    }
+                });
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.stu_submit:
-                submit();
+            case R.id.sg_add_submit:
+                try {
+                    submit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.sg_select_time:
                 DatePickDialog dialog = new DatePickDialog(getActivity());
@@ -197,113 +306,20 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
                 //设置标题
                 dialog.setTitle("选择时间");
                 //设置类型
-                dialog.setType(DateType.TYPE_ALL);
+                dialog.setType(DateType.TYPE_YMD);
                 //设置消息体的显示格式，日期格式
-                dialog.setMessageFormat("yyyy-MM-dd HH:mm");
+                dialog.setMessageFormat("yyyy-MM-dd");
                 //设置点击确定按钮回调
                 dialog.setOnSureLisener(new OnSureLisener() {
                     @Override
                     public void onSure(Date date) {
-                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd").format(date);
                         sg_time.setText(string);
                     }
                 });
                 dialog.show();
                 break;
         }
-    }
-
-
-    private void showDialog(String str) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("选择");
-        builder.setMessage(str);
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                LoadingDialog.showDialog(getActivity(),"正在提交...");
-                set_data_into_server();
-            }
-        });
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.CAMERA},
-                            1);
-                }else {
-                    SharedPreferences sharedPreferences=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-                    file = new File(Environment.getExternalStorageDirectory()
-                            + File.separator + sharedPreferences.getString("userid","")+LoadingDialog.getTime2()+".jpg");
-                    file.getParentFile().mkdirs();
-                    SD_CARD_TEMP_DIR = file.getPath();
-                    dialog.dismiss();
-                    Intent cameraIntent = new Intent(
-                            MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (Build.VERSION.SDK_INT>=24){
-                        //改变Uri  com.xykj.customview.fileprovider注意和xml中的一致
-                        Uri uri = FileProvider.getUriForFile(getActivity(), "com.example.administrator.policetong.fileprovider", file);
-                        //添加权限
-                        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                        startActivityForResult(cameraIntent, 1);
-                    }else{
-                        SD_CARD_TEMP_DIR = Environment.getExternalStorageDirectory()
-                                + File.separator + sharedPreferences.getString("userid","")+LoadingDialog.getTime2()+".jpg";//设定照相后保存的文件名，类似于缓存文件
-                        dialog.dismiss();
-                        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                                Uri.fromFile(new File(SD_CARD_TEMP_DIR)));
-                        startActivityForResult(cameraIntent, 1);
-                    }
-
-                }
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-    String time,paddr,licheng,unit,fxunit,shangbao,zhenggai,zgtime;
-    private void set_data_into_server() {
-        Map info=new HashMap();
-        SharedPreferences sp=getActivity().getSharedPreferences("userinfo",Context.MODE_PRIVATE);
-        info.put("username",sp.getString("username",""));
-        info.put("userid",sp.getString("userid",""));
-        info.put("date",time);
-        info.put("road",paddr);
-        info.put("distance",licheng);
-        info.put("asunit",unit);
-        info.put("fdunit",fxunit);
-        info.put("report",shangbao);
-        info.put("img","");
-        info.put("rectify",zhenggai);
-        info.put("rectifydate",zgtime);
-        info.put("group",sp.getString("group",""));
-        info.put("detachment",sp.getString("detachment",""));
-        getNetInfo.NetInfo(getActivity(), "insertdanger", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")){
-                    Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                    getActivity().finish();
-                }else {
-                    Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override

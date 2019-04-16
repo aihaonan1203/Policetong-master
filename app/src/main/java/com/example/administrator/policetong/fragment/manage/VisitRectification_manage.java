@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
@@ -26,11 +27,18 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.base.BaseBean;
+import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.bean.SafetyChecks_bean;
 import com.example.administrator.policetong.bean.VisitRectification_bean;
 import com.example.administrator.policetong.fragment.Fragment_manage;
 import com.example.administrator.policetong.httppost.getNetInfo;
+import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.VisitBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
+import com.google.gson.Gson;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,12 +50,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.functions.Consumer;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VisitRectification_manage extends Fragment {
+public class VisitRectification_manage extends BaseFragment {
 
-    List<VisitRectification_bean> listbean;
+    List<VisitBean> listbean;
     private ListView pc_manage_listview;
     private TextView nodata;
     private MyAdapter myAdapter;
@@ -76,37 +88,59 @@ public class VisitRectification_manage extends Fragment {
 
     public void getNetData() {
         listbean.clear();
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        Map map = new HashMap();
-        map.put("userid", sharedPreferences.getString("userid", ""));
-        getNetInfo.NetInfoArray(getActivity(), "selectvisit", new JSONObject(map), new getNetInfo.VolleyArrayCallback() {
-            @Override
-            public void onSuccess(JSONArray object) throws JSONException {
-                for (int i = 0; i < object.length(); i++) {
-                    JSONObject j = (JSONObject) object.get(i);
-                    if (j.getString("modify").equals("未修改")) {
-                        listbean.add(new VisitRectification_bean(j.getString("date"), j.getString("detachment"), j.getString("unit"), j.getString("unitnature"), j.getString("img"),
-                                j.getString("grop"), j.getString("userid"), j.getString("content"), j.getString("objective")));
+        Map<String,String> map=new HashMap<>();
+        map.put("userid",userInfo.getUserId());
+        disposable=Network.getPoliceApi().getVisit(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
+                .compose(BaseActivity.<BaseBean<List<VisitBean>>>applySchedulers())
+                .subscribe(new Consumer<BaseBean<List<VisitBean>>>() {
+                    @Override
+                    public void accept(BaseBean<List<VisitBean>> listBaseBean) throws Exception {
+                        if (listbean!=null&&listbean.size()>0){
+                            listbean.clear();
+                        }
+                        listbean.addAll(listBaseBean.getData());
+                        LoadingDialog.disDialog();
+                        shuaxinListview();
                     }
-                }
-                if (listbean.size() == 0) {
-                    nodata.setVisibility(View.VISIBLE);
-                    pc_manage_listview.setVisibility(View.GONE);
-                } else {
-                    Collections.reverse(listbean);
-                    nodata.setVisibility(View.GONE);
-                    pc_manage_listview.setVisibility(View.VISIBLE);
-                }
-                LoadingDialog.disDialog();
-                shuaxinListview();
-            }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(getActivity(), "获取数据失败..", Toast.LENGTH_SHORT).show();
+                        LoadingDialog.disDialog();
+                    }
+                });
 
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.showToast_shibai(getActivity());
-                LoadingDialog.disDialog();
-            }
-        });
+//        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
+//        Map map = new HashMap();
+//        map.put("userid", sharedPreferences.getString("userid", ""));
+//        getNetInfo.NetInfoArray(getActivity(), "selectvisit", new JSONObject(map), new getNetInfo.VolleyArrayCallback() {
+//            @Override
+//            public void onSuccess(JSONArray object) throws JSONException {
+//                for (int i = 0; i < object.length(); i++) {
+//                    JSONObject j = (JSONObject) object.get(i);
+//                    if (j.getString("modify").equals("未修改")) {
+//                        listbean.add(new VisitRectification_bean(j.getString("date"), j.getString("detachment"), j.getString("unit"), j.getString("unitnature"), j.getString("img"),
+//                                j.getString("grop"), j.getString("userid"), j.getString("content"), j.getString("objective")));
+//                    }
+//                }
+//                if (listbean.size() == 0) {
+//                    nodata.setVisibility(View.VISIBLE);
+//                    pc_manage_listview.setVisibility(View.GONE);
+//                } else {
+//                    Collections.reverse(listbean);
+//                    nodata.setVisibility(View.GONE);
+//                    pc_manage_listview.setVisibility(View.VISIBLE);
+//                }
+//                LoadingDialog.disDialog();
+//                shuaxinListview();
+//            }
+//
+//            @Override
+//            public void onError(VolleyError volleyError) {
+//                LoadingDialog.showToast_shibai(getActivity());
+//                LoadingDialog.disDialog();
+//            }
+//        });
     }
 
     public void shuaxinListview() {
@@ -174,7 +208,6 @@ public class VisitRectification_manage extends Fragment {
         lp.alpha = 0.5f;
         getActivity().getWindow().setAttributes(lp);
         popupWindow.showAtLocation(popView, Gravity.BOTTOM, 0, 0);
-
     }
 
     private void showDialog(final int id) {
@@ -188,11 +221,15 @@ public class VisitRectification_manage extends Fragment {
         final EditText visit_context = view.findViewById(R.id.visit_context);
         final EditText visit_unit = view.findViewById(R.id.visit_unit);
         final EditText visit_purpose = view.findViewById(R.id.visit_purpose);
-        final VisitRectification_bean bean = listbean.get(id);
+        final EditText visit_time = view.findViewById(R.id.visit_time);
+        final LinearLayout llay_content = view.findViewById(R.id.llay_content);
+        llay_content.setVisibility(View.INVISIBLE);
+        final VisitBean bean = listbean.get(id);
+        visit_time.setText(bean.getVisitDate());
         visit_unitname.setText(bean.getUnit());
         visit_context.setText(bean.getContent());
-        visit_unit.setText(bean.getUnitnature());
-        visit_purpose.setText(bean.getObjective());
+        visit_unit.setText(bean.getUnitNature());
+        visit_purpose.setText(bean.getVisitPurpose());
         builder.setView(view);
         final AlertDialog dialog = builder.create();
         cancle.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +243,12 @@ public class VisitRectification_manage extends Fragment {
             public void onClick(View view) {
                 unitname = visit_unitname.getText().toString().trim();
                 if (TextUtils.isEmpty(unitname)) {
+                    Toast.makeText(getContext(), "走访单位不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String unittime = visit_time.getText().toString().trim();
+                if (TextUtils.isEmpty(unittime)) {
                     Toast.makeText(getContext(), "走访单位不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -225,75 +268,42 @@ public class VisitRectification_manage extends Fragment {
                     Toast.makeText(getContext(), "简要内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-
                 dialog.dismiss();
                 LoadingDialog.showDialog(getActivity(), "正在提交内容！");
-                amend_data(bean);
+                VisitBean visitBean=new VisitBean(id,userInfo.getUserId(),userInfo.getSquId(),unit,unitname,purpose,context,unittime,"2");
+                String s = new Gson().toJson(visitBean);
+                disposable=Network.getPoliceApi().addVisit(RequestBody.create(MediaType.parse("application/json"),s))
+                        .compose(BaseActivity.<BaseBean>applySchedulers())
+                        .subscribe(new Consumer<BaseBean>() {
+                            @Override
+                            public void accept(BaseBean bean) throws Exception {
+                                LoadingDialog.disDialog();
+                                if (bean.getCode()==0){
+                                    Toast.makeText(getActivity(), "修改成功!", Toast.LENGTH_SHORT).show();
+                                    initValues();
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Toast.makeText(getActivity(), "修改失败!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
         dialog.show();
     }
 
-    private void amend_data(final VisitRectification_bean bean) {
-        Map info = new HashMap();
-        info.put("userid", bean.getUserid());
-        info.put("date", bean.getDate());
-        getNetInfo.NetInfo(getActivity(), "updatevisit", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")) {
-                    get_data_form_server(bean);
-                } else {
-                    Toast.makeText(getActivity(), "修改失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
+    private void amend_data(final VisitBean bean) {
 
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void get_data_form_server(VisitRectification_bean bean) {
-        Map info=new HashMap();
-        SharedPreferences sp=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        info.put("username",sp.getString("username",""));
-        info.put("userid",bean.getUserid());
-        info.put("unit",unitname);
-        info.put("unitnature",unit);
-        info.put("objective",purpose);
-        info.put("content",context);
-        info.put("img",bean.getImg());
-        info.put("date",bean.getDate());
-        info.put("group",bean.getGrop());
-        info.put("detachment",bean.getDetachment());
-        getNetInfo.NetInfo(getActivity(), "insertvisit", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")){
-                    Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                    getNetData();
-                }else {
-                    Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
     String unitname,context,purpose,unit;
+
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+
+    }
+
     private class MyAdapter extends BaseAdapter {
 
         @Override
@@ -322,13 +332,13 @@ public class VisitRectification_manage extends Fragment {
         }
 
         @SuppressLint("SetTextI18n")
-        private void set_data_into_layout(int i, VisitRectification_bean bean,MyAdapter.ViewHolder holder) {
+        private void set_data_into_layout(int i, VisitBean bean,MyAdapter.ViewHolder holder) {
             holder.pc_item_id.setText(i+1+"");
             holder.pc_item_txt1.setText("走访单位："+bean.getUnit());
-            holder.pc_item_txt2.setText("单位性质："+bean.getUnitnature());
-            holder.pc_item_txt3.setText("走访目的："+bean.getObjective());
+            holder.pc_item_txt2.setText("单位性质："+bean.getUnitNature());
+            holder.pc_item_txt3.setText("走访目的："+bean.getVisitPurpose());
             holder.pc_item_txt4.setText("简要内容："+bean.getContent());
-            holder.pc_item_txt5.setText("提交时间："+bean.getDate());
+            holder.pc_item_txt5.setText("走访时间："+bean.getVisitDate());
         }
 
         private   class ViewHolder {

@@ -16,10 +16,14 @@ import com.luck.picture.lib.entity.LocalMedia;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusException;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.luck.picture.lib.config.PictureConfig.CHOOSE_REQUEST;
@@ -48,6 +52,13 @@ public abstract class BaseFragment extends Fragment {
         userInfo = SPUtils.getUserInfo(Objects.requireNonNull(getActivity()));
     }
 
+
+    //创建Multipart, fieldName为表单字段名
+    public static void createFilePart(MultipartBody.Part[] part, int i, File file) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
+        part[i] = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+    }
+
     protected List<LocalMedia> selectList;
 
     protected void takePhoto(){
@@ -55,6 +66,7 @@ public abstract class BaseFragment extends Fragment {
                 .openGallery(PictureMimeType.ofImage())
                 .maxSelectNum(9)
                 .isCamera(true)
+                .compress(true)// 是否压缩
                 .selectionMedia(selectList)
                 .forResult(CHOOSE_REQUEST);
     }

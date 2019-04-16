@@ -1,16 +1,9 @@
-package com.example.administrator.policetong.fragment;
-
+package com.example.administrator.policetong.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,19 +14,19 @@ import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.R;
-import com.example.administrator.policetong.activity.ModulesActivity;
-import com.example.administrator.policetong.activity.ParkActivity;
-import com.example.administrator.policetong.activity.PreviewActivity;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
-import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.CarBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.Utils;
+import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -42,28 +35,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ParkManageFragment extends BaseFragment implements View.OnClickListener {
+public class ParkOutActivity extends BaseActivity implements View.OnClickListener, BaseActivity.PhotoCallBack {
 
-
-    private ImageView iv_right;
     private EditText etParkTime;
     private Button btnParkTime;
     private EditText etParkCarType;
@@ -75,35 +56,22 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
     private EditText tvParkRemark;
     private Button btnParkSubmit;
     private Button sgAddCancle;
-
-    public ParkManageFragment() {
-        // Required empty public constructor
-    }
-
+    private ImageView acArrowBack;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_park_manage, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initView(view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_park_out);
+        initView();
         initListener();
     }
 
+
     private void initListener() {
+        setPhoto(this);
         btnParkSubmit.setOnClickListener(this);
         btnParkTime.setOnClickListener(this);
         btnPreview.setOnClickListener(this);
-        iv_right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(),ParkActivity.class));
-            }
-        });
         ivTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,42 +82,56 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 if (selectList == null || selectList.size() == 0) {
-                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ParkOutActivity.this, "请先选择照片!!!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 EventBus.getDefault().postSticky(new EvenMsg<>("", selectList));
-                startActivity(new Intent(getActivity(), PreviewActivity.class));
+                startActivity(new Intent(ParkOutActivity.this, PreviewActivity.class));
             }
         });
     }
 
-    private void initView(View view) {
-        iv_right = ModulesActivity.getmContext().findViewById(R.id.ac_tv_right);
-        iv_right.setVisibility(View.VISIBLE);
-        etParkTime = view.findViewById(R.id.et_park_time);
-        btnParkTime = view.findViewById(R.id.btn_park_time);
-        etParkCarType = view.findViewById(R.id.et_park_car_type);
-        etParkCarNumber = view.findViewById(R.id.et_park_carNumber);
-        etParkType = view.findViewById(R.id.et_park_type);
-        tvParkPhoto = view.findViewById(R.id.tv_park_photo);
-        ivTakePhoto = view.findViewById(R.id.iv_take_photo);
-        btnPreview = view.findViewById(R.id.btn_preview);
-        tvParkRemark = view.findViewById(R.id.tv_park_remark);
-        btnParkSubmit = view.findViewById(R.id.btn_park_submit);
-        sgAddCancle = view.findViewById(R.id.sg_add_cancle);
-        tvParkPhoto.setText(String.format(getResources().getString(R.string.photo), "0"));
+    private CarBean carBean;
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void XXX(CarBean carBean) {
+        this.carBean = carBean;
     }
 
-    @Override
-    public void getPhoto(List<LocalMedia> selectList) {
-        tvParkPhoto.setText(String.format(getResources().getString(R.string.photo), selectList.size() + ""));
+    private void initView() {
+        etParkTime = findViewById(R.id.et_park_time);
+        btnParkTime = findViewById(R.id.btn_park_time);
+        etParkCarType = findViewById(R.id.et_park_car_type);
+        etParkCarNumber = findViewById(R.id.et_park_carNumber);
+        etParkType = findViewById(R.id.et_park_type);
+        tvParkPhoto = findViewById(R.id.tv_park_photo);
+        ivTakePhoto = findViewById(R.id.iv_take_photo);
+        btnPreview = findViewById(R.id.btn_preview);
+        tvParkRemark = findViewById(R.id.tv_park_remark);
+        btnParkSubmit = findViewById(R.id.btn_park_submit);
+        sgAddCancle = findViewById(R.id.sg_add_cancle);
+
+        if (carBean != null) {
+            etParkCarNumber.setText(carBean.getLicence());
+            etParkCarType.setText(carBean.getModels());
+            etParkType.setText(carBean.getType());
+        }
+        tvParkPhoto.setText(String.format(getResources().getString(R.string.photo), "0"));
+
+        acArrowBack = findViewById(R.id.ac_arrow_back);
+        acArrowBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_park_time:
-                DatePickDialog dialog = new DatePickDialog(getActivity());
+                DatePickDialog dialog = new DatePickDialog(ParkOutActivity.this);
                 //设置上下年分限制
                 dialog.setYearLimt(5);
                 //设置标题
@@ -181,23 +163,27 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
         String type = etParkType.getText().toString().trim();
         String remark = tvParkRemark.getText().toString().trim();
         if (selectList == null || selectList.size() == 0) {
-            Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ParkOutActivity.this, "请先选择照片!!!", Toast.LENGTH_SHORT).show();
             return;
         }
         if (carNumber.isEmpty() || carType.isEmpty() || time.isEmpty() || type.isEmpty()) {
-            Toast.makeText(getActivity(), "请把信息补充完整!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ParkOutActivity.this, "请把信息补充完整!!!", Toast.LENGTH_SHORT).show();
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("operate", "1");
-        map.put("userId", userInfo.getUserId());
-        map.put("entranceTime", Utils.getStringToDate(time,"yyyy-MM-dd HH:mm:ss")/1000);
-        map.put("models", carType);
-        map.put("license", carNumber);
-        map.put("type", type);
-        map.put("remark", remark);
-        String s = new JSONObject(map).toString();
-        LoadingDialog.showDialog(getActivity(),"正在提交表单");
-        disposable = Network.getPoliceApi().setPark(RequestBody.create(MediaType.parse("application/json"),s ))
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("operate", "1");
+//        map.put("userId", userInfo.getUserId());
+//        map.put("entranceTime", Utils.getStringToDate(time, "yyyy-MM-dd HH:mm:ss") / 1000);
+//        map.put("models", carType);
+//        map.put("license", carNumber);
+//        map.put("type", type);
+//        map.put("remark", remark);
+//        String s = new JSONObject(map).toString();
+        carBean.setLeaveLicense(remark);
+        carBean.setLeaveTime(Utils.getStringToDate(time, "yyyy-MM-dd HH:mm:ss")/1000);
+        carBean.setOperate("2");
+        String json = new Gson().toJson(carBean);
+        LoadingDialog.showDialog(ParkOutActivity.this, "正在提交表单");
+        disposable = Network.getPoliceApi().setPark(RequestBody.create(MediaType.parse("application/json"),json ))
                 .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
                     @Override
                     public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
@@ -205,23 +191,36 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
                         for (int i = 0; i < selectList.size(); i++) {
                             createFilePart(part, i, new File(selectList.get(i).getPath()));
                         }
-                        return Network.getPoliceApi().uploadImage("park/uploadEntranceImg", part);
+                        return Network.getPoliceApi().uploadImage("park/uploadLeaveImg", part);
                     }
                 }).compose(BaseActivity.<BaseBean>applySchedulers()).subscribe(new Consumer<BaseBean>() {
                     @Override
                     public void accept(BaseBean bean) throws Exception {
                         LoadingDialog.disDialog();
-                        Toast.makeText(getActivity(), "提交成功!", Toast.LENGTH_SHORT).show();
-                        Objects.requireNonNull(getActivity()).finish();
+                        Toast.makeText(ParkOutActivity.this, "提交成功!", Toast.LENGTH_SHORT).show();
+                        ParkOutActivity.this.finish();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         LoadingDialog.disDialog();
-                        Toast.makeText(getActivity(), "提交失败!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ParkOutActivity.this, "提交失败!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
 
+    //创建Multipart, fieldName为表单字段名
+    public static void createFilePart(MultipartBody.Part[] part, int i, File file) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
+        part[i] = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+    }
+
+    List<LocalMedia> selectList;
+
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+        this.selectList = selectList;
+        tvParkPhoto.setText(String.format(getResources().getString(R.string.photo), selectList.size() + ""));
+    }
 }

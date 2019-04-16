@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -25,32 +26,50 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.base.BaseBean;
+import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.bean.Study_bean;
 import com.example.administrator.policetong.bean.VisitRectification_bean;
 import com.example.administrator.policetong.fragment.Fragment_manage;
 import com.example.administrator.policetong.httppost.getNetInfo;
+import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.StudyBean;
+import com.example.administrator.policetong.new_bean.ZDBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
+import com.google.gson.Gson;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Study_manage extends Fragment {
+public class Study_manage extends BaseFragment {
 
-    List<Study_bean> listbean;
+    List<StudyBean> listbean;
     private ListView pc_manage_listview;
     private TextView nodata;
     private MyAdapter myAdapter;
+    private HashMap<Object, Object> map;
+
     public Study_manage() {
         // Required empty public constructor
     }
@@ -62,7 +81,7 @@ public class Study_manage extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_study_manage, container, false);
         initView(view);
-        initValues();
+        getSqu();
         return view;
     }
 
@@ -114,6 +133,34 @@ public class Study_manage extends Fragment {
         getNetData();
     }
 
+    private void getSqu() {
+        disposable = Network.getPoliceApi().getSqu()
+                .compose(BaseActivity.<BaseBean<List<ZDBean>>>applySchedulers())
+                .subscribe(new Consumer<BaseBean<List<ZDBean>>>() {
+                    @SuppressLint("UseSparseArrays")
+                    @Override
+                    public void accept(BaseBean<List<ZDBean>> bean) throws Exception {
+                        if (bean.getCode() != 0) {
+                            Toast.makeText(getActivity(), "获取中队信息失败", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        List<ZDBean> data = bean.getData();
+                        map = new HashMap<>();
+                        for (int i = 0; i <data.size() ; i++) {
+                            ZDBean zdBean = data.get(i);
+                            map.put(zdBean.getId(),zdBean.getSquName());
+                        }
+                        initValues();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
+    }
+
+    @SuppressLint("SetTextI18n")
     private void showDialog(final int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = View.inflate(getActivity(), R.layout.fragment_studdy, null);
@@ -122,14 +169,23 @@ public class Study_manage extends Fragment {
         submit.setText("修改");
         cancle.setVisibility(View.VISIBLE);
         final EditText stu_study_time = view.findViewById(R.id.stu_study_time);
-        final EditText stu_time = view.findViewById(R.id.stu_time);
         final EditText stu_zd = view.findViewById(R.id.stu_zd);
         final EditText stu_context = view.findViewById(R.id.stu_context);
-        final Study_bean bean = listbean.get(id);
-        stu_study_time.setText(bean.getUsername());
-        stu_time.setText(bean.getDate());
-        stu_zd.setText(bean.getDetachment());
+        final EditText stu_study_site = view.findViewById(R.id.stu_study_site);
+        final LinearLayout llyt_photo = view.findViewById(R.id.llyt_photo);
+        llyt_photo.setVisibility(View.GONE);
+        final StudyBean bean = listbean.get(id);
+        stu_study_time.setText(bean.getStudyTime());
+        Object o = map.get(bean.getSquId());
+        if (o!=null){
+            stu_zd.setText("所属中队:"+o.toString());
+        }else
+        {
+            stu_zd.setText(String.valueOf(bean.getSquId()));
+        }
+
         stu_context.setText(bean.getContent());
+        stu_study_site.setText(bean.getPlace());
         builder.setView(view);
         final AlertDialog dialog = builder.create();
         cancle.setOnClickListener(new View.OnClickListener() {
@@ -143,19 +199,19 @@ public class Study_manage extends Fragment {
             public void onClick(View view) {
                 String name = stu_study_time.getText().toString().trim();
                 if (TextUtils.isEmpty(name)) {
-                    Toast.makeText(getContext(), "姓名不能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "学习时间不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 String zd = stu_zd.getText().toString().trim();
                 if (TextUtils.isEmpty(zd)) {
-                    Toast.makeText(getContext(), "所属中队能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "所属中队不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String time = stu_time.getText().toString().trim();
-                if (TextUtils.isEmpty(time)) {
-                    Toast.makeText(getContext(), "学习时间不能为空", Toast.LENGTH_SHORT).show();
+                String site = stu_study_site.getText().toString().trim();
+                if (TextUtils.isEmpty(zd)) {
+                    Toast.makeText(getContext(), "学习地点不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -164,66 +220,32 @@ public class Study_manage extends Fragment {
                     Toast.makeText(getContext(), "学习内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                dialog.dismiss();
-                LoadingDialog.showDialog(getActivity(), "正在提交内容！");
-                amend_data(new Study_bean(time,zd,bean.getGrop(),bean.getUserid(),context,name));
+                LoadingDialog.showDialog(getActivity(), "正在提交...");
+                StudyBean bean1=new StudyBean(bean.getId(),userInfo.getUserId(),context,site,name,userInfo.getSquId(),"2");
+                String s = new Gson().toJson(bean1);
+                disposable=Network.getPoliceApi().addStudy(RequestBody.create(MediaType.parse("application/json"),s))
+                        .compose(BaseActivity.<BaseBean>applySchedulers()).subscribe(new Consumer<BaseBean>() {
+                            @Override
+                            public void accept(BaseBean bean) throws Exception {
+                                if (bean.getCode()==0){
+                                    LoadingDialog.disDialog();
+                                    Toast.makeText(getActivity(), "提交成功...", Toast.LENGTH_SHORT).show();
+                                    shuaxinListview();
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                LoadingDialog.disDialog();
+                                Toast.makeText(getActivity(), "提交失败...", Toast.LENGTH_SHORT).show();
+                                Log.e("accept: ","" );
+                            }
+                        });
             }
         });
         dialog.show();
     }
 
-    private void amend_data(final Study_bean bean) {
-        Map info = new HashMap();
-        info.put("userid", bean.getUserid());
-        info.put("date", bean.getDate());
-        getNetInfo.NetInfo(getActivity(), "updatestudy", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")) {
-                    setDataToService(bean);
-                } else {
-                    Toast.makeText(getActivity(), "修改失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void setDataToService(Study_bean bean) {
-        Map info=new HashMap();
-        info.put("username",bean.getUsername());
-        info.put("userid",bean.getUserid());
-        info.put("date",bean.getDate());
-        info.put("content",bean.getContent());
-        info.put("detachment",bean.getDetachment());
-        getNetInfo.NetInfo(getActivity(), "insertstudys", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")){
-                    Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                    initValues();
-                }else {
-                    Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
 
     private void initView(View view) {
@@ -244,38 +266,29 @@ public class Study_manage extends Fragment {
     }
 
     public void getNetData() {
-        listbean.clear();
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         Map map = new HashMap();
-        map.put("userid", sharedPreferences.getString("userid", ""));
-        getNetInfo.NetInfoArray(getActivity(), "selectstudy", new JSONObject(map), new getNetInfo.VolleyArrayCallback() {
-            @Override
-            public void onSuccess(JSONArray object) throws JSONException {
-                for (int i = 0; i < object.length(); i++) {
-                    JSONObject j = (JSONObject) object.get(i);
-                    if (j.getString("modify").equals("未修改")) {
-                        listbean.add(new Study_bean(j.getString("date"), j.getString("detachment"), j.getString("grop"), j.getString("userid"), j.getString("content"),
-                                j.getString("username")));
+        map.put("userId",userInfo.getUserId());
+        disposable=Network.getPoliceApi().getStudy(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
+                .compose(BaseActivity.<BaseBean<List<StudyBean>>>applySchedulers())
+                .subscribe(new Consumer<BaseBean<List<StudyBean>>>() {
+                    @Override
+                    public void accept(BaseBean<List<StudyBean>> listBaseBean) throws Exception {
+                        LoadingDialog.disDialog();
+                        if (listBaseBean.getCode()==0){
+                            if (listbean!=null) {
+                                listbean.clear();
+                            }
+                            assert listbean != null;
+                            listbean.addAll(listBaseBean.getData());
+                            shuaxinListview();
+                        }
                     }
-                }
-                if (listbean.size() == 0) {
-                    nodata.setVisibility(View.VISIBLE);
-                    pc_manage_listview.setVisibility(View.GONE);
-                } else {
-                    Collections.reverse(listbean);
-                    nodata.setVisibility(View.GONE);
-                    pc_manage_listview.setVisibility(View.VISIBLE);
-                }
-                LoadingDialog.disDialog();
-                shuaxinListview();
-            }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
 
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.showToast_shibai(getActivity());
-                LoadingDialog.disDialog();
-            }
-        });
+                    }
+                });
     }
 
     public void shuaxinListview() {
@@ -285,6 +298,11 @@ public class Study_manage extends Fragment {
         } else {
             myAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+
     }
 
     private class MyAdapter extends BaseAdapter {
@@ -315,11 +333,17 @@ public class Study_manage extends Fragment {
         }
 
         @SuppressLint("SetTextI18n")
-        private void set_data_into_layout(int i, Study_bean bean, MyAdapter.ViewHolder holder) {
+        private void set_data_into_layout(int i, StudyBean bean, MyAdapter.ViewHolder holder) {
             holder.pc_item_id.setText(i + 1 + "");
-            holder.pc_item_txt1.setText("姓名："+bean.getUsername());
-            holder.pc_item_txt2.setText("记录时间："+bean.getDate());
-            holder.pc_item_txt3.setText("所属中队："+bean.getDetachment());
+            holder.pc_item_txt1.setText("学习时间："+bean.getStudyTime());
+            holder.pc_item_txt2.setText("记录地点："+bean.getPlace());
+            Object o = map.get(bean.getSquId());
+            if (o!=null){
+                holder.pc_item_txt3.setText("所属中队："+o.toString());
+            }else
+            {
+                holder.pc_item_txt3.setText("所属中队："+bean.getSquId());
+            }
             holder.pc_item_txt4.setText("学习内容："+bean.getContent());
             holder.pc_item_txt5.setVisibility(View.GONE);
         }

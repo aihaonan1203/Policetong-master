@@ -16,6 +16,7 @@ import android.view.View;
 
 import com.luck.picture.lib.tools.StringUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -50,6 +51,17 @@ public class Utils {
         throw new NullPointerException("u should init first");
     }
 
+    public static long getStringToDate(String dateString, String pattern) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        Date date = new Date();
+        try{
+            date = dateFormat.parse(dateString);
+        } catch(ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
 
     private static SimpleDateFormat sdf = null;
     public  static String formatUTC(long l, String strPattern) {

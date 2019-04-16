@@ -7,18 +7,57 @@
     android:scrollbars="none"
     tools:context="com.example.administrator.policetong.fragment.CarInFragment">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/text_white"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:padding="7dp"
+            android:background="#3291FF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/ac_arrow_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                />
+
+            <TextView
+                android:id="@+id/ac_tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="车辆驶出登记"
+                android:layout_centerInParent="true"
+                android:textColor="@color/text_white"
+                />
+
+            <ImageView
+                android:id="@+id/ac_tv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                android:src="@drawable/icon_lishi"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/text_white"
+                />
+
+        </RelativeLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/magrgin_txt_1"
             android:layout_marginTop="@dimen/magrgin_txt_5"
-            android:text="入场时间:"
+            android:text="出场时间:"
             android:textColor="@color/txt_color"
             android:textSize="18sp" />
 
@@ -70,6 +109,7 @@
 
             <EditText
                 android:id="@+id/et_park_car_type"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/k_height"
                 android:layout_centerVertical="true"
@@ -106,6 +146,7 @@
 
             <EditText
                 android:id="@+id/et_park_carNumber"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/k_height"
                 android:layout_centerVertical="true"
@@ -142,6 +183,7 @@
 
             <EditText
                 android:id="@+id/et_park_type"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/k_height"
                 android:layout_centerVertical="true"
@@ -188,13 +230,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="@dimen/magrgin_txt_5"
-            android:text="备注："
+            android:text="驶出建议："
             android:textSize="18sp" />
 
         <EditText
             android:id="@+id/tv_park_remark"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:text="同意驶出"
+            android:textColor="#757575"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"

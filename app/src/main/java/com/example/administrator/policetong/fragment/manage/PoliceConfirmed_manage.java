@@ -164,7 +164,6 @@ public class PoliceConfirmed_manage extends BaseFragment {
         lp.alpha = 0.5f;
         getActivity().getWindow().setAttributes(lp);
         popupWindow.showAtLocation(popView, Gravity.BOTTOM,0,0);
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

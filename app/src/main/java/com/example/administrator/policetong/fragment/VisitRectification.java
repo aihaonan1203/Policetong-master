@@ -40,13 +40,18 @@ import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.PreviewActivity;
+import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.httppost.getNetInfo;
+import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.VisitBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.example.administrator.policetong.utils.FileUtils;
 import com.example.administrator.policetong.utils.Util;
+import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
 import org.greenrobot.eventbus.EventBus;
@@ -67,6 +72,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -125,7 +138,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
         visit_select_time=view.findViewById(R.id.vr_select_time);
         visit_submit.setOnClickListener(this);
         visit_select_time.setOnClickListener(this);
-        visit_time.setText(LoadingDialog.getTime());
+//        visit_time.setText(LoadingDialog.getTime());
         btn_preview = (Button) view.findViewById(R.id.btn_preview);
         iv_take_photo=view.findViewById(R.id.iv_take_photo);
         tv_photo=view.findViewById(R.id.tv_photo);
@@ -216,14 +229,14 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                 //设置标题
                 dialog.setTitle("选择时间");
                 //设置类型
-                dialog.setType(DateType.TYPE_ALL);
+                dialog.setType(DateType.TYPE_YMD);
                 //设置消息体的显示格式，日期格式
-                dialog.setMessageFormat("yyyy-MM-dd HH:mm");
+                dialog.setMessageFormat("yyyy-MM-dd");
                 //设置点击确定按钮回调
                 dialog.setOnSureLisener(new OnSureLisener() {
                     @Override
                     public void onSure(Date date) {
-                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd").format(date);
                         visit_time.setText(string);
                     }
                 });
@@ -233,7 +246,17 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
     }
     String unitname,context,purpose,unit;
     private void submit() {
+        if (selectList==null||selectList.size()==0){
+            Toast.makeText(getActivity(), "请先选择上传的图片!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // validate
+        String time = visit_time.getText().toString().trim();
+        if (TextUtils.isEmpty(time)) {
+            Toast.makeText(getContext(), "时间不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         unitname = visit_unitname.getText().toString().trim();
         if (TextUtils.isEmpty(unitname)) {
             Toast.makeText(getContext(), "走访单位不能为空", Toast.LENGTH_SHORT).show();
@@ -255,11 +278,39 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
             Toast.makeText(getContext(), "单位性质不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (NetworkChangeListener.onAvailable){
-            showDialog("请选择是否要上传照片");
-        }else {
-            Toast.makeText(getActivity(), "您的网络出现了问题", Toast.LENGTH_SHORT).show();
-        }
+        VisitBean visitBean=new VisitBean(userInfo.getUserId(),userInfo.getSquId(),unit,unitname,purpose,context,time,"1");
+        String s = new Gson().toJson(visitBean);
+        disposable=Network.getPoliceApi().addVisit(RequestBody.create(MediaType.parse("application/json"),s))
+                .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
+                    @Override
+                    public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
+                        MultipartBody.Part[] part = new MultipartBody.Part[selectList.size()];
+                        for (int i = 0; i < selectList.size(); i++) {
+                            createFilePart(part, i, new File(selectList.get(i).getPath()));
+                        }
+                        return Network.getPoliceApi().uploadImage("visit/uploadImg",part);
+                    }
+                }).compose(BaseActivity.<BaseBean>applySchedulers())
+                .subscribe(new Consumer<BaseBean>() {
+                    @Override
+                    public void accept(BaseBean bean) throws Exception {
+                        if (bean.getCode()==0){
+                            Toast.makeText(getActivity(), "上传成功", Toast.LENGTH_SHORT).show();
+                            Objects.requireNonNull(getActivity()).finish();
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("accept: ","" );
+                        Toast.makeText(getActivity(), "上传失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+//        if (NetworkChangeListener.onAvailable){
+//            showDialog("请选择是否要上传照片");
+//        }else {
+//            Toast.makeText(getActivity(), "您的网络出现了问题", Toast.LENGTH_SHORT).show();
+//        }
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.administrator.policetong.base;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Keep;
@@ -14,9 +15,14 @@ import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.new_bean.UserBean;
 import com.example.administrator.policetong.utils.SPUtils;
 import com.example.administrator.policetong.utils.Utils;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusException;
+
+import java.util.List;
 
 import javax.xml.transform.Transformer;
 
@@ -26,6 +32,8 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.luck.picture.lib.config.PictureConfig.CHOOSE_REQUEST;
 
 
 /**
@@ -39,6 +47,7 @@ import io.reactivex.schedulers.Schedulers;
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected UserBean userInfo;
+    private List<LocalMedia> selectList;
 
     /**
      * 封装的findViewByID方法
@@ -117,6 +126,44 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
+    protected void takePhoto(){
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .maxSelectNum(9)
+                .isCamera(true)
+                .compress(true)// 是否压缩
+                .selectionMedia(selectList)
+                .forResult(CHOOSE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case CHOOSE_REQUEST:
+                    // 图片、视频、音频选择结果回调
+                    selectList = PictureSelector.obtainMultipleResult(data);
+                    if (photo!=null){
+                        photo.getPhoto(selectList);
+                    }
+                    break;
+            }
+        }
+    }
+
+    private PhotoCallBack photo;
+    public interface PhotoCallBack{
+        void getPhoto(List<LocalMedia> selectList);
+    }
+
+    public PhotoCallBack getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(PhotoCallBack photo) {
+        this.photo = photo;
+    }
 
     /**
      * 替换fragment
