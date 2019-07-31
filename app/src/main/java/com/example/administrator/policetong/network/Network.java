@@ -3,6 +3,7 @@
 package com.example.administrator.policetong.network;
 
 
+import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.network.api.PoliceApi;
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
@@ -21,7 +22,7 @@ public class Network {
         if (gankApi == null) {
             Retrofit retrofit = new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://47.106.70.175:8080/traffic/")
+                    .baseUrl(Consts.COMMOM_URL)
                     .addConverterFactory(gsonConverterFactory)
                     .addCallAdapterFactory(rxJavaCallAdapterFactory)
                     .build();

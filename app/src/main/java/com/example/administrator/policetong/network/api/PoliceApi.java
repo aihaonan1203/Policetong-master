@@ -33,8 +33,8 @@ public interface PoliceApi {
     @POST()//上传图片
     Observable<BaseBean> uploadImage(@Url()String url, @Part() MultipartBody.Part [] file);
 
-    @POST("user/login")//登录
-    Observable<BaseBean<UserBean>> login(@Body RequestBody test);
+    @POST("login")//登录
+    Observable<ResponseBody> login(@Body RequestBody test);
 
     @POST("notice/getNotice")//公告查询
     Observable<BaseBean<List<GongGaoBean>>> getNotice(@Body RequestBody test);

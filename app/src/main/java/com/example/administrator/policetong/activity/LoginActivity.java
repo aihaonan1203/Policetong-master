@@ -51,6 +51,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -213,42 +214,44 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void userlogin(final String name, final String pwd) {
-        LoadingDialog.showDialog(this);
-        LoadingDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                WindowManager.LayoutParams lp = getWindow().getAttributes();
-                lp.alpha = 1.0f;
-                getWindow().setAttributes(lp);
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            }
-        });
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = 0.5f;
-        getWindow().setAttributes(lp);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//        LoadingDialog.showDialog(this);
+//        LoadingDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialogInterface) {
+//                WindowManager.LayoutParams lp = getWindow().getAttributes();
+//                lp.alpha = 1.0f;
+//                getWindow().setAttributes(lp);
+//                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//            }
+//        });
+//        WindowManager.LayoutParams lp = getWindow().getAttributes();
+//        lp.alpha = 0.5f;
+//        getWindow().setAttributes(lp);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         Map<String, String> input = new HashMap<String, String>();
-        input.put("userid", name);
+        input.put("user", name);
         input.put("password", pwd);
         JSONObject jsonObject = new JSONObject(input);
         disposable = Network.getPoliceApi().login(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString()))
-                .compose(BaseActivity.<BaseBean<UserBean>>applySchedulers())
-                .subscribe(new Consumer<BaseBean<UserBean>>() {
+                .compose(BaseActivity.<ResponseBody>applySchedulers())
+                .subscribe(new Consumer<ResponseBody>() {
                     @Override
-                    public void accept(BaseBean<UserBean> userBean) throws Exception {
-                        LoadingDialog.disDialog();
-                        if (userBean.getCode()!=0){
-                            Toast.makeText(LoginActivity.this, "账号或密码错误!", Toast.LENGTH_SHORT).show();
-                            SPUtils.saveBoolean("save", false);
-                            return;
-                        }
-                        SPUtils.setUserInfo(LoginActivity.this, userBean.getData());
-                        SPUtils.saveBoolean("save", true);
-                        SPUtils.saveString("userid", name);
-                        SPUtils.saveString("password", pwd);
-                        finish();
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
+                    public void accept(ResponseBody responseBody) throws Exception {
+                        String name=responseBody.string();
+                        Log.e("accept: ",name );
+//                        LoadingDialog.disDialog();
+//                        if (userBean.getCode()!=0){
+//                            Toast.makeText(LoginActivity.this, "账号或密码错误!", Toast.LENGTH_SHORT).show();
+//                            SPUtils.saveBoolean("save", false);
+//                            return;
+//                        }
+//                        SPUtils.setUserInfo(LoginActivity.this, userBean.getData());
+//                        SPUtils.saveBoolean("save", true);
+//                        SPUtils.saveString("userid", name);
+//                        SPUtils.saveString("password", pwd);
+//                        finish();
+//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                        startActivity(intent);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

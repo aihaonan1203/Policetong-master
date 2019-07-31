@@ -39,6 +39,12 @@
         <item name="android:shadowRadius">1.0</item>
     </style>
 
+    <!--EditText灰色主题-->
+    <style name="edittext_graydark1" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#666666</item>
+        <item name="colorControlActivated">#666666</item>
+    </style>
+
     <style name="btn_login" parent="@style/btn_base">
         <item name="android:textSize">16.0sp</item>
         <item name="android:textColor">#ffffffff</item>
