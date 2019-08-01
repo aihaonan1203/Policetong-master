@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mycolor"
+    android:background="@color/colorMain"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.example.administrator.policetong.MainActivity">
@@ -23,7 +23,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/mycolor"
+                android:background="@color/colorMain"
                 android:orientation="horizontal">
 
                 <TextView
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2.1"
-                android:background="@color/mycolor"
+                android:background="@color/colorMain"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="20dp">
@@ -115,13 +115,14 @@
                             android:id="@+id/tv_email"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/icon_yj" />
+                            android:src="@drawable/icon_pass" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/youjian"
+                            android:gravity="center"
                             android:textColor="@color/text_black"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -134,19 +135,22 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/tv_jbtz"
+                            android:id="@+id/tv_more_pass_card"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/icon_jbtz" />
+                            android:padding="5dp"
+                            android:src="@drawable/icon_more" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="@string/jbtz"
+                            android:text="@string/youjian_2"
+                            android:gravity="center"
                             android:textColor="@color/text_black"
                             android:textSize="13sp" />
                     </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -386,6 +390,38 @@
                         android:orientation="vertical">
 
                         <ImageView
+                            android:id="@+id/tv_jbtz"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/icon_jbtz" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/jbtz"
+                            android:textColor="@color/text_black"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
                             android:id="@+id/tv_help"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
@@ -401,7 +437,27 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
                 </LinearLayout>
+
+
 
             </LinearLayout>
         </LinearLayout>

@@ -3,8 +3,6 @@ package com.example.administrator.policetong.fragment.manage;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -24,39 +22,27 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.base.BaseFragment;
-import com.example.administrator.policetong.bean.Study_bean;
-import com.example.administrator.policetong.bean.VisitRectification_bean;
 import com.example.administrator.policetong.fragment.Fragment_manage;
-import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.StudyBean;
 import com.example.administrator.policetong.new_bean.ZDBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
-import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**
@@ -134,7 +120,7 @@ public class Study_manage extends BaseFragment {
     }
 
     private void getSqu() {
-        disposable = Network.getPoliceApi().getSqu()
+        disposable = Network.getPoliceApi(false).getSqu()
                 .compose(BaseActivity.<BaseBean<List<ZDBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<ZDBean>>>() {
                     @SuppressLint("UseSparseArrays")
@@ -223,7 +209,7 @@ public class Study_manage extends BaseFragment {
                 LoadingDialog.showDialog(getActivity(), "正在提交...");
                 StudyBean bean1=new StudyBean(bean.getId(),userInfo.getUserId(),context,site,name,userInfo.getSquId(),"2");
                 String s = new Gson().toJson(bean1);
-                disposable=Network.getPoliceApi().addStudy(RequestBody.create(MediaType.parse("application/json"),s))
+                disposable= Network.getPoliceApi(false).addStudy(RequestBody.create(MediaType.parse("application/json"),s))
                         .compose(BaseActivity.<BaseBean>applySchedulers()).subscribe(new Consumer<BaseBean>() {
                             @Override
                             public void accept(BaseBean bean) throws Exception {
@@ -268,7 +254,7 @@ public class Study_manage extends BaseFragment {
     public void getNetData() {
         Map map = new HashMap();
         map.put("userId",userInfo.getUserId());
-        disposable=Network.getPoliceApi().getStudy(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
+        disposable= Network.getPoliceApi(false).getStudy(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
                 .compose(BaseActivity.<BaseBean<List<StudyBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<StudyBean>>>() {
                     @Override

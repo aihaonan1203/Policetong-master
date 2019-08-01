@@ -59,33 +59,6 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.ModulesActivity" />
-        <activity
-            android:name=".em.LoginActivity"
-            android:label="@string/app_name" />
-        <activity android:name=".em.HomeActivity" />
-        <activity android:name=".em.MailEditActivity" />
-        <activity
-            android:name=".em.MailEditActivity"
-            tools:ignore="DuplicateActivity" />
-        <activity android:name=".em.MailBoxActivity" />
-        <activity android:name=".em.MailContentActivity" />
-        <activity android:name=".em.MailConstactsActivity" />
-        <activity android:name=".em.MailAddConstact" />
-        <activity android:name=".em.MailCaogaoxiangActivity" />
-
-        <provider
-            android:name=".em.provider.EmailConstantProvider"
-            android:authorities="com.emailconstantprovider" />
-        <provider
-            android:name=".em.provider.CaogaoxiangProvider"
-            android:authorities="com.caogaoxiangprovider" />
-        <provider
-            android:name=".em.provider.AttachmentProvider"
-            android:authorities="com.attachmentprovider" />
-        <provider
-            android:name=".em.provider.EmailStatusProvider"
-            android:authorities="com.emailstatusprovider" />
-
         <activity android:name=".activity.HelpActivity" />
         <activity android:name=".activity.NoticeActivity" />
         <activity android:name=".activity.ChangePwdActivity" />
@@ -100,7 +73,9 @@
 
         <activity android:name=".activity.ParkActivity" />
         <activity android:name=".activity.ParkOutActivity" />
-        <activity android:name=".activity.AccidentActivity"></activity>
+        <activity android:name=".activity.AccidentActivity" />
+        <activity android:name=".activity.pass_card.PassCardActivity" />
+        <activity android:name=".activity.pass_card.PassCardInfoActivity"></activity>
     </application>
 
 </manifest>

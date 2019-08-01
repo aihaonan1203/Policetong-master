@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,12 +31,10 @@ import com.example.administrator.policetong.bean.PathBean;
 import com.example.administrator.policetong.bean.PoliceMent;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.JingBaoBean;
-import com.example.administrator.policetong.new_bean.JingBaoBean_T;
 import com.example.administrator.policetong.new_bean.ZDBean;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.Util;
-import com.example.administrator.policetong.utils.Utils;
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
@@ -51,7 +48,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -119,7 +115,7 @@ public class PoliceFragment extends BaseFragment {
 
 
     private void getSqu() {
-        disposable = Network.getPoliceApi().getSqu()
+        disposable = Network.getPoliceApi(false).getSqu()
                 .compose(BaseActivity.<BaseBean<List<ZDBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<ZDBean>>>() {
                     @Override
@@ -292,7 +288,7 @@ public class PoliceFragment extends BaseFragment {
         bean.setTitle(tv_title.getText().toString().trim());
         String s = gson.toJson(bean);
         LoadingDialog.showDialog(getActivity(),"正在提交...");
-        disposable=Network.getPoliceApi().addGuard(RequestBody.create(MediaType.parse("application/json"),s))
+        disposable= Network.getPoliceApi(false).addGuard(RequestBody.create(MediaType.parse("application/json"),s))
                 .compose(BaseActivity.<BaseBean>applySchedulers())
                 .subscribe(new Consumer<BaseBean>() {
                     @Override

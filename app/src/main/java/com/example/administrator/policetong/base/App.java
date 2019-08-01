@@ -4,8 +4,14 @@ import android.app.Application;
 import android.os.Build;
 import android.os.StrictMode;
 
+import com.alibaba.fastjson.JSON;
+import com.example.administrator.policetong.bean.new_bean.UserInfo;
+import com.example.administrator.policetong.utils.GsonUtil;
+
 public class App extends Application {
     private static App mContext;
+
+    public static UserInfo userInfo;
 
     @Override
     public void onCreate() {
@@ -22,4 +28,7 @@ public class App extends Application {
     }
 
 
+    public static void initUser(String response) {
+        userInfo = JSON.parseObject(response, UserInfo.class);
     }
+}

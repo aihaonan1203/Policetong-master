@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,15 +43,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -197,7 +190,7 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
         map.put("remark", remark);
         String s = new JSONObject(map).toString();
         LoadingDialog.showDialog(getActivity(),"正在提交表单");
-        disposable = Network.getPoliceApi().setPark(RequestBody.create(MediaType.parse("application/json"),s ))
+        disposable = Network.getPoliceApi(false).setPark(RequestBody.create(MediaType.parse("application/json"),s ))
                 .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
                     @Override
                     public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
@@ -205,7 +198,7 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
                         for (int i = 0; i < selectList.size(); i++) {
                             createFilePart(part, i, new File(selectList.get(i).getPath()));
                         }
-                        return Network.getPoliceApi().uploadImage("park/uploadEntranceImg", part);
+                        return Network.getPoliceApi(false).uploadImage("park/uploadEntranceImg", part);
                     }
                 }).compose(BaseActivity.<BaseBean>applySchedulers()).subscribe(new Consumer<BaseBean>() {
                     @Override

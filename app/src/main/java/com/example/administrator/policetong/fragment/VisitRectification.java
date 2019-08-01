@@ -35,8 +35,6 @@ import com.android.volley.VolleyError;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
-import com.example.administrator.policetong.BuildConfig;
-import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.PreviewActivity;
@@ -48,8 +46,6 @@ import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.VisitBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
-import com.example.administrator.policetong.utils.NetworkChangeListener;
-import com.example.administrator.policetong.utils.FileUtils;
 import com.example.administrator.policetong.utils.Util;
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -280,7 +276,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
         }
         VisitBean visitBean=new VisitBean(userInfo.getUserId(),userInfo.getSquId(),unit,unitname,purpose,context,time,"1");
         String s = new Gson().toJson(visitBean);
-        disposable=Network.getPoliceApi().addVisit(RequestBody.create(MediaType.parse("application/json"),s))
+        disposable= Network.getPoliceApi(false).addVisit(RequestBody.create(MediaType.parse("application/json"),s))
                 .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
                     @Override
                     public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
@@ -288,7 +284,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                         for (int i = 0; i < selectList.size(); i++) {
                             createFilePart(part, i, new File(selectList.get(i).getPath()));
                         }
-                        return Network.getPoliceApi().uploadImage("visit/uploadImg",part);
+                        return Network.getPoliceApi(false).uploadImage("visit/uploadImg",part);
                     }
                 }).compose(BaseActivity.<BaseBean>applySchedulers())
                 .subscribe(new Consumer<BaseBean>() {

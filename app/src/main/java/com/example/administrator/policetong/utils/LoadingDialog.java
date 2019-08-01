@@ -42,7 +42,9 @@ public class LoadingDialog {
 		dialog.show();
 	}
 	public static void disDialog(){
-		dialog.dismiss();
+		if (dialog!=null){
+			dialog.dismiss();
+		}
 	}
 	
 	@SuppressLint("SimpleDateFormat")

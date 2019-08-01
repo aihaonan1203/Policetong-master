@@ -1,7 +1,6 @@
 package com.example.administrator.policetong.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,9 +20,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
 import com.example.administrator.policetong.R;
-import com.example.administrator.policetong.base.App;
 import com.example.administrator.policetong.fragment.DailyService;
-import com.example.administrator.policetong.fragment.Email;
 import com.example.administrator.policetong.fragment.Fragment_manage;
 import com.example.administrator.policetong.fragment.ParkManageFragment;
 import com.example.administrator.policetong.fragment.PathParameter;
@@ -83,8 +79,8 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
             id = bundle.getInt("id");
             switch (id) {
                 case 1:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new Email()).commit();
-                    ac_tv_title.setText("邮件收发");
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new Email()).commit();
+//                    ac_tv_title.setText("邮件收发");
                     break;
                 case 11:
                 case 2:

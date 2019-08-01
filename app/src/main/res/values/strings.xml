@@ -4,7 +4,8 @@
     <string name="zhuxiao">注销账户</string>
     <string name="more_dian">获取位置信息</string>
     <string name="ac_name">张三（队长）</string>
-    <string name="youjian">邮件收发</string>
+    <string name="youjian">单个通行证</string>
+    <string name="youjian_2">批量通行证</string>
     <string name="jbtz">警保台账</string>
     <string name="aupc">安全排查</string>
     <string name="zfzg">走访整改</string>

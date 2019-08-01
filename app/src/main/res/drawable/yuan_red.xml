@@ -3,6 +3,6 @@
 
 
     <solid
-        android:color="@color/mycolor"/>
+        android:color="@color/colorMain"/>
 
 </shape>

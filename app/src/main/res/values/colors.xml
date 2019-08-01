@@ -15,4 +15,107 @@
 
     <color name="yellow">#F99503</color>
     <color name="txt_color">#333333</color>
+
+
+    <color name="colorBlue">#dd0000ff</color>
+    <color name="colorBackground">#efefef</color>
+
+
+    <!--<color name="colorMain">#fb8123</color>-->
+    <!--<color name="colorMain_light">#</color>-->
+    <!--<color name="colorMain_dark">#aafb8123</color>-->
+
+
+    <color name="colorMain">#3E85E5</color>
+    <color name="colorMain_light">#D62743</color>
+    <color name="colorMain_dark">#C21515</color>
+
+    <color name="colorMain_light_press">#df576d</color>
+    <color name="colorMain_dark_press">#a31212</color>
+
+
+    <color name="colorRed">#f66054</color>
+
+    <color name="colorBackground_dark">#e0e0e0</color>
+
+
+    <color name="colorGray_dark2">#333333</color>
+    <color name="colorGray_dark1">#666666</color>
+    <color name="colorGray">#939393</color>
+    <color name="colorGray_light1">#bbbbbb</color>
+    <color name="colorGray_light2">#dddddd</color>
+    <color name="colorGray_light3">#eaeaea</color>
+    <color name="colorGray_light4">#f0f0f0f0</color>
+    <color name="colorGray_light5">#fafafa</color>
+
+
+    <color name="black_transparency">#77000000</color>
+    <color name="black_transparency_press">#55000000</color>
+
+    <color name="transparency_press">#22ffffff</color>
+
+
+    <color name="a_zise">#B96DB4</color>
+
+
+    <color name="a_yellow">#ffd900</color>
+    <color name="a_yellow_press">#aaffd900</color>
+
+
+    <color name="a_greenblue">#45bca8</color>
+    <color name="a_greenblue_press">#aa45bca8</color>
+
+
+    <color name="a_red">#f3736f</color>
+    <color name="a_red_press">#aaf3736f</color>
+
+
+    <color name="a_blue">#4d99c1</color>
+    <color name="a_blue_press">#aa4d99c1</color>
+
+
+    <color name="a_green">#82b64c</color>
+    <color name="a_green_press">#aa82b64c</color>
+
+
+    <color name="green_select">#58B737</color>
+
+
+    <!--微信支付-->
+
+    <color name="white">#ffffff</color>
+    <color name="blue">#ffccddff</color>
+    <color name="grey">#58616d</color>
+    <color name="greylow">#bf58616d</color>
+    <color name="darkgrey">#ff404040</color>
+    <color name="toasterro">#9fd524</color>
+    <color name="lightgrey">#ff888888</color>
+    <color name="semitransparent">#80000000</color>
+    <color name="lightransparent">#a0000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="navpage">#FFE1E8EB</color>
+
+
+    <!--挑选照片-->
+    <color name="color_f6">#f6f6f6</color>
+
+    <color name="payed">#f7a977</color>
+    <color name="pass">#46b9a9</color>
+
+    <color name="grey_shaixuan">#919191</color>
+    <color name="red_shaixuan">#fe7765</color>
+    <color name="grey_select">#bbbbbb</color>
+    <color name="grey_un_select">#818181</color>
+    <color name="grey_send">#999999</color>
+    <color name="red_select">#e2444b</color>
+    <color name="red_selelct_bg">#fff0ee</color>
+    <color name="grey_msg">#959595</color>
+    <color name="black_msg">#555555</color>
+    <color name="grey_msg2">#b5b5b5</color>
+    <color name="msg_blue">#3a83e8</color>
+
+    <color name="selected">#00FF00</color>
+    <color name="normal">#FFFFFF</color>
+
+
 </resources>

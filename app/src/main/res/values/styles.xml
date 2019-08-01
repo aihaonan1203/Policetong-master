@@ -1,10 +1,52 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+
+        <!--默认字体颜色-->
+        <item name="android:textColor">@color/colorGray_dark2</item>
+        <!--状态栏颜色-->
+        <item name="colorPrimaryDark">@color/colorMain</item>
+        <!--<item name="colorPrimaryDark">@color/transparent</item>-->
+        <!--<item name="colorPrimaryDark">@color/white</item>-->
+        <item name="android:colorBackground">@color/colorBackground</item>
+
+        <!--Toolbar颜色-->
+        <item name="colorPrimary">@color/colorMain</item>
+
+        <!--悬浮按键颜色-->
+        <item name="colorAccent">@color/colorMain</item>
+        <!--返回键样式-->
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
+        <item name="toolbarStyle">@style/ClubToolbar</item>
+        <!--recycler的分割线-->
+        <item name="android:listDivider">@color/colorBackground</item>
+        <!--&lt;!&ndash;dialog背景透明&ndash;&gt;-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <item name="android:screenOrientation">portrait</item>
+
+
+        <!--&lt;!&ndash;让页面全屏显示 状态栏变为透明&ndash;&gt;-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!--<item name="android:statusBarColor">#999</item>-->
+
+
+        <!--<item name="android:fitsSystemWindows">true</item>-->
+        <!--沉浸式状态栏相关-->
+        <!--<item name="android:windowTranslucentStatus"> true </item>-->
+
+
+
+    </style>
+
+
+    <!--//返回键-->
+    <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+
+
+    <style name="ClubToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item><!-- 设置该属性解决空白部分-->
     </style>
 
     <style name="anim_menu_bottombar">
@@ -81,6 +123,46 @@
         <item name="android:background">@drawable/login_input_del</item>
         <item name="android:layout_width">20.0dip</item>
         <item name="android:layout_height">20.0dip</item>
+    </style>
+
+    <!--详情界面 右边的数据-->
+    <style name="textView_detail_data" parent="textView_detail">
+        <item name="android:textColor">@color/colorGray_dark2</item>
+
+    </style>
+
+    <!--详情界面 左边的描述字体-->
+    <style name="textView_detail">
+        <!-- Customize your theme here. -->
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">@dimen/text_common</item>
+        <!--<item name="android:background">#ffffff</item>-->
+        <item name="android:textColor">@color/colorGray</item>
+        <item name="android:gravity">center</item>
+
+    </style>
+
+    <style name="textView_smallsmall_gray">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_12sp</item>
+        <item name="android:textColor">@color/colorGray</item>
+    </style>
+
+    <style name="textView_big" parent="textView_base">
+
+        <item name="android:textSize">20sp</item>
+
+    </style>
+
+    <!--base-->
+    <style name="textView_base">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+
     </style>
 
 </resources>

@@ -46,7 +46,7 @@ public class ParkActivity extends BaseActivity {
     }
 
     private void getNetData() {
-        disposable = Network.getPoliceApi().getPark()
+        disposable = Network.getPoliceApi(true).getPark()
                 .compose(BaseActivity.<BaseBean<List<CarBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<CarBean>>>() {
                     @Override

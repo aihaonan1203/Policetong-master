@@ -44,6 +44,7 @@ import com.example.administrator.policetong.activity.HelpActivity;
 import com.example.administrator.policetong.activity.LoginActivity;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.NoticeActivity;
+import com.example.administrator.policetong.activity.pass_card.PassCardActivity;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.bean.NoticeBean;
@@ -51,7 +52,6 @@ import com.example.administrator.policetong.bean.Notice_bean;
 import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.GongGaoBean;
-import com.example.administrator.policetong.new_bean.JingBaoBean;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.MorePopupWindow;
@@ -60,7 +60,6 @@ import com.example.administrator.policetong.utils.Util;
 import com.example.administrator.policetong.utils.Utils;
 import com.master.permissionhelper.PermissionHelper;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
-import com.zhy.http.okhttp.OkHttpUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -81,12 +80,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView notice;
@@ -135,14 +132,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 dingwei();
             }
             updata_mag();
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-//                    get_notice2();
-                    getGuard();
-                }
-            }, 0, 10000);
+//            timer = new Timer();
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+////                    get_notice2();
+//                    getGuard();
+//                }
+//            }, 0, 10000);
         } catch (Exception e) {
 
         }
@@ -189,8 +186,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void getGuard() {
         Map<String, String> map = new HashMap<>();
-        map.put("userid", userInfo.getUserId());
-        disposable = Network.getPoliceApi().getNotice(RequestBody.create(MediaType.parse("application/json"), new JSONObject(map).toString()))
+        map.put("userid", String.valueOf(userInfo.getUser().getUid()));
+        disposable = Network.getPoliceApi(false).getNotice(RequestBody.create(MediaType.parse("application/json"), new JSONObject(map).toString()))
                 .compose(BaseActivity.<BaseBean<List<GongGaoBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<GongGaoBean>>>() {
                     @Override
@@ -361,7 +358,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     public void onSuccess(int i) {
                         switch (i) {
                             case 0:
-                                sharedPreferences.edit().putBoolean("save", false).apply();
                                 finish();
                                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent);
@@ -401,25 +397,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
         mMainMore = findViewById(R.id.main_more);
-        tv_email = (ImageView) findViewById(R.id.tv_email);
+        tv_email =  findViewById(R.id.tv_email);
         tv_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, com.example.administrator.policetong.em.LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, PassCardActivity.class);
                 startActivity(intent);
             }
         });
-        tv_jbtz = (ImageView) findViewById(R.id.tv_jbtz);
+        findViewById(R.id.tv_more_pass_card).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        tv_jbtz =  findViewById(R.id.tv_jbtz);
         tv_jbtz.setOnClickListener(this);
-        tv_aqpc = (ImageView) findViewById(R.id.tv_aqpc);
+        tv_aqpc =  findViewById(R.id.tv_aqpc);
         tv_aqpc.setOnClickListener(this);
-        tv_zfzg = (ImageView) findViewById(R.id.tv_zfzg);
+        tv_zfzg =  findViewById(R.id.tv_zfzg);
         tv_zfzg.setOnClickListener(this);
-        tv_rcqw = (ImageView) findViewById(R.id.tv_rcqw);
+        tv_rcqw =  findViewById(R.id.tv_rcqw);
         tv_rcqw.setOnClickListener(this);
-        tv_dltz = (ImageView) findViewById(R.id.tv_dltz);
+        tv_dltz =  findViewById(R.id.tv_dltz);
         tv_dltz.setOnClickListener(this);
-        ac_username = (TextView) findViewById(R.id.ac_username);
+        ac_username =  findViewById(R.id.ac_username);
         iv_study = findViewById(R.id.tv_study);
         iv_study.setOnClickListener(this);
         iv_tingchechang = findViewById(R.id.iv_tingchecgang);
@@ -429,10 +431,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         iv_shigu.setOnClickListener(this);
         tv_manage = findViewById(R.id.tv_manage);
         tv_manage.setOnClickListener(this);
-        ac_username.setText(userInfo.getUserName());
-        if (userInfo.getSex().equals("女")) {
-            tv_tx.setImageResource(R.drawable.touxiang_1);
-        }
+        ac_username.setText(userInfo.getUser().getTruename());
     }
 
     long exitTime = 0;

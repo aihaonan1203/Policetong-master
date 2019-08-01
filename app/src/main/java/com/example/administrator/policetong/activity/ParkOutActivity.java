@@ -27,14 +27,11 @@ import com.luck.picture.lib.entity.LocalMedia;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
@@ -183,7 +180,7 @@ public class ParkOutActivity extends BaseActivity implements View.OnClickListene
         carBean.setOperate("2");
         String json = new Gson().toJson(carBean);
         LoadingDialog.showDialog(ParkOutActivity.this, "正在提交表单");
-        disposable = Network.getPoliceApi().setPark(RequestBody.create(MediaType.parse("application/json"),json ))
+        disposable = Network.getPoliceApi(false).setPark(RequestBody.create(MediaType.parse("application/json"),json ))
                 .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
                     @Override
                     public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
@@ -191,7 +188,7 @@ public class ParkOutActivity extends BaseActivity implements View.OnClickListene
                         for (int i = 0; i < selectList.size(); i++) {
                             createFilePart(part, i, new File(selectList.get(i).getPath()));
                         }
-                        return Network.getPoliceApi().uploadImage("park/uploadLeaveImg", part);
+                        return Network.getPoliceApi(false).uploadImage("park/uploadLeaveImg", part);
                     }
                 }).compose(BaseActivity.<BaseBean>applySchedulers()).subscribe(new Consumer<BaseBean>() {
                     @Override

@@ -13,7 +13,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
+import com.example.administrator.policetong.R;
 import com.luck.picture.lib.tools.StringUtils;
 
 import java.text.ParseException;
@@ -54,9 +56,9 @@ public class Utils {
     public static long getStringToDate(String dateString, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         Date date = new Date();
-        try{
+        try {
             date = dateFormat.parse(dateString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -64,7 +66,8 @@ public class Utils {
     }
 
     private static SimpleDateFormat sdf = null;
-    public  static String formatUTC(long l, String strPattern) {
+
+    public static String formatUTC(long l, String strPattern) {
         if (TextUtils.isEmpty(strPattern)) {
             strPattern = "yyyy-MM-dd HH:mm:ss";
         }
@@ -79,9 +82,12 @@ public class Utils {
         return sdf == null ? "NULL" : sdf.format(l);
     }
 
-    public static String stampToDate(long timeMillis){
+    public static String stampToDate(long timeMillis) {
+        if (timeMillis==0){
+            return "----";
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(timeMillis*1000);
+        Date date = new Date(timeMillis * 1000);
         return simpleDateFormat.format(date);
     }
 
@@ -117,7 +123,6 @@ public class Utils {
     }
 
 
-
     /**
      * The {@code fragment} is added to the container view with id {@code frameId}. The operation is
      * performed by the {@code fragmentManager}.
@@ -139,4 +144,39 @@ public class Utils {
         return obj;
     }
 
+
+    public static String stampToDate(long timeMillis, String time) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(time);
+        Date date = new Date(timeMillis * 1000);
+        return simpleDateFormat.format(date);
+    }
+
+    public static void setTextStatus(int textStatus, TextView textView) {
+        switch (textStatus) {
+            case 0:
+                textView.setText("未审核");
+                textView.setBackgroundResource(R.drawable.button_all_maincolor_r5_selector);
+                break;
+            case 1:
+                textView.setText("通过");
+                textView.setBackgroundResource(R.drawable.button_all_maincolor_r5_selector_green);
+                break;
+            case 2:
+                textView.setText("否决");
+                textView.setBackgroundResource(R.drawable.button_all_maincolor_r5_selector_red);
+                break;
+        }
+    }
+
+    public static String getTextStatus(int textStatus) {
+        switch (textStatus) {
+            case 0:
+                return ("未审核");
+            case 1:
+                return ("通过");
+            case 2:
+                return ("否决");
+        }
+        return "";
+    }
 }

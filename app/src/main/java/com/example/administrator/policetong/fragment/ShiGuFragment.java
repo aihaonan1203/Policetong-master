@@ -1,22 +1,9 @@
 package com.example.administrator.policetong.fragment;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
@@ -37,17 +23,12 @@ import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.AccidentActivity;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.PreviewActivity;
-import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.bean.EvenMsg;
-import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.AccidentBean;
-import com.example.administrator.policetong.new_bean.JingBaoBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
-import com.example.administrator.policetong.utils.NetworkChangeListener;
-import com.example.administrator.policetong.utils.Utils;
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
@@ -55,14 +36,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.ObservableSource;
@@ -248,7 +226,7 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
         }
         String s = new Gson().toJson(bean);
         LoadingDialog.showDialog(getActivity(),"正在提交...");
-        disposable=Network.getPoliceApi().addAccident(RequestBody.create(MediaType.parse("application/json"),s))
+        disposable= Network.getPoliceApi(false).addAccident(RequestBody.create(MediaType.parse("application/json"),s))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<BaseBean>() {
@@ -270,7 +248,7 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
                         for (int i = 0; i < selectList.size(); i++) {
                             createFilePart(part, i, new File(selectList.get(i).getPath()));
                         }
-                        return Network.getPoliceApi().uploadImage("accident/uploadImg",part);
+                        return Network.getPoliceApi(false).uploadImage("accident/uploadImg",part);
                     }
                 }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseBean>() {
                     @Override

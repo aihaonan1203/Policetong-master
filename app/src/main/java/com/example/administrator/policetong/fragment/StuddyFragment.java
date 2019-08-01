@@ -33,7 +33,6 @@ import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.StudyBean;
 import com.example.administrator.policetong.new_bean.ZDBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
-import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
@@ -43,12 +42,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
@@ -91,7 +88,7 @@ public class StuddyFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void getSqu() {
-        disposable = Network.getPoliceApi().getSqu()
+        disposable = Network.getPoliceApi(false).getSqu()
                 .compose(BaseActivity.<BaseBean<List<ZDBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<ZDBean>>>() {
                     @SuppressLint("UseSparseArrays")
@@ -214,7 +211,7 @@ public class StuddyFragment extends BaseFragment implements View.OnClickListener
         LoadingDialog.showDialog(getActivity(), "正在提交...");
         StudyBean bean=new StudyBean(userInfo.getUserId(),context,site,time,userInfo.getSquId(),"1");
         String s = new Gson().toJson(bean);
-        disposable=Network.getPoliceApi().addStudy(RequestBody.create(MediaType.parse("application/json"),s))
+        disposable= Network.getPoliceApi(false).addStudy(RequestBody.create(MediaType.parse("application/json"),s))
                 .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
                     @Override
                     public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
@@ -222,7 +219,7 @@ public class StuddyFragment extends BaseFragment implements View.OnClickListener
                         for (int i = 0; i < selectList.size(); i++) {
                             createFilePart(part, i, new File(selectList.get(i).getPath()));
                         }
-                        return Network.getPoliceApi().uploadImage("study/uploadImg",part);
+                        return Network.getPoliceApi(false).uploadImage("study/uploadImg",part);
                     }
                 }).compose(BaseActivity.<BaseBean>applySchedulers()).subscribe(new Consumer<BaseBean>() {
                     @Override

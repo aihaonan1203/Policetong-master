@@ -2,13 +2,9 @@ package com.example.administrator.policetong.fragment.manage;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,26 +13,17 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.VolleyError;
-import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.base.BaseFragment;
-import com.example.administrator.policetong.bean.EvenMsg;
-import com.example.administrator.policetong.bean.PathBean;
 import com.example.administrator.policetong.bean.PoliceMent;
 import com.example.administrator.policetong.fragment.Fragment_manage;
-import com.example.administrator.policetong.fragment.PoliceFragment;
-import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.JingBaoBean;
 import com.example.administrator.policetong.utils.GsonUtil;
@@ -46,7 +33,6 @@ import com.luck.picture.lib.entity.LocalMedia;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -177,7 +163,7 @@ public class PoliceConfirmed_manage extends BaseFragment {
     public void getNetData() {
         Map<String,String> map=new HashMap<>();
         map.put("userid",userInfo.getUserId());
-        disposable=Network.getPoliceApi().getGuard(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
+        disposable= Network.getPoliceApi(false).getGuard(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
                 .compose(BaseActivity.<BaseBean<List<JingBaoBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<JingBaoBean>>>() {
                     @Override

@@ -2,7 +2,6 @@ package com.example.administrator.policetong.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,8 +21,6 @@ import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.AccidentBean;
-import com.example.administrator.policetong.new_bean.CarBean;
-import com.example.administrator.policetong.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,8 +55,8 @@ public class AccidentActivity extends BaseActivity {
 
     private void getNetData() {
         Map<String,String> map=new HashMap<>();
-        map.put("userId",userInfo.getUserId());
-        disposable = Network.getPoliceApi().getAccident(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
+        map.put("userId",String.valueOf(userInfo.getUser().getUid()));
+        disposable = Network.getPoliceApi(true).getAccident(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
                 .compose(BaseActivity.<BaseBean<List<AccidentBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<AccidentBean>>>() {
                     @Override

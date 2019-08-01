@@ -29,6 +29,24 @@ import retrofit2.http.Url;
 
 public interface PoliceApi {
 
+
+    @POST("oneList")//获取单条通行证列表
+    Observable<ResponseBody> oneList(@Body RequestBody test);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Multipart
     @POST()//上传图片
     Observable<BaseBean> uploadImage(@Url()String url, @Part() MultipartBody.Part [] file);

@@ -3,12 +3,9 @@ package com.example.administrator.policetong.fragment.manage;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,31 +18,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.base.BaseFragment;
-import com.example.administrator.policetong.bean.SafetyChecks_bean;
-import com.example.administrator.policetong.bean.VisitRectification_bean;
 import com.example.administrator.policetong.fragment.Fragment_manage;
-import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.new_bean.VisitBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +79,7 @@ public class VisitRectification_manage extends BaseFragment {
         listbean.clear();
         Map<String,String> map=new HashMap<>();
         map.put("userid",userInfo.getUserId());
-        disposable=Network.getPoliceApi().getVisit(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
+        disposable= Network.getPoliceApi(false).getVisit(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
                 .compose(BaseActivity.<BaseBean<List<VisitBean>>>applySchedulers())
                 .subscribe(new Consumer<BaseBean<List<VisitBean>>>() {
                     @Override
@@ -272,7 +261,7 @@ public class VisitRectification_manage extends BaseFragment {
                 LoadingDialog.showDialog(getActivity(), "正在提交内容！");
                 VisitBean visitBean=new VisitBean(id,userInfo.getUserId(),userInfo.getSquId(),unit,unitname,purpose,context,unittime,"2");
                 String s = new Gson().toJson(visitBean);
-                disposable=Network.getPoliceApi().addVisit(RequestBody.create(MediaType.parse("application/json"),s))
+                disposable= Network.getPoliceApi(false).addVisit(RequestBody.create(MediaType.parse("application/json"),s))
                         .compose(BaseActivity.<BaseBean>applySchedulers())
                         .subscribe(new Consumer<BaseBean>() {
                             @Override
