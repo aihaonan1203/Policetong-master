@@ -8,14 +8,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.activity.PictureActivity;
 import com.example.administrator.policetong.bean.new_bean.UserInfo;
 import com.example.administrator.policetong.new_bean.UserBean;
 import com.example.administrator.policetong.utils.SPUtils;
+import com.example.administrator.policetong.utils.UIUtils;
 import com.example.administrator.policetong.utils.Utils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -24,6 +27,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.transform.Transformer;
@@ -193,6 +197,32 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .hide(fragment)
                 .commitAllowingStateLoss();
 
+    }
+
+    //显示图片
+    public void showPicture(String imageUrlcurrent, ArrayList<String> imageUrls, int position) {
+        if (imageUrls == null) {
+            imageUrls = new ArrayList<>();
+        }
+        if (TextUtils.isEmpty(imageUrlcurrent)) {
+            UIUtils.t("图片链接为空", false, UIUtils.T_ERROR);
+            return;
+        }
+
+//        Dialog dia = new Dialog(this, R.style.alertDialog_style);
+//        dia.setContentView(R.layout.activity_start_dialog);
+//        // 可放大的imageView
+//        MyZoomImageView imageView = (MyZoomImageView ) dia.findViewById(R.area_id.dialog_imageview);
+//        Glide.with(this).load(imageUrlcurrent).into(imageView);
+//        dia.show();
+
+        Intent intent = new Intent(this, PictureActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("image", imageUrlcurrent);
+        bundle.putStringArrayList("images", imageUrls);
+        bundle.putInt("position", position);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
 

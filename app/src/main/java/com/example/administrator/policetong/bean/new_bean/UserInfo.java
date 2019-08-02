@@ -1,5 +1,8 @@
 package com.example.administrator.policetong.bean.new_bean;
 
+import com.example.administrator.policetong.base.App;
+import com.example.administrator.policetong.utils.SPUtils;
+
 import java.util.List;
 
 /**
@@ -12,6 +15,9 @@ public class UserInfo {
     private UserBean user;
 
     public String getToken() {
+        if (token==null||token.isEmpty()){
+            token= SPUtils.getUserToken(App.getApplication());
+        }
         return token;
     }
 

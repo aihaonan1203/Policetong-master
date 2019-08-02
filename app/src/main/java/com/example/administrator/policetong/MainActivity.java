@@ -44,7 +44,8 @@ import com.example.administrator.policetong.activity.HelpActivity;
 import com.example.administrator.policetong.activity.LoginActivity;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.NoticeActivity;
-import com.example.administrator.policetong.activity.pass_card.PassCardActivity;
+import com.example.administrator.policetong.activity.pass_card.more.MorePassCardListActivity;
+import com.example.administrator.policetong.activity.pass_card.one.OnePassCardActivity;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.bean.NoticeBean;
@@ -56,6 +57,7 @@ import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.MorePopupWindow;
 import com.example.administrator.policetong.utils.NotificationUtils;
+import com.example.administrator.policetong.utils.SPUtils;
 import com.example.administrator.policetong.utils.Util;
 import com.example.administrator.policetong.utils.Utils;
 import com.master.permissionhelper.PermissionHelper;
@@ -359,6 +361,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         switch (i) {
                             case 0:
                                 finish();
+                                SPUtils.saveBoolean("isLogin",false);
                                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 break;
@@ -401,14 +404,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tv_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, PassCardActivity.class);
+                Intent intent = new Intent(MainActivity.this, OnePassCardActivity.class);
                 startActivity(intent);
             }
         });
         findViewById(R.id.tv_more_pass_card).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, MorePassCardListActivity.class);
+                startActivity(intent);
             }
         });
         tv_jbtz =  findViewById(R.id.tv_jbtz);

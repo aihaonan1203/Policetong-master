@@ -1,4 +1,4 @@
-package com.example.administrator.policetong.activity.pass_card;
+package com.example.administrator.policetong.activity.pass_card.one;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,18 +20,19 @@ import com.example.administrator.policetong.bean.new_bean.PassCardBean;
 import com.example.administrator.policetong.network.DoNet;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.Utils;
+import com.example.administrator.policetong.view.NoDataOrNetError;
 
 import java.util.List;
 
-import retrofit2.http.PATCH;
-
-public class PassCardActivity extends BaseActivity {
+public class OnePassCardActivity extends BaseActivity {
 
     private TextView title_name;
     private Toolbar tl_custom;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private BaseQuickAdapter<PassCardBean,BaseViewHolder> adapter;
+    private View notDataView;
+    private View NetErrorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,19 +46,39 @@ public class PassCardActivity extends BaseActivity {
     }
 
     private void init() {
+        notDataView = NoDataOrNetError.noData(mRecyclerView, this, "暂时没有通行证数据呦！");
+        NetErrorView = NoDataOrNetError.netError(mRecyclerView, this);
+        NetErrorView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getPassList(true);
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter=new BaseQuickAdapter<PassCardBean,BaseViewHolder>(R.layout.pass_card_layout) {
             @Override
-            protected void convert(BaseViewHolder helper, PassCardBean item) {
+            protected void convert(BaseViewHolder helper, final PassCardBean item) {
                 helper.setText(R.id.tv_pass_card_name,String.valueOf(item.getName()));
                 helper.setText(R.id.tv_pass_card_phone,String.valueOf(item.getPhone()));
-                helper.setText(R.id.tv_pass_card_want_time,String.valueOf(Utils.stampToDate(item.getWanttime())));
+                helper.setText(R.id.tv_pass_card_want_time,item.getWanttime());
                 helper.setText(R.id.tv_pass_card_start,String.valueOf(item.getStartpoint()));
                 helper.setText(R.id.tv_pass_card_end,String.valueOf(item.getEndpoint()));
                 if (item.getResult()==1){
-                    helper.setText(R.id.tv_pass_card_time,String.valueOf(Utils.stampToDate(item.getTxstarttime())+"-"+Utils.stampToDate(item.getTxendtime())));
+                    helper.setText(R.id.tv_pass_card_time,item.getTxstarttime()+"-"+item.getTxendtime());
+                    helper.getView(R.id.iv_check).setVisibility(View.GONE);
                 }else {
                     helper.setText(R.id.tv_pass_card_time,"");
+                    if (item.getResult()==0){
+                        helper.getView(R.id.iv_check).setVisibility(View.VISIBLE);
+                        helper.getView(R.id.iv_check).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivityForResult(new Intent(OnePassCardActivity.this,OneCheckPassCardActivity.class).putExtra("name",item.getName()).putExtra("phone",item.getPhone()).putExtra("id",String.valueOf(item.getId())),200);
+                            }
+                        });
+                    }else {
+                        helper.getView(R.id.iv_check).setVisibility(View.GONE);
+                    }
                 }
                 Utils.setTextStatus(item.getResult(),((TextView)helper.getView(R.id.tv_pass_card_status)));
             }
@@ -66,14 +87,14 @@ public class PassCardActivity extends BaseActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter mAdapter, View view, int position) {
-                startActivity(new Intent(PassCardActivity.this,PassCardInfoActivity.class).putExtra("card_id",String.valueOf(adapter.getData().get(position).getId())));
+                startActivity(new Intent(OnePassCardActivity.this,OnePassCardInfoActivity.class).putExtra("card_id",String.valueOf(adapter.getData().get(position).getId())));
             }
         });
     }
 
     private void initToolbar() {
         setupToolBar(tl_custom, false);
-        title_name.setText("单通行证审核");
+        title_name.setText("单通行证列表");
     }
 
     private void initView() {
@@ -101,15 +122,33 @@ public class PassCardActivity extends BaseActivity {
                 }
                 List<PassCardBean> passCardBeans = GsonUtil.parseJsonArrayWithGson(JSON.parseObject(response).getJSONObject("data").getJSONArray("list").toString(), PassCardBean.class);
                 Log.e("doWhat: ",passCardBeans.size()+"" );
+                if (passCardBeans.size()==0){
+                    adapter.setEmptyView(notDataView);
+                    return;
+                }
                 adapter.setNewData(passCardBeans);
             }
         };
         doNet.setOnErrorListener(new DoNet.OnErrorListener() {
             @Override
-            public void onError() {
-
+            public void onError(int code) {
+                if (code==400){
+                    adapter.setEmptyView(NoDataOrNetError.noData(mRecyclerView, OnePassCardActivity.this, "您没有审核通行证的权限呦！"));
+                }else {
+                    adapter.setEmptyView(NetErrorView);
+                }
             }
         });
         doNet.doGet(Consts.URL_ONE_LIST ,this,needDialog);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 200) {
+            if (resultCode == 666) {
+                getPassList(true);
+            }
+        }
     }
 }

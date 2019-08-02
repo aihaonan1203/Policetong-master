@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGray_light4"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="107dp"
+        android:layout_height="94dp"
+        android:src="@drawable/empty_img" />
+
+    <TextView
+        style="@style/textView_small"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="2dp"
+        android:text="网络连接失败"
+        android:textColor="@color/colorGray" />
+
+    <TextView
+        style="@style/textView_small"
+        android:textColor="@color/colorGray"
+        android:text="请检查您的手机是否连上网"
+        />
+    <TextView
+        android:background="@drawable/button_edge_gray_r10"
+        android:layout_margin="10dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/colorGray_dark1"
+        style="@style/textView_small"
+        android:text="点击刷新"/>
+
+
+</LinearLayout>

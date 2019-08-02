@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/icon_pass" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="通行证详情"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="申请人:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_name"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="手机号:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_phone"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="希望通行时间:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_wantTime"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="起点:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_startPoint"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="终点:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_endPoint"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="申请日期:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_applyTime"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="审核状态:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_status"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="审核结果:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_result"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="处理完成时间:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_resultTime"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="指派线路人:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_resultPerson"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="指派时间:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_zpTime"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:textColor="#000000">
+
+        <TextView
+            style="@style/textView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="通行路线:" />
+
+        <TextView
+            android:id="@+id/tv_pass_info_point"
+            style="@style/textView_detail_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="----" />
+    </LinearLayout>
+
+
+    <include layout="@layout/line_horizontal" />
+
+
+
+
+</LinearLayout>

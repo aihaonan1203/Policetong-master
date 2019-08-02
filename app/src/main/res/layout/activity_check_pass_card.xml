@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <include layout="@layout/title_main" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:textColor="#000000">
+
+            <TextView
+                style="@style/textView_comon_limitsize"
+                android:gravity="center"
+                android:text="姓名:" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/edittext_common_2" />
+        </LinearLayout>
+
+        <include layout="@layout/line_horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:orientation="horizontal"
+            android:textColor="#000000">
+
+            <TextView
+                style="@style/textView_comon_limitsize"
+                android:text="手机号:" />
+
+            <TextView
+                android:id="@+id/tv_phone"
+                style="@style/edittext_common_2"
+                android:enabled="false"/>
+
+        </LinearLayout>
+
+        <include layout="@layout/line_horizontal" />
+
+
+        <!--手机型号-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:textColor="#000000">
+
+                <TextView
+                    style="@style/textView_comon_limitsize"
+                    android:text="审核结果: " />
+
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <RadioButton
+                        android:id="@+id/rb_pass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/select_tg"
+                        android:button="@null"
+                        android:checked="true"
+                        android:text="通过"
+                        android:drawablePadding="10dp"
+                        android:textSize="16sp"
+                        />
+
+
+                    <RadioButton
+                        android:id="@+id/rb_refuse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/select_jj"
+                        android:button="@null"
+                        android:text="拒绝"
+                        android:drawablePadding="10dp"
+                        android:layout_marginStart="40dp"
+                        android:textSize="16sp"
+                        />
+
+
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+            <include layout="@layout/line_horizontal" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal"
+                android:textColor="#000000">
+
+                <TextView
+                    style="@style/textView_comon_limitsize"
+                    android:text="通行开始时间:" />
+
+                <TextView
+                    android:id="@+id/tv_start_time"
+                    style="@style/edittext_common_2"
+                    android:text="请选择通行开始时间"
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/line_horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal"
+                android:textColor="#000000">
+
+                <TextView
+                    style="@style/textView_comon_limitsize"
+                    android:text="通行结束时间:" />
+
+                <TextView
+                    android:id="@+id/tv_end_time"
+                    style="@style/edittext_common_2"
+                    android:text="请选择通行结束时间"
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/line_horizontal" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:textColor="#000000">
+
+                <TextView
+                    style="@style/textView_comon_limitsize"
+                    android:text="指派路线:" />
+
+                <TextView
+                    android:id="@+id/tv_select_point"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="点击选择通行路线"
+                    android:gravity="center_vertical"
+                    android:drawablePadding="10dp"
+                    android:layout_marginStart="30dp"
+                    android:drawableStart="@drawable/icon_select_point"
+                    android:textSize="16sp"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textSize="16sp"
+                />
+
+            <include layout="@layout/line_horizontal" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:orientation="horizontal"
+            android:textColor="#000000">
+
+            <TextView
+                style="@style/textView_comon_limitsize"
+                android:text="备注信息:" />
+
+            <EditText
+                android:id="@+id/et_remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:textSize="16sp"
+                android:padding="5dp"
+                android:inputType="text"
+                tools:ignore="LabelFor" />
+
+        </LinearLayout>
+
+        <include layout="@layout/line_horizontal" />
+
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提交审核"
+            android:background="@drawable/member_btn_bg"
+            android:textColor="@color/white"
+            android:layout_margin="70dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -52,7 +52,7 @@ public abstract class Callback<T>
      */
     public abstract T parseNetworkResponse(Response response, int id) throws Exception;
 
-    public abstract void onError(Call call, Exception e, int id);
+    public abstract void onError(Call call, Exception e, int id,int code);
 
     public abstract void onResponse(T response, int id);
 
@@ -67,7 +67,7 @@ public abstract class Callback<T>
         }
 
         @Override
-        public void onError(Call call, Exception e, int id)
+        public void onError(Call call, Exception e, int id,int code)
         {
 
         }

@@ -1,6 +1,7 @@
 package com.example.administrator.policetong.utils;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -86,7 +87,7 @@ public class Utils {
         if (timeMillis==0){
             return "----";
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(timeMillis * 1000);
         return simpleDateFormat.format(date);
     }
@@ -151,7 +152,7 @@ public class Utils {
         return simpleDateFormat.format(date);
     }
 
-    public static void setTextStatus(int textStatus, TextView textView) {
+    public static void setTextResult(int textStatus, TextView textView) {
         switch (textStatus) {
             case 0:
                 textView.setText("未审核");
@@ -164,6 +165,28 @@ public class Utils {
             case 2:
                 textView.setText("否决");
                 textView.setBackgroundResource(R.drawable.button_all_maincolor_r5_selector_red);
+                break;
+        }
+    }
+
+    public static void setTextStatus(int textStatus, TextView textView) {
+        switch (textStatus) {
+
+            case 0:
+                textView.setText("未指派");
+                textView.setBackgroundResource(R.drawable.button_all_maincolor_r5_selector_org);
+                break;
+            case 1:
+                textView.setText("中队审核中");
+                textView.setBackgroundResource(R.drawable.button_all_maincolor_r5_selector);
+                break;
+            case 2:
+                textView.setText("大队复审");
+                textView.setBackgroundResource(R.drawable.button_all_maincolor_r5_selector);
+                break;
+            case 3:
+                textView.setText("审核完毕");
+                textView.setBackgroundResource(R.drawable.button_all_maincolor_r5_selector_green);
                 break;
         }
     }

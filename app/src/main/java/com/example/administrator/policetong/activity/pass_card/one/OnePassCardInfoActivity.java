@@ -1,13 +1,20 @@
-package com.example.administrator.policetong.activity.pass_card;
+package com.example.administrator.policetong.activity.pass_card.one;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.activity.pass_card.PassCardPhotoActivity;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.bean.new_bean.PassCardInfo;
@@ -15,7 +22,7 @@ import com.example.administrator.policetong.network.DoNet;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.Utils;
 
-public class PassCardInfoActivity extends BaseActivity {
+public class OnePassCardInfoActivity extends BaseActivity {
 
     private TextView title_name;
     private Toolbar tl_custom;
@@ -32,14 +39,57 @@ public class PassCardInfoActivity extends BaseActivity {
     private TextView tv_pass_info_zpTime;
     private TextView tv_pass_info_point;
     private RecyclerView mRecyclerView;
+    private BaseQuickAdapter<PassCardInfo,BaseViewHolder> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pass_card_info);
         initView();
+        init();
         initToolbar();
         getPassCard(true);
+    }
+
+    private void init() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter=new BaseQuickAdapter<PassCardInfo, BaseViewHolder>(R.layout.pass_card_info_item) {
+            @Override
+            protected void convert(BaseViewHolder helper, final PassCardInfo item) {
+                helper.setText(R.id.tv_car_number,item.getCarno());
+                helper.setText(R.id.tv_car_type,item.getHuowuname());
+                helper.setText(R.id.icon_car_no,String.valueOf("序号："+item.getId()));
+                helper.getView(R.id.tv_look_info).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle=new Bundle();
+                        bundle.putSerializable("data",item);
+                        bundle.putInt("type",1);
+                        startActivity(new Intent(OnePassCardInfoActivity.this,PassCardPhotoActivity.class).putExtra("data",bundle));
+                    }
+                });
+            }
+        };
+        View headView= LayoutInflater.from(this).inflate(R.layout.pass_card_info_head,mRecyclerView,false);
+        initHeadView(headView);
+        mAdapter.addHeaderView(headView);
+        mRecyclerView.setAdapter(mAdapter);
+
+    }
+
+    private void initHeadView(View view) {
+        tv_pass_info_name =  view.findViewById(R.id.tv_pass_info_name);
+        tv_pass_info_phone = view. findViewById(R.id.tv_pass_info_phone);
+        tv_pass_info_wantTime =  view.findViewById(R.id.tv_pass_info_wantTime);
+        tv_pass_info_startPoint =  view.findViewById(R.id.tv_pass_info_startPoint);
+        tv_pass_info_endPoint =  view.findViewById(R.id.tv_pass_info_endPoint);
+        tv_pass_info_applyTime =  view.findViewById(R.id.tv_pass_info_applyTime);
+        tv_pass_info_status =  view.findViewById(R.id.tv_pass_info_status);
+        tv_pass_info_result =  view.findViewById(R.id.tv_pass_info_result);
+        tv_pass_info_resultTime =  view.findViewById(R.id.tv_pass_info_resultTime);
+        tv_pass_info_resultPerson =  view.findViewById(R.id.tv_pass_info_resultPerson);
+        tv_pass_info_zpTime =  view.findViewById(R.id.tv_pass_info_zpTime);
+        tv_pass_info_point =  view.findViewById(R.id.tv_pass_info_point);
     }
 
 
@@ -62,7 +112,7 @@ public class PassCardInfoActivity extends BaseActivity {
         };
         doNet.setOnErrorListener(new DoNet.OnErrorListener() {
             @Override
-            public void onError() {
+            public void onError(int code) {
 
             }
         });
@@ -72,7 +122,7 @@ public class PassCardInfoActivity extends BaseActivity {
     private void refresh(PassCardInfo cardInfo) {
         tv_pass_info_name.setText(String.valueOf(cardInfo.getName()));
         tv_pass_info_phone.setText(String.valueOf(cardInfo.getPhone()));
-        tv_pass_info_wantTime.setText(String.valueOf(Utils.stampToDate(cardInfo.getWanttime())));
+        tv_pass_info_wantTime.setText(cardInfo.getWanttime());
         tv_pass_info_startPoint.setText(String.valueOf(cardInfo.getStartpoint()));
         tv_pass_info_endPoint.setText(String.valueOf(cardInfo.getEndpoint()));
         tv_pass_info_applyTime.setText(String.valueOf(Utils.stampToDate(Long.valueOf(cardInfo.getAddtime()))));
@@ -83,27 +133,15 @@ public class PassCardInfoActivity extends BaseActivity {
             tv_pass_info_resultTime.setText(String.valueOf(Utils.stampToDate(cardInfo.getEndtime())));
             tv_pass_info_zpTime.setText(String.valueOf(Utils.stampToDate(cardInfo.getEndtime())));
             tv_pass_info_resultPerson.setText(cardInfo.getZprname());
-            tv_pass_info_point.setText(cardInfo.getLinelist());
+            tv_pass_info_point.setText(cardInfo.getLine());
         }
         tv_pass_info_result.setText(Utils.getTextStatus(cardInfo.getResult()));
-
+        mAdapter.addData(cardInfo);
     }
 
     private void initView() {
         title_name = findViewById(R.id.title_name);
         tl_custom = findViewById(R.id.tl_custom);
-        tv_pass_info_name =  findViewById(R.id.tv_pass_info_name);
-        tv_pass_info_phone =  findViewById(R.id.tv_pass_info_phone);
-        tv_pass_info_wantTime =  findViewById(R.id.tv_pass_info_wantTime);
-        tv_pass_info_startPoint =  findViewById(R.id.tv_pass_info_startPoint);
-        tv_pass_info_endPoint =  findViewById(R.id.tv_pass_info_endPoint);
-        tv_pass_info_applyTime =  findViewById(R.id.tv_pass_info_applyTime);
-        tv_pass_info_status =  findViewById(R.id.tv_pass_info_status);
-        tv_pass_info_result =  findViewById(R.id.tv_pass_info_result);
-        tv_pass_info_resultTime =  findViewById(R.id.tv_pass_info_resultTime);
-        tv_pass_info_resultPerson =  findViewById(R.id.tv_pass_info_resultPerson);
-        tv_pass_info_zpTime =  findViewById(R.id.tv_pass_info_zpTime);
-        tv_pass_info_point =  findViewById(R.id.tv_pass_info_point);
         mRecyclerView =  findViewById(R.id.mRecyclerView);
     }
 }

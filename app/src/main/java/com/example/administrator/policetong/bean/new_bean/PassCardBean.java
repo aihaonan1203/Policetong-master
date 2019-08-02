@@ -6,23 +6,37 @@ package com.example.administrator.policetong.bean.new_bean;
 
 public class PassCardBean {
 
+
+    /**
+     * id : 183
+     * phone : 13545551885
+     * name : 朱必强
+     * startpoint : 文愽大道
+     * endpoint : 八里湖高速口
+     * addtime : 1564624022
+     * wanttime : 2019年08月01日
+     * status : 3
+     * result : 2
+     * line :
+     * txstarttime :
+     * txendtime :
+     * zpr : 2
+     * failure_cause : 需提起一个工作日的16时之前提交申请
+     */
+
     private int id;
-    private int wx_uid;
     private String phone;
     private String name;
     private String startpoint;
     private String endpoint;
     private String addtime;
-    private long endtime;
-    private long wanttime;
+    private String wanttime;
     private int status;
     private int result;
     private String line;
-    private long txstarttime;
-    private long txendtime;
-    private String zpr;
-    private int batch;
-    private String formId;
+    private String txstarttime;
+    private String txendtime;
+    private int zpr;
     private String failure_cause;
 
     public int getId() {
@@ -31,14 +45,6 @@ public class PassCardBean {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getWx_uid() {
-        return wx_uid;
-    }
-
-    public void setWx_uid(int wx_uid) {
-        this.wx_uid = wx_uid;
     }
 
     public String getPhone() {
@@ -81,19 +87,11 @@ public class PassCardBean {
         this.addtime = addtime;
     }
 
-    public long getEndtime() {
-        return endtime;
-    }
-
-    public void setEndtime(long endtime) {
-        this.endtime = endtime;
-    }
-
-    public long getWanttime() {
+    public String getWanttime() {
         return wanttime;
     }
 
-    public void setWanttime(long wanttime) {
+    public void setWanttime(String wanttime) {
         this.wanttime = wanttime;
     }
 
@@ -121,44 +119,28 @@ public class PassCardBean {
         this.line = line;
     }
 
-    public long getTxstarttime() {
+    public String getTxstarttime() {
         return txstarttime;
     }
 
-    public void setTxstarttime(long txstarttime) {
+    public void setTxstarttime(String txstarttime) {
         this.txstarttime = txstarttime;
     }
 
-    public long getTxendtime() {
+    public String getTxendtime() {
         return txendtime;
     }
 
-    public void setTxendtime(long txendtime) {
+    public void setTxendtime(String txendtime) {
         this.txendtime = txendtime;
     }
 
-    public String getZpr() {
+    public int getZpr() {
         return zpr;
     }
 
-    public void setZpr(String zpr) {
+    public void setZpr(int zpr) {
         this.zpr = zpr;
-    }
-
-    public int getBatch() {
-        return batch;
-    }
-
-    public void setBatch(int batch) {
-        this.batch = batch;
-    }
-
-    public String getFormId() {
-        return formId;
-    }
-
-    public void setFormId(String formId) {
-        this.formId = formId;
     }
 
     public String getFailure_cause() {

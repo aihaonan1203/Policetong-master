@@ -19,6 +19,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -202,11 +203,11 @@ public abstract class DoNet {
                     }
 
                     @Override
-                    public void onError(okhttp3.Call call, Exception e, int id) {
+                    public void onError(okhttp3.Call call, Exception e, int id,int code) {
                         closeDialog();
                         closeMDialog();
                         if (onErrorListener != null) {
-                            onErrorListener.onError();
+                            onErrorListener.onError(code);
                         }
                         if (needShowNetError) {
                             needShowNetError = false;
@@ -263,12 +264,11 @@ public abstract class DoNet {
                 .build()
                 .execute(new StringCallback() {
                     @Override
-                    public void onError(okhttp3.Call call, Exception e, int id) {
+                    public void onError(okhttp3.Call call, Exception e, int id,int code) {
                         closeDialog();
                         closeMDialog();
-
                         if (onErrorListener != null) {
-                            onErrorListener.onError();
+                            onErrorListener.onError(code);
                         }
                         if (needShowNetError) {
                             needShowNetError = false;
@@ -379,11 +379,11 @@ public abstract class DoNet {
                     }
 
                     @Override
-                    public void onError(okhttp3.Call call, Exception e, int id) {
+                    public void onError(okhttp3.Call call, Exception e, int id,int code) {
                         closeDialog();
                         closeMDialog();
                         if (onErrorListener != null) {
-                            onErrorListener.onError();
+                            onErrorListener.onError(code);
                         }
                         if (needShowNetError) {
                             needShowNetError = false;
@@ -455,11 +455,11 @@ public abstract class DoNet {
                     }
 
                     @Override
-                    public void onError(okhttp3.Call call, Exception e, int id) {
+                    public void onError(okhttp3.Call call, Exception e, int id,int code) {
                         closeDialog();
                         closeMDialog();
                         if (onErrorListener != null) {
-                            onErrorListener.onError();
+                            onErrorListener.onError(code);
                         }
                         if (needShowNetError) {
                             needShowNetError = false;
@@ -490,7 +490,7 @@ public abstract class DoNet {
 
 
     public interface OnErrorListener {
-        void onError();
+        void onError(int code);
     }
     private OnErrorListener onErrorListener;
 

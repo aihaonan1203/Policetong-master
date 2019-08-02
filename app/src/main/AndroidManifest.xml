@@ -74,8 +74,14 @@
         <activity android:name=".activity.ParkActivity" />
         <activity android:name=".activity.ParkOutActivity" />
         <activity android:name=".activity.AccidentActivity" />
-        <activity android:name=".activity.pass_card.PassCardActivity" />
-        <activity android:name=".activity.pass_card.PassCardInfoActivity"></activity>
+        <activity android:name=".activity.pass_card.one.OnePassCardActivity" />
+        <activity android:name=".activity.pass_card.one.OnePassCardInfoActivity" />
+        <activity android:name=".activity.pass_card.PassCardPhotoActivity" />
+        <activity android:name=".activity.pass_card.one.OneCheckPassCardActivity" />
+        <activity android:name=".activity.PictureActivity" />
+        <activity android:name=".activity.pass_card.one.OneSelectPointActivity" />
+        <activity android:name=".activity.pass_card.more.MorePassCardListActivity" />
+        <activity android:name=".activity.pass_card.more.MorePassCardInfoActivity"></activity>
     </application>
 
 </manifest>

@@ -13,7 +13,11 @@ public class Consts {
 
     public static final String URL_LOGIN=COMMOM_URL+"login"; //登录
     public static final String URL_ONE_LIST=COMMOM_URL+"oneList";
+    public static final String URL_TXZLIST=COMMOM_URL+"txzList";
     public static final String URL_ONEDETAIL=COMMOM_URL+"onedetail/";
+    public static final String URL_TXZDETAIL=COMMOM_URL+"txzdetail/";
+    public static final String URL_ROADLISt=COMMOM_URL+"roadList";
+    public static final String URL_ONESHENHE=COMMOM_URL+"oneshenhe";
 
 
 

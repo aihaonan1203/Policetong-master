@@ -7,11 +7,12 @@ import android.os.StrictMode;
 import com.alibaba.fastjson.JSON;
 import com.example.administrator.policetong.bean.new_bean.UserInfo;
 import com.example.administrator.policetong.utils.GsonUtil;
+import com.example.administrator.policetong.utils.SPUtils;
 
 public class App extends Application {
     private static App mContext;
 
-    public static UserInfo userInfo;
+    public static UserInfo userInfo=new UserInfo();
 
     @Override
     public void onCreate() {
@@ -30,5 +31,8 @@ public class App extends Application {
 
     public static void initUser(String response) {
         userInfo = JSON.parseObject(response, UserInfo.class);
+        if (userInfo.getToken()!=null&&!userInfo.getToken().isEmpty()){
+            SPUtils.setUserToken(App.getApplication(),userInfo.getToken());
+        }
     }
 }

@@ -1,10 +1,12 @@
 package com.example.administrator.policetong.bean.new_bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Hjb on 2019/8/1.
  */
 
-public class PassCardInfo {
+public class PassCardInfo implements Serializable {
 
 
     private int id;
@@ -14,13 +16,13 @@ public class PassCardInfo {
     private String endpoint;
     private String addtime;
     private long endtime;
-    private long wanttime;
+    private String wanttime;
     private int status;
     private int result;
     private String line;
-    private long txstarttime;
-    private long txendtime;
-    private String failure_cause;
+    private String txstarttime;
+    private String txendtime;
+    private Object failure_cause;
     private String zprname;
     private String linelist;
     private String carno;
@@ -90,11 +92,11 @@ public class PassCardInfo {
         this.endtime = endtime;
     }
 
-    public long getWanttime() {
+    public String getWanttime() {
         return wanttime;
     }
 
-    public void setWanttime(long wanttime) {
+    public void setWanttime(String wanttime) {
         this.wanttime = wanttime;
     }
 
@@ -122,27 +124,27 @@ public class PassCardInfo {
         this.line = line;
     }
 
-    public long getTxstarttime() {
+    public String getTxstarttime() {
         return txstarttime;
     }
 
-    public void setTxstarttime(long txstarttime) {
+    public void setTxstarttime(String txstarttime) {
         this.txstarttime = txstarttime;
     }
 
-    public long getTxendtime() {
+    public String getTxendtime() {
         return txendtime;
     }
 
-    public void setTxendtime(long txendtime) {
+    public void setTxendtime(String txendtime) {
         this.txendtime = txendtime;
     }
 
-    public String getFailure_cause() {
+    public Object getFailure_cause() {
         return failure_cause;
     }
 
-    public void setFailure_cause(String failure_cause) {
+    public void setFailure_cause(Object failure_cause) {
         this.failure_cause = failure_cause;
     }
 

@@ -1,0 +1,18 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 点击状态下按钮背景样式 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp"/>
+            <stroke android:width="1dp"
+                android:color="@color/colorGray"/>
+        </shape>
+    </item>
+    <!-- 正常点击状态下按钮背景样式 -->
+    <item android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp"/>
+            <stroke android:width="1dp"
+                android:color="@color/colorGray"/>
+        </shape>
+    </item>
+</selector>
