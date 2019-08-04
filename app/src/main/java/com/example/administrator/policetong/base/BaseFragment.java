@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.administrator.policetong.new_bean.UserBean;
 import com.example.administrator.policetong.utils.SPUtils;
 import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
@@ -66,6 +67,14 @@ public abstract class BaseFragment extends Fragment {
                 .openGallery(PictureMimeType.ofImage())
                 .maxSelectNum(9)
                 .isCamera(true)
+                .compress(true)// 是否压缩
+                .selectionMedia(selectList)
+                .forResult(CHOOSE_REQUEST);
+    }
+
+    protected void takeOnePhoto(){
+        PictureSelector.create(this)
+                .openCamera(PictureMimeType.ofImage())
                 .compress(true)// 是否压缩
                 .selectionMedia(selectList)
                 .forResult(CHOOSE_REQUEST);

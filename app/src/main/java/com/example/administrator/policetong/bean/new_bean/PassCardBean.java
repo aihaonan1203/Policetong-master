@@ -38,6 +38,15 @@ public class PassCardBean {
     private String txendtime;
     private int zpr;
     private String failure_cause;
+    private String wx_uid;
+
+    public String getWx_uid() {
+        return wx_uid;
+    }
+
+    public void setWx_uid(String wx_uid) {
+        this.wx_uid = wx_uid;
+    }
 
     public int getId() {
         return id;

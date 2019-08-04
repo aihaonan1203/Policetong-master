@@ -36,6 +36,7 @@ public class OneSelectPointActivity extends BaseActivity implements View.OnClick
     private Button btn_create;
     private BaseQuickAdapter<PointBean,BaseViewHolder> adapter;
     private List<String> idList=new ArrayList<>();
+    private List<String> addList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class OneSelectPointActivity extends BaseActivity implements View.OnClick
         if (!id.isEmpty()){
             String[] ids = id.split(",");
             idList=new ArrayList<>(Arrays.asList(ids));
+            addList.addAll(idList);
         }
         initView();
         initToolbar();
@@ -77,8 +79,10 @@ public class OneSelectPointActivity extends BaseActivity implements View.OnClick
                     public void onClick(View v) {
                         if (item.isCheck()){
                             item.setCheck(false);
+                            addList.remove(item.getId()+"");
                         }else {
                             item.setCheck(true);
+                            addList.add(item.getId()+"");
                         }
                     }
                 });
@@ -91,8 +95,10 @@ public class OneSelectPointActivity extends BaseActivity implements View.OnClick
             public void onItemClick(BaseQuickAdapter Adapter, View view, int position) {
                 if (adapter.getData().get(position).isCheck()) {
                     adapter.getData().get(position).setCheck(false);
+                    addList.remove(adapter.getData().get(position).getId()+"");
                 }else {
                     adapter.getData().get(position).setCheck(true);
+                    addList.add(adapter.getData().get(position).getId()+"");
                 }
                 adapter.notifyItemChanged(position);
             }
@@ -108,7 +114,7 @@ public class OneSelectPointActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 Log.e("doWhat: ", response);
-                List<PointBean> pointBeans = GsonUtil.parseJsonArrayWithGson(JSON.parseObject(response).getJSONObject("data").getJSONArray("info").toString(), PointBean.class);
+                List<PointBean> pointBeans = GsonUtil.parseJsonArrayWithGson(JSON.parseObject(response).getJSONArray("data").toString(), PointBean.class);
                 adapter.setNewData(pointBeans);
             }
         };
@@ -130,11 +136,13 @@ public class OneSelectPointActivity extends BaseActivity implements View.OnClick
             case R.id.btn_create:
                 StringBuilder names=new StringBuilder();
                 StringBuilder ids=new StringBuilder();
-                for (int i = 0; i < adapter.getData().size(); i++) {
-                    PointBean bean = adapter.getData().get(i);
-                    if (bean.isCheck()){
-                        names.append(bean.getName()).append("➡");
-                        ids.append(bean.getId()).append(",");
+
+                for (int i = 0; i < addList.size(); i++) {
+                    for (int j = 0; j < adapter.getData().size(); j++) {
+                        if (String.valueOf(adapter.getData().get(j).getId()).equals(addList.get(i))){
+                            names.append(adapter.getData().get(j).getName()).append("➡");
+                            ids.append(adapter.getData().get(j).getId()).append(",");
+                        }
                     }
                 }
                 if (names.length()==0){

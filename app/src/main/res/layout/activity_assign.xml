@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="com.example.administrator.policetong.activity.pass_card.one.OnePassCardActivity">
+
+
+    <include
+        layout="@layout/title_main"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:textColor="#000000">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icon_shenqingren"/>
+
+            <TextView
+                style="@style/textView_comon_limitsize"
+                android:gravity="center"
+                android:text="申请人:"
+                android:drawablePadding="5dp"
+               />
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/edittext_common_2" />
+        </LinearLayout>
+
+        <include
+            layout="@layout/line_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:textColor="#000000">
+
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icon_phone"/>
+            <TextView
+                style="@style/textView_comon_limitsize"
+                android:gravity="center"
+                android:text="手机号:" />
+
+            <TextView
+                android:id="@+id/tv_phone"
+                style="@style/edittext_common_2" />
+        </LinearLayout>
+
+        <include
+            layout="@layout/line_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:textColor="#000000">
+
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icon_wx"/>
+            <TextView
+                style="@style/textView_comon_limitsize"
+                android:gravity="center"
+                android:text="微信申请ID:" />
+
+            <TextView
+                android:id="@+id/tv_wx"
+                style="@style/edittext_common_2" />
+        </LinearLayout>
+
+        <include
+            layout="@layout/line_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:textColor="#000000">
+
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icon_zhongdui"/>
+            <TextView
+                style="@style/textView_comon_limitsize"
+                android:gravity="center"
+                android:text="派遣中队:" />
+
+            <Spinner
+                android:id="@+id/mSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+        <include
+            layout="@layout/line_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:textColor="#000000">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icon_yijian"/>
+            <TextView
+                style="@style/textView_comon_limitsize"
+                android:gravity="center"
+                android:text="大队意见:" />
+
+            <com.example.administrator.policetong.view.ClearWriteEditText
+                android:id="@+id/et_yj"
+                style="@style/edittext_common_2" />
+        </LinearLayout>
+
+        <include
+            layout="@layout/line_horizontal"/>
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提交"
+            android:background="@drawable/member_btn_bg"
+            android:textColor="@color/white"
+            android:layout_margin="70dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

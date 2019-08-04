@@ -24,6 +24,7 @@ import com.example.administrator.policetong.network.DoNet;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.UIUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -95,10 +96,18 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
                 submit();
                 break;
             case R.id.tv_start_time:
-                selectTime(tv_start_time,"1");
+                try {
+                    selectTime(tv_start_time,"1");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.tv_end_time:
-                selectTime(tv_end_time,"2");
+                try {
+                    selectTime(tv_end_time,"2");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.tv_select_point:
                 startActivityForResult(new Intent(OneCheckPassCardActivity.this, OneSelectPointActivity.class).putExtra("id", id), 200);
@@ -124,7 +133,7 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
     }
 
 
-    private void selectTime(final TextView textView, final String time) {
+    private void selectTime(final TextView textView, final String time) throws ParseException {
         DatePickDialog dialog = new DatePickDialog(this);
         //设置上下年分限制
         dialog.setYearLimt(5);
@@ -134,6 +143,9 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
         dialog.setType(DateType.TYPE_ALL);
         //设置消息体的显示格式，日期格式
         dialog.setMessageFormat("yyyy-MM-dd HH:mm");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdfOne = new SimpleDateFormat("yyyy-MM-dd");
+        long now = System.currentTimeMillis();
+        dialog.setStartDate(new Date(sdfOne.parse(sdfOne.format(now)).getTime()));
         //设置点击确定按钮回调
         dialog.setOnSureLisener(new OnSureLisener() {
             @Override

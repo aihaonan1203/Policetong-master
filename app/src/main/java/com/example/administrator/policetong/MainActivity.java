@@ -33,6 +33,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -48,6 +49,7 @@ import com.example.administrator.policetong.activity.pass_card.more.MorePassCard
 import com.example.administrator.policetong.activity.pass_card.one.OnePassCardActivity;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
+import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.bean.NoticeBean;
 import com.example.administrator.policetong.bean.Notice_bean;
 import com.example.administrator.policetong.httppost.getNetInfo;
@@ -58,9 +60,15 @@ import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.MorePopupWindow;
 import com.example.administrator.policetong.utils.NotificationUtils;
 import com.example.administrator.policetong.utils.SPUtils;
+import com.example.administrator.policetong.utils.UIUtils;
 import com.example.administrator.policetong.utils.Util;
 import com.example.administrator.policetong.utils.Utils;
+import com.example.administrator.policetong.utils.VersionUtils;
+import com.example.administrator.policetong.view.OkGoUpdateHttpUtil;
 import com.master.permissionhelper.PermissionHelper;
+import com.vector.update_app.UpdateAppBean;
+import com.vector.update_app.UpdateAppManager;
+import com.vector.update_app.UpdateCallback;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -133,7 +141,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else {
                 dingwei();
             }
-            updata_mag();
+            updateVision();
+//            updata_mag();
 //            timer = new Timer();
 //            timer.schedule(new TimerTask() {
 //                @Override
@@ -347,6 +356,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         intent.putExtra("data", bundle);
         startActivity(intent);
+//        UIUtils.t("暂时无法使用该功能！",false,UIUtils.T_ERROR);
     }
 
     SharedPreferences sharedPreferences;
@@ -497,23 +507,113 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                showDownloadProgressDialog(MainActivity.this);
                 break;
             case 3:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    installAPK();
-                } else {
-                    //跳转到安装未知应用界面
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-                    startActivityForResult(intent, 5);//on line 380
-                }
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    installAPK();
+//                } else {
+//                    //跳转到安装未知应用界面
+//                    Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+//                    startActivityForResult(intent, 5);//on line 380
+//                }
                 break;
             case 1:
-                update();
+//                update();
                 break;
             case 5:
-                installAPK();
+//                installAPK();
                 break;
             default:
                 break;
         }
+    }
+
+    //更新版本
+    private void updateVision() {
+        String mUpdateUrl = Consts.URL_GETVERSION;
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        new UpdateAppManager
+                .Builder()
+                //必须设置，当前Activity
+                .setActivity(MainActivity.this)
+                //必须设置，实现httpManager接口的对象
+                .setHttpManager(new OkGoUpdateHttpUtil())
+                //必须设置，更新地址
+                .setUpdateUrl(mUpdateUrl)
+                //以下设置，都是可选
+                //设置请求方式，默认get
+                .setPost(false)
+                //添加自定义参数，默认version=1.0.0（app的versionName）；apkKey=唯一表示（在AndroidManifest.xml配置）
+//                .setParams(params)
+                //设置点击升级后，消失对话框，默认点击升级后，对话框显示下载进度
+                .hideDialogOnDownloading()
+                //设置头部，不设置显示默认的图片，设置图片后自动识别主色调，然后为按钮，进度条设置颜色
+//                .setTopPic(R.mipmap.ic_launcher)
+                //为按钮，进度条设置颜色，默认从顶部图片自动识别。
+                .setThemeColor(MainActivity.this.getResources().getColor(R.color.colorMain))
+                //设置apk下砸路径，默认是在下载到sd卡下/Download/1.0.0/test.apk
+                .setTargetPath(path)
+                //不显示通知栏进度条
+                .dismissNotificationProgress()
+                //是否忽略版本
+                //.showIgnoreVersion()
+
+                .build()
+                //检测是否有新版本
+                .checkNewApp(new UpdateCallback() {
+
+                    @Override
+                    protected UpdateAppBean parseJson(String json) {
+                        UpdateAppBean updateAppBean = new UpdateAppBean();
+
+                        int visionCurrent = VersionUtils.getVersion(MainActivity.this);
+                        com.alibaba.fastjson.JSONObject resultJson = JSON.parseObject(json);
+//                        //新版本版本号
+                        String newVersion = resultJson.getJSONObject("data").getString("version");
+
+                        updateAppBean
+//                                .setUpdate("Yes")
+                                //（必须）新版本号，
+                                .setNewVersion("最新")
+                                //（必须）下载地址
+                                .setApkFileUrl("https://pic.jjedd.net:9000/app/app.apk")
+                                //（必须）更新内容
+                                .setUpdateLog("更新内容：\n\r\r\r\r1.优化了部分功能。\n\r\r\r\r2.修复了部分bug。\n\r\r\r\r请耐心等待更新完成！")
+                                //大小，不设置不显示大小，可以不设置
+//                                .setTargetSize(jsonObject.optString("target_size"))
+                                //是否强制更新，可以不设置
+                                .setConstraint(true);
+                        //设置md5，可以不设置
+//                                    .setNewMd5(jsonObject.optString("new_md51"));
+                        double newversioncode = Double.parseDouble(newVersion);
+                        int cc = (int) (newversioncode);
+                        if (cc == visionCurrent) {
+                            return updateAppBean.setUpdate("No");
+                        }
+                        if (visionCurrent < cc) {
+                            return updateAppBean.setUpdate("Yes");
+                        }
+                        return updateAppBean.setUpdate("No");
+
+                    }
+
+
+                    /**
+                     * 网络请求之前
+                     */
+                    @Override
+                    public void onBefore() {
+//                        CProgressDialogUtils.showProgressDialog((Activity)mContext);
+                    }
+
+                    /**
+                     * 网路请求之后
+                     */
+                    @Override
+                    public void onAfter() {
+//                        CProgressDialogUtils.cancelProgressDialog((Activity)mContext);
+                    }
+
+
+                });
     }
 
 
@@ -534,9 +634,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
         Map<String, String> map = new HashMap<>();
-        String downloadUrl = "http://" + Util.loadSetting(MainActivity.this).getUrl() + ":" + Util.loadSetting(MainActivity.this).getUrlPort() + "/pointsman/checkupdate";
+        String downloadUrl =Consts.URL_GETVERSION;
         final int finalVersionCode = versionCode;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, downloadUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, downloadUrl, new JSONObject(map), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(final JSONObject jsonObject) {
                 Log.e("返回的更新信息", jsonObject.toString());
@@ -637,10 +737,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
                 ActivityCompat.requestPermissions(this, permissions, 1);
             } else {
-                update();
+//                update();
             }
         } else {
-            update();
+//            update();
         }
     }
 

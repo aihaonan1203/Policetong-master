@@ -116,7 +116,7 @@ public class MorePassCardInfoActivity extends BaseActivity {
 
             }
         });
-        doNet.doGet(Consts.URL_TXZDETAIL + getIntent().getStringExtra("card_id"), this, needDialog);
+        doNet.doGet(Consts.URL_TXZDETAIL + getIntent().getStringExtra("id"), this, needDialog);
     }
 
     private void refresh(MorePassBean cardInfo) {

@@ -2,90 +2,96 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingLeft="10dp">
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/pc_item_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:textSize="22sp" />
-
-    <LinearLayout
-        android:gravity="center"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        card_view:cardCornerRadius="4dp"
+        android:padding="5dp"
+        card_view:cardUseCompatPadding="true"
+        >
 
-
-
-
-        <TextView
-            android:id="@+id/pc_item_txt1"
+        <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="日期：1单位"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/pc_item_txt2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="街道：九江"
-            android:textSize="16sp" />
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
 
 
 
 
-        <TextView
-            android:id="@+id/pc_item_txt3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="里程：是"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/pc_item_txt1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="日期：1单位"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/pc_item_txt2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="街道：九江"
+                android:textSize="16sp" />
 
 
-        <TextView
-            android:id="@+id/pc_item_txt4"
-            android:textSize="16sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="所属行政单位:"
-            />
 
-        <TextView
-            android:id="@+id/pc_item_txt5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="发现单位：2018-11-20 09:15:30"
-            android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/pc_item_txt6"
-            android:textSize="16sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="是否报告:"
-            />
+            <TextView
+                android:id="@+id/pc_item_txt3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="里程：是"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/pc_item_txt7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="是否整改：2018-11-20 09:15:30"
-            android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/pc_item_txt8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="整改日期：2018-11-20 09:15:30"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/pc_item_txt4"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="所属行政单位:"
+                />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/pc_item_txt5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="发现单位：2018-11-20 09:15:30"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/pc_item_txt6"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="是否报告:"
+                />
+
+            <TextView
+                android:id="@+id/pc_item_txt7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="是否整改：2018-11-20 09:15:30"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/pc_item_txt8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="整改日期：2018-11-20 09:15:30"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
 
 </LinearLayout>
