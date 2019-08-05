@@ -43,6 +43,7 @@
                     android:id="@+id/visit_time"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/k_height"
+                    android:enabled="false"
                     android:layout_centerVertical="true"
                     android:background="@drawable/kuang"
                     android:inputType="text" />
@@ -80,6 +81,7 @@
                     android:id="@+id/visit_unitname"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/k_height"
+                    android:enabled="false"
                     android:layout_centerVertical="true"
                     android:background="@drawable/kuang"
                     android:inputType="text" />
@@ -118,6 +120,7 @@
                     android:id="@+id/visit_unit"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/k_height"
+                    android:enabled="false"
                     android:layout_centerVertical="true"
                     android:background="@drawable/kuang"
                     android:inputType="text" />
@@ -157,6 +160,7 @@
                     android:layout_height="@dimen/k_height"
                     android:layout_centerVertical="true"
                     android:background="@drawable/kuang"
+                    android:enabled="false"
                     android:inputType="text" />
 
                 <Button
@@ -225,6 +229,7 @@
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:background="@color/mycolor"
+                    android:visibility="gone"
                     android:textColor="@color/text_white"
                     android:layout_marginEnd="10dp"
                     />

@@ -26,6 +26,9 @@ public class Consts {
     public static final String URL_ROADTZADD=COMMOM_URL+"roadtzAdd";
     public static final String URL_ROADTZLIST=COMMOM_URL+"roadtzList";
     public static final String URL_AQYHPCADD=COMMOM_URL+"aqyhpcAdd";
+    public static final String URL_AQYHPCLIST=COMMOM_URL+"aqyhpcList";
+    public static final String URL_ZFXCZGADD=COMMOM_URL+"zfxczgAdd";
+    public static final String URL_ZFXCZGLIST=COMMOM_URL+"zfxczgList";
 
 
 

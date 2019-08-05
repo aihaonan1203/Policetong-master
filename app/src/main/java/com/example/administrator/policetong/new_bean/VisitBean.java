@@ -4,56 +4,24 @@ public class VisitBean {
 
 
     /**
-     * id : 1
-     * userId : test1
-     * squId : 2
-     * unit : 九江市政府
-     * unitNature : 政府单位
-     * visitPurpose : 学习1
-     * content : 学习十几大精神
-     * visitDate : 2019-04-14
+     * id : 6
+     * zfunit : 九江市公安局
+     * biunitnature_id : 医院
+     * bivisitpurpose_id : 重点检查
+     * detail : adwdad
+     * pic : 20190805/900a440fe3e6e42e3725ef724751dd86.JPEG,
+     * user_id : 超级管理员
+     * create_time : 2019-08-05 17:32:56
      */
 
     private int id;
-    private String userId;
-    private int squId;
-    private String unit;
-    private String unitNature;
-    private String visitPurpose;
-    private String content;
-    private String visitDate;
-    private String operate;
-
-    public VisitBean(int id, String userId, int squId, String unit, String unitNature, String visitPurpose, String content, String visitDate, String operate) {
-        this.id = id;
-        this.userId = userId;
-        this.squId = squId;
-        this.unit = unit;
-        this.unitNature = unitNature;
-        this.visitPurpose = visitPurpose;
-        this.content = content;
-        this.visitDate = visitDate;
-        this.operate = operate;
-    }
-
-    public VisitBean(String userId, int squId, String unit, String unitNature, String visitPurpose, String content, String visitDate, String operate) {
-        this.userId = userId;
-        this.squId = squId;
-        this.unit = unit;
-        this.unitNature = unitNature;
-        this.visitPurpose = visitPurpose;
-        this.content = content;
-        this.visitDate = visitDate;
-        this.operate = operate;
-    }
-
-    public String getOperate() {
-        return operate;
-    }
-
-    public void setOperate(String operate) {
-        this.operate = operate;
-    }
+    private String zfunit;
+    private String biunitnature_id;
+    private String bivisitpurpose_id;
+    private String detail;
+    private String pic;
+    private String user_id;
+    private String create_time;
 
     public int getId() {
         return id;
@@ -63,59 +31,59 @@ public class VisitBean {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getZfunit() {
+        return zfunit;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setZfunit(String zfunit) {
+        this.zfunit = zfunit;
     }
 
-    public int getSquId() {
-        return squId;
+    public String getBiunitnature_id() {
+        return biunitnature_id;
     }
 
-    public void setSquId(int squId) {
-        this.squId = squId;
+    public void setBiunitnature_id(String biunitnature_id) {
+        this.biunitnature_id = biunitnature_id;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getBivisitpurpose_id() {
+        return bivisitpurpose_id;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setBivisitpurpose_id(String bivisitpurpose_id) {
+        this.bivisitpurpose_id = bivisitpurpose_id;
     }
 
-    public String getUnitNature() {
-        return unitNature;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setUnitNature(String unitNature) {
-        this.unitNature = unitNature;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
-    public String getVisitPurpose() {
-        return visitPurpose;
+    public String getPic() {
+        return pic;
     }
 
-    public void setVisitPurpose(String visitPurpose) {
-        this.visitPurpose = visitPurpose;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
-    public String getContent() {
-        return content;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public String getVisitDate() {
-        return visitDate;
+    public String getCreate_time() {
+        return create_time;
     }
 
-    public void setVisitDate(String visitDate) {
-        this.visitDate = visitDate;
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 }

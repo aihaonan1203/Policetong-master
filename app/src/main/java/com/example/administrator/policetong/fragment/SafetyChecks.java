@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -37,6 +38,7 @@ import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.activity.ManageActivity;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.PreviewActivity;
 import com.example.administrator.policetong.base.App;
@@ -104,10 +106,9 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
     private EditText safety_zhenggai;
     private EditText safety_zgtime;
     private Button safety_select_time;
+    private Button sg_select_zgtime;
     private EditText safety_xq;
-    private static String SD_CARD_TEMP_DIR;
-    private Button unit_btn,fxunit_btn,paddr_btn;
-    private File file;
+    private Button unit_btn, fxunit_btn, paddr_btn;
     private Button btn_preview;
     private ImageView iv_take_photo;
     private TextView tv_photo;
@@ -117,59 +118,67 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
     private String xiangqing;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_safety_checks_add, container, false);
         view.setClickable(true);
         initView(view);
+        Objects.requireNonNull(getActivity()).findViewById(R.id.ac_tv_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ManageActivity.class).putExtra("type", 2));
+            }
+        });
         return view;
     }
 
     private void initView(View view) {
-        safety_add_submit=view.findViewById(R.id.sg_add_submit);
+        safety_add_submit = view.findViewById(R.id.sg_add_submit);
         safety_add_submit.setOnClickListener(this);
-        safety_time = (EditText) view.findViewById(R.id.sg_time);
-        safety_paddr = (EditText) view.findViewById(R.id.sg_type);
-        safety_xq = (EditText) view.findViewById(R.id.safety_xq);
-        safety_licheng = (EditText) view.findViewById(R.id.jb_lingdao);
-        safety_unit = (EditText) view.findViewById(R.id.sg_car_type);
-        safety_fxunit = (EditText) view.findViewById(R.id.sg_shoushang);
-        safety_shangbao = (EditText) view.findViewById(R.id.sg_chesun);
-        safety_zhenggai = (EditText) view.findViewById(R.id.safety_zhenggai);
-        safety_zgtime = (EditText) view.findViewById(R.id.safety_zgtime);
-        safety_select_time = (Button) view.findViewById(R.id.sg_select_time);
+        safety_time = view.findViewById(R.id.sg_time);
+        safety_paddr = view.findViewById(R.id.sg_type);
+        safety_xq = view.findViewById(R.id.safety_xq);
+        safety_licheng = view.findViewById(R.id.jb_lingdao);
+        safety_unit = view.findViewById(R.id.sg_car_type);
+        safety_fxunit = view.findViewById(R.id.sg_shoushang);
+        safety_shangbao = view.findViewById(R.id.sg_chesun);
+        safety_zhenggai = view.findViewById(R.id.safety_zhenggai);
+        safety_zgtime = view.findViewById(R.id.safety_zgtime);
+        safety_select_time = view.findViewById(R.id.sg_select_time);
+        sg_select_zgtime = view.findViewById(R.id.sg_select_zgtime);
         safety_select_time.setOnClickListener(this);
-        safety_time.setText(LoadingDialog.getTime());
-        safety_zgtime.setText(LoadingDialog.getTime());
-        fxunit_btn=view.findViewById(R.id.sg_shoushang_s);
-        paddr_btn=view.findViewById(R.id.sg_type_btn);
-        unit_btn=view.findViewById(R.id.safety_car_type_select);
-        btn_preview = (Button) view.findViewById(R.id.btn_preview);
-        iv_take_photo=view.findViewById(R.id.iv_take_photo);
-        tv_photo=view.findViewById(R.id.tv_photo);
+        sg_select_zgtime.setOnClickListener(this);
+        safety_time.setText(LoadingDialog.getTime5());
+        safety_zgtime.setText(LoadingDialog.getTime5());
+        fxunit_btn = view.findViewById(R.id.sg_shoushang_s);
+        paddr_btn = view.findViewById(R.id.sg_type_btn);
+        unit_btn = view.findViewById(R.id.safety_car_type_select);
+        btn_preview = view.findViewById(R.id.btn_preview);
+        iv_take_photo = view.findViewById(R.id.iv_take_photo);
+        tv_photo = view.findViewById(R.id.tv_photo);
+        tv_photo.setText(String.format(getResources().getString(R.string.photo), "0"));
         btn_preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectList==null||selectList.size()==0){
+                if (selectList == null || selectList.size() == 0) {
                     Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                EventBus.getDefault().postSticky(new EvenMsg<>("",selectList));
-                startActivity(new Intent(getActivity(),PreviewActivity.class));
+                EventBus.getDefault().postSticky(new EvenMsg<>("", selectList));
+                startActivity(new Intent(getActivity(), PreviewActivity.class));
             }
         });
         Util.RequestOption(getActivity(), "biRoad", new Util.OptionCallBack() {
             @Override
             public void CallBack(List<PointBean> list) {
-                if (list.size()!=0){
+                if (list.size() != 0) {
                     Util.setRadioDateIntoDialog(getActivity(), safety_paddr, paddr_btn, list, new Util.SelectOpintCallBack() {
                         @Override
                         public void selectItem(int itemId) {
-                            biroad_id=itemId;
+                            biroad_id = itemId;
                         }
                     });
-                }else {
+                } else {
                     paddr_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -182,14 +191,14 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
         Util.RequestOption(getActivity(), "biOrganization", new Util.OptionCallBack() {
             @Override
             public void CallBack(List<PointBean> list) {
-                if (list.size()!=0){
+                if (list.size() != 0) {
                     Util.setRadioDateIntoDialog(getActivity(), safety_fxunit, fxunit_btn, list, new Util.SelectOpintCallBack() {
                         @Override
                         public void selectItem(int itemId) {
-                            biorganization_id=itemId;
+                            biorganization_id = itemId;
                         }
                     });
-                }else {
+                } else {
                     fxunit_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -203,14 +212,14 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
         Util.RequestOption(getActivity(), "biUnitnature", new Util.OptionCallBack() {
             @Override
             public void CallBack(List<PointBean> list) {
-                if (list.size()!=0){
+                if (list.size() != 0) {
                     Util.setRadioDateIntoDialog(getActivity(), safety_unit, unit_btn, list, new Util.SelectOpintCallBack() {
                         @Override
                         public void selectItem(int itemId) {
-                            biunitnature_id=itemId;
+                            biunitnature_id = itemId;
                         }
                     });
-                }else {
+                } else {
                     unit_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -224,17 +233,6 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 takeOnePhoto();
-            }
-        });
-        btn_preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectList==null||selectList.size()==0){
-                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                EventBus.getDefault().postSticky(new EvenMsg<>("",selectList));
-                startActivity(new Intent(getActivity(),PreviewActivity.class));
             }
         });
     }
@@ -282,9 +280,9 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
             Toast.makeText(getContext(), "是否上报不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (shangbao.equals("是")||shangbao.equals("否")){
+        if (shangbao.equals("是") || shangbao.equals("否")) {
 
-        }else {
+        } else {
             Toast.makeText(getContext(), "是否上报只能填“是”和”否", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -294,9 +292,9 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
             Toast.makeText(getContext(), "是否整改不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (zhenggai.equals("是")||zhenggai.equals("否")){
+        if (zhenggai.equals("是") || zhenggai.equals("否")) {
 
-        }else {
+        } else {
             Toast.makeText(getContext(), "是否上报只能填“是”和”否", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -305,7 +303,7 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
             Toast.makeText(getContext(), "整改时间不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (selectList.size()==0){
+        if (selectList.size() == 0) {
             Toast.makeText(getContext(), "请选择上传图片！", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -314,7 +312,7 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.sg_add_submit:
                 submit();
                 break;
@@ -332,25 +330,46 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
                 dialog.setOnSureLisener(new OnSureLisener() {
                     @Override
                     public void onSure(Date date) {
-                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+                        @SuppressLint("SimpleDateFormat") String string = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
                         safety_time.setText(string);
                     }
                 });
                 dialog.show();
                 break;
+            case R.id.sg_select_zgtime:
+                DatePickDialog dialog1 = new DatePickDialog(getActivity());
+                //设置上下年分限制
+                dialog1.setYearLimt(5);
+                //设置标题
+                dialog1.setTitle("选择时间");
+                //设置类型
+                dialog1.setType(DateType.TYPE_ALL);
+                //设置消息体的显示格式，日期格式
+                dialog1.setMessageFormat("yyyy-MM-dd HH:mm");
+                //设置点击确定按钮回调
+                dialog1.setOnSureLisener(new OnSureLisener() {
+                    @Override
+                    public void onSure(Date date) {
+                        @SuppressLint("SimpleDateFormat") String string = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+                        safety_zgtime.setText(string);
+                    }
+                });
+                dialog1.show();
+                break;
         }
     }
 
-    String time,paddr,licheng,unit,fxunit,shangbao,zhenggai,zgtime;
+    String time, paddr, licheng, unit, fxunit, shangbao, zhenggai, zgtime;
+
     private void set_data_into_server() {
-        PostFormBuilder builder=new PostFormBuilder();
+        PostFormBuilder builder = new PostFormBuilder();
         for (int i = 0; i < selectList.size(); i++) {
-            builder.addFile("file[]",new File(selectList.get(0).getPath()).getName(),new File(selectList.get(i).getPath()));
+            builder.addFile("file[]", new File(selectList.get(0).getPath()).getName(), new File(selectList.get(i).getPath()));
         }
         builder.url("https://api.jjedd.net:9000/v1/uploadImg")
-                .addHeader("token",App.userInfo.getToken())
-                .addHeader("user",App.userInfo.getUser().getUser())
-                .addHeader("Content-Type","multipart/form-data")
+                .addHeader("token", App.userInfo.getToken())
+                .addHeader("user", App.userInfo.getUser().getUser())
+                .addHeader("Content-Type", "multipart/form-data")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -360,46 +379,48 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        com.alibaba.fastjson.JSONObject json=JSON.parseObject(response);
+                        com.alibaba.fastjson.JSONObject json = JSON.parseObject(response);
                         DoNet doNet = new DoNet() {
                             @Override
                             public void doWhat(String response, int id) {
                                 if (!GsonUtil.verifyResult_show(response)) {
                                     return;
                                 }
-                                UIUtils.t(JSON.parseObject(response).getString("message"),false,UIUtils.T_SUCCESS);
+                                UIUtils.t(JSON.parseObject(response).getString("message"), false, UIUtils.T_SUCCESS);
                                 getActivity().finish();
+                                startActivity(new Intent(getActivity(), ManageActivity.class).putExtra("type", 2));
                             }
                         };
-                        com.alibaba.fastjson.JSONObject jsonObject=new com.alibaba.fastjson.JSONObject();
-                        jsonObject.put("work_time",time);
+                        com.alibaba.fastjson.JSONObject jsonObject = new com.alibaba.fastjson.JSONObject();
+                        jsonObject.put("work_time", time);
                         jsonObject.put("biroad_id", biroad_id);
-                        jsonObject.put("mileage",licheng);
+                        jsonObject.put("mileage", licheng);
                         jsonObject.put("biunitnature_id", biunitnature_id);
                         jsonObject.put("biorganization_id", biorganization_id);
                         if (shangbao.equals("是")) {
                             jsonObject.put("summit", "1");
-                        }else {
+                        } else {
                             jsonObject.put("summit", "0");
                         }
                         if (zhenggai.equals("是")) {
                             jsonObject.put("reform", "1");
-                        }else {
+                        } else {
                             jsonObject.put("reform", "0");
                         }
                         jsonObject.put("reform_time", zgtime);
                         jsonObject.put("pic", json.getJSONObject("data").getString("filepath"));
                         jsonObject.put("detail", xiangqing);
-                        doNet.doPost(jsonObject,Consts.URL_AQYHPCADD, getActivity(), true);
+                        doNet.doPost(jsonObject, Consts.URL_AQYHPCADD, getActivity(), true);
                     }
                 });
     }
 
-    private List<LocalMedia> selectList=new ArrayList<>();
+    private List<LocalMedia> selectList = new ArrayList<>();
+
     @Override
     public void getPhoto(List<LocalMedia> selectList) {
         this.selectList.addAll(selectList);
-        tv_photo.setText(String.format(getResources().getString(R.string.photo),this.selectList.size()+""));
+        tv_photo.setText(String.format(getResources().getString(R.string.photo), this.selectList.size() + ""));
         selectList.clear();
     }
 }

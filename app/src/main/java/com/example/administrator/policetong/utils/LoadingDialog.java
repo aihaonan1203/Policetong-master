@@ -79,6 +79,14 @@ public class LoadingDialog {
 		return string;
 	}
 
+	@SuppressLint("SimpleDateFormat")
+	public static String getTime5(){
+		data=new Date(System.currentTimeMillis());
+		format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String string=format.format(data);
+		return string;
+	}
+
 	public static Dialog getDialog() {
 		return dialog;
 	}

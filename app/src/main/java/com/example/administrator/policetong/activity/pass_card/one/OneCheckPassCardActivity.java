@@ -23,6 +23,7 @@ import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.network.DoNet;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.UIUtils;
+import com.example.administrator.policetong.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,15 +37,19 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
     private TextView tv_phone;
     private RadioButton rb_pass;
     private RadioButton rb_refuse;
-    private TextView tv_start_time;
+    private TextView tv_start_time1;
+    private TextView tv_start_time2;
     private TextView tv_points;
-    private TextView tv_end_time;
+    private TextView tv_end_time1;
+    private TextView tv_end_time2;
     private TextView tv_select_point;
     private EditText et_remark;
     private LinearLayout ll_content;
     private Button btn_submit;
-    private String startTime="";
-    private String endTime="";
+    private String startYMD="";
+    private String endYMD="";
+    private String startHM="";
+    private String endHM="";
     private String id="";
 
     @Override
@@ -71,10 +76,14 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
         rb_refuse = findViewById(R.id.rb_refuse);
         tv_points = findViewById(R.id.tv_points);
 
-        tv_start_time = findViewById(R.id.tv_start_time);
-        tv_start_time.setOnClickListener(this);
-        tv_end_time = findViewById(R.id.tv_end_time);
-        tv_end_time.setOnClickListener(this);
+        tv_start_time1 = findViewById(R.id.tv_start_time1);
+        tv_start_time2 = findViewById(R.id.tv_start_time2);
+        tv_start_time1.setOnClickListener(this);
+        tv_start_time2.setOnClickListener(this);
+        tv_end_time1 = findViewById(R.id.tv_end_time1);
+        tv_end_time2 = findViewById(R.id.tv_end_time2);
+        tv_end_time1.setOnClickListener(this);
+        tv_end_time2.setOnClickListener(this);
         tv_select_point = findViewById(R.id.tv_select_point);
         tv_select_point.setOnClickListener(this);
         et_remark = findViewById(R.id.et_remark);
@@ -95,16 +104,30 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
             case R.id.btn_submit:
                 submit();
                 break;
-            case R.id.tv_start_time:
+            case R.id.tv_start_time1:
                 try {
-                    selectTime(tv_start_time,"1");
+                    selectYearMorthDay(tv_start_time1,"1");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 break;
-            case R.id.tv_end_time:
+            case R.id.tv_end_time1:
                 try {
-                    selectTime(tv_end_time,"2");
+                    selectYearMorthDay(tv_end_time1,"2");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.tv_start_time2:
+                try {
+                    selectHM(tv_start_time2,"1");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.tv_end_time2:
+                try {
+                    selectHM(tv_end_time2,"2");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -133,14 +156,14 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
     }
 
 
-    private void selectTime(final TextView textView, final String time) throws ParseException {
+    private void selectYearMorthDay(final TextView textView, final String time) throws ParseException {
         DatePickDialog dialog = new DatePickDialog(this);
         //设置上下年分限制
         dialog.setYearLimt(5);
         //设置标题
         dialog.setTitle("选择时间");
         //设置类型
-        dialog.setType(DateType.TYPE_ALL);
+        dialog.setType(DateType.TYPE_YMD);
         //设置消息体的显示格式，日期格式
         dialog.setMessageFormat("yyyy-MM-dd HH:mm");
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdfOne = new SimpleDateFormat("yyyy-MM-dd");
@@ -150,12 +173,41 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
         dialog.setOnSureLisener(new OnSureLisener() {
             @Override
             public void onSure(Date date) {
-                @SuppressLint("SimpleDateFormat") String string = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+                @SuppressLint("SimpleDateFormat") String string = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
                 textView.setText(string);
                 if ("1".equals(time)) {
-                    startTime=string;
+                    startYMD=string;
                 }else {
-                    endTime=string;
+                    endYMD=string;
+                }
+            }
+        });
+        dialog.show();
+    }
+
+    private void selectHM(final TextView textView, final String time) throws ParseException {
+        DatePickDialog dialog = new DatePickDialog(this);
+        //设置上下年分限制
+        dialog.setYearLimt(5);
+        //设置标题
+        dialog.setTitle("选择时间");
+        //设置类型
+        dialog.setType(DateType.TYPE_HM);
+        if (time.equals("1")){
+            dialog.setStartDate(new Date(Utils.getStringToDate("00:00","HH:mm")));
+        }else {
+            dialog.setStartDate(new Date(Utils.getStringToDate("06:00","HH:mm")));
+        }
+        //设置点击确定按钮回调
+        dialog.setOnSureLisener(new OnSureLisener() {
+            @Override
+            public void onSure(Date date) {
+                @SuppressLint("SimpleDateFormat") String string = new SimpleDateFormat("HH:mm").format(date);
+                textView.setText(string);
+                if ("1".equals(time)) {
+                    startHM=string;
+                }else {
+                    endHM=string;
                 }
             }
         });
@@ -171,7 +223,7 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
         }
 
         if (rb_pass.isChecked()){
-            if (TextUtils.isEmpty(startTime)||TextUtils.isEmpty(endTime)) {
+            if (TextUtils.isEmpty(startYMD)||TextUtils.isEmpty(startYMD)||TextUtils.isEmpty(endHM)||TextUtils.isEmpty(endYMD)) {
                 UIUtils.t("请选择时间",false,UIUtils.T_WARNING);
                 return;
             }
@@ -203,8 +255,8 @@ public class OneCheckPassCardActivity extends BaseActivity implements View.OnCli
         if (rb_pass.isChecked()){
             jsonObject.put("result","1");
             jsonObject.put("line",id);
-            jsonObject.put("txstarttime",startTime);
-            jsonObject.put("txendtime",endTime);
+            jsonObject.put("txstarttime",startYMD+" "+startHM);
+            jsonObject.put("txendtime",endYMD+" "+endHM);
         }else {
             jsonObject.put("result","2");
         }

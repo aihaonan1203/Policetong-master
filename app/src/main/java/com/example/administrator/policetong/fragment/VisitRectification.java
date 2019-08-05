@@ -1,27 +1,11 @@
 package com.example.administrator.policetong.fragment;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,51 +15,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.R;
-import com.example.administrator.policetong.activity.ModulesActivity;
+import com.example.administrator.policetong.activity.ManageActivity;
 import com.example.administrator.policetong.activity.PreviewActivity;
-import com.example.administrator.policetong.base.BaseActivity;
-import com.example.administrator.policetong.base.BaseBean;
+import com.example.administrator.policetong.base.App;
 import com.example.administrator.policetong.base.BaseFragment;
+import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.bean.EvenMsg;
-import com.example.administrator.policetong.httppost.getNetInfo;
-import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.bean.new_bean.PointBean;
+import com.example.administrator.policetong.network.DoNet;
 import com.example.administrator.policetong.new_bean.VisitBean;
-import com.example.administrator.policetong.utils.LoadingDialog;
+import com.example.administrator.policetong.utils.GsonUtil;
+import com.example.administrator.policetong.utils.UIUtils;
 import com.example.administrator.policetong.utils.Util;
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+import okhttp3.Call;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,82 +63,66 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
     private EditText visit_context;
     private EditText visit_time;
     private Button visit_submit,vr_danwei,vr_mudi,vr_xz,visit_select_time;
-    private static String SD_CARD_TEMP_DIR;
+    private int biunitnature_id;
+    private int bivisitpurpose_id;
+
     public VisitRectification() {
-        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_visitrectification_add, container, false);
         view.setClickable(true);
         initView(view);
-        ModulesActivity modulesActivity = (ModulesActivity) getActivity();
-        modulesActivity.shilihua(new ModulesActivity.Myjiekou() {
+        Objects.requireNonNull(getActivity()).findViewById(R.id.ac_tv_right).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void callback(String ooo) {
-                Log.e("onActivityResult: ",file.getPath()+"      "+file.getName() );
-                LoadingDialog.showDialog(getActivity(),"正在上传");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        formUpload("http://" + Util.loadSetting(getActivity()).getUrl() + ":"+Util.loadSetting(getActivity()).getUrlPort()+"/pointsman/uploadimg",SD_CARD_TEMP_DIR);
-                    }
-                }).start();
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ManageActivity.class).putExtra("type", 3));
             }
         });
         return view;
     }
 
     private void initView(View view) {
-        visit_unitname = (EditText) view.findViewById(R.id.visit_unitname);
-        visit_unit = (EditText) view.findViewById(R.id.visit_unit);
-        visit_purpose = (EditText) view.findViewById(R.id.visit_purpose);
-        visit_context = (EditText) view.findViewById(R.id.visit_context);
-        visit_submit = (Button) view.findViewById(R.id.visit_submit);
-        vr_danwei = (Button) view.findViewById(R.id.vr_unit);
-        vr_mudi = (Button) view.findViewById(R.id.vr_mudi);
-        vr_xz = (Button) view.findViewById(R.id.vr_unit_xz);
+        visit_unitname =  view.findViewById(R.id.visit_unitname);
+        visit_unit =  view.findViewById(R.id.visit_unit);
+        visit_purpose =  view.findViewById(R.id.visit_purpose);
+        visit_context =  view.findViewById(R.id.visit_context);
+        visit_submit =  view.findViewById(R.id.visit_submit);
+        vr_danwei =  view.findViewById(R.id.vr_unit);
+        vr_mudi =  view.findViewById(R.id.vr_mudi);
+        vr_xz =  view.findViewById(R.id.vr_unit_xz);
         visit_time=view.findViewById(R.id.visit_time);
         visit_select_time=view.findViewById(R.id.vr_select_time);
         visit_submit.setOnClickListener(this);
         visit_select_time.setOnClickListener(this);
-//        visit_time.setText(LoadingDialog.getTime());
-        btn_preview = (Button) view.findViewById(R.id.btn_preview);
+        btn_preview =  view.findViewById(R.id.btn_preview);
         iv_take_photo=view.findViewById(R.id.iv_take_photo);
         tv_photo=view.findViewById(R.id.tv_photo);
-        btn_preview = (Button) view.findViewById(R.id.btn_preview);
+        btn_preview =  view.findViewById(R.id.btn_preview);
         iv_take_photo=view.findViewById(R.id.iv_take_photo);
         tv_photo=view.findViewById(R.id.tv_photo);
         tv_photo.setText(String.format(getResources().getString(R.string.photo),"0"));
         iv_take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takePhoto();
+                takeOnePhoto();
             }
         });
-        btn_preview.setOnClickListener(new View.OnClickListener() {
+
+        Util.RequestOption(getActivity(), "biUnitnature", new Util.OptionCallBack() {
             @Override
-            public void onClick(View view) {
-                if (selectList==null||selectList.size()==0){
-                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                EventBus.getDefault().postSticky(new EvenMsg<>("",selectList));
-                startActivity(new Intent(getActivity(),PreviewActivity.class));
-            }
-        });
-        Util.RequestOption(getActivity(), "option1", new Util.RequestOptionCallBack() {
-            @Override
-            public void CallBack(List<String> list) {
-                if (list.size()!=0){
-                    int size = list.size();
-                    String[] arr =list.toArray(new String[size]);
-                    Util.setRadioDateIntoDialog(getActivity(),visit_unitname,vr_danwei,arr);
-                }else {
+            public void CallBack(List<PointBean> list) {
+                if (list.size() != 0) {
+                    Util.setRadioDateIntoDialog(getActivity(), visit_unit, vr_xz, list, new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            biunitnature_id = itemId;
+                        }
+                    });
+                } else {
                     vr_danwei.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -174,40 +130,43 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                         }
                     });
                 }
-                Util.RequestOption(getActivity(), "option4", new Util.RequestOptionCallBack() {
-                    @Override
-                    public void CallBack(List<String> list) {
-                        if (list.size()!=0){
-                            int size = list.size();
-                            String[] arr =list.toArray(new String[size]);
-                            Util.setRadioDateIntoDialog(getActivity(),visit_purpose,vr_mudi,arr);
-                        }else {
-                            vr_mudi.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+            }
+        });
+
+        Util.RequestOption(getActivity(), "biVisitpurpose", new Util.OptionCallBack() {
+            @Override
+            public void CallBack(List<PointBean> list) {
+                if (list.size() != 0) {
+                    Util.setRadioDateIntoDialog(getActivity(), visit_purpose, vr_mudi, list, new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            bivisitpurpose_id = itemId;
                         }
-                        Util.RequestOption(getActivity(), "option3", new Util.RequestOptionCallBack() {
-                            @Override
-                            public void CallBack(List<String> list) {
-                                if (list.size()!=0){
-                                    int size = list.size();
-                                    String[] arr =list.toArray(new String[size]);
-                                    Util.setRadioDateIntoDialog(getActivity(),visit_unit,vr_xz,arr);
-                                }else {
-                                    vr_mudi.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                });
+                    });
+                } else {
+                    vr_danwei.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
+        Util.RequestOption(getActivity(), "biOrganization", new Util.OptionCallBack() {
+            @Override
+            public void CallBack(List<PointBean> list) {
+                if (list.size() != 0) {
+                    Util.setRadioDateIntoDialog(getActivity(), visit_unitname, vr_danwei, list,null);
+                } else {
+                    vr_danwei.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }
@@ -247,7 +206,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
             return;
         }
         // validate
-        String time = visit_time.getText().toString().trim();
+        final String time = visit_time.getText().toString().trim();
         if (TextUtils.isEmpty(time)) {
             Toast.makeText(getContext(), "时间不能为空", Toast.LENGTH_SHORT).show();
             return;
@@ -274,254 +233,54 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
             Toast.makeText(getContext(), "单位性质不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        VisitBean visitBean=new VisitBean(userInfo.getUserId(),userInfo.getSquId(),unit,unitname,purpose,context,time,"1");
-        String s = new Gson().toJson(visitBean);
-        disposable= Network.getPoliceApi(false).addVisit(RequestBody.create(MediaType.parse("application/json"),s))
-                .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
+
+        PostFormBuilder builder = new PostFormBuilder();
+        for (int i = 0; i < selectList.size(); i++) {
+            builder.addFile("file[]", new File(selectList.get(0).getPath()).getName(), new File(selectList.get(i).getPath()));
+        }
+        builder.url("https://api.jjedd.net:9000/v1/uploadImg")
+                .addHeader("token", App.userInfo.getToken())
+                .addHeader("user", App.userInfo.getUser().getUser())
+                .addHeader("Content-Type", "multipart/form-data")
+                .build()
+                .execute(new StringCallback() {
                     @Override
-                    public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
-                        MultipartBody.Part[] part = new MultipartBody.Part[selectList.size()];
-                        for (int i = 0; i < selectList.size(); i++) {
-                            createFilePart(part, i, new File(selectList.get(i).getPath()));
-                        }
-                        return Network.getPoliceApi(false).uploadImage("visit/uploadImg",part);
+                    public void onError(Call call, Exception e, int id, int code) {
+
                     }
-                }).compose(BaseActivity.<BaseBean>applySchedulers())
-                .subscribe(new Consumer<BaseBean>() {
+
                     @Override
-                    public void accept(BaseBean bean) throws Exception {
-                        if (bean.getCode()==0){
-                            Toast.makeText(getActivity(), "上传成功", Toast.LENGTH_SHORT).show();
-                            Objects.requireNonNull(getActivity()).finish();
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.e("accept: ","" );
-                        Toast.makeText(getActivity(), "上传失败", Toast.LENGTH_SHORT).show();
+                    public void onResponse(String response, int id) {
+                        com.alibaba.fastjson.JSONObject json = JSON.parseObject(response);
+                        DoNet doNet = new DoNet() {
+                            @Override
+                            public void doWhat(String response, int id) {
+                                if (!GsonUtil.verifyResult_show(response)) {
+                                    return;
+                                }
+                                UIUtils.t(JSON.parseObject(response).getString("message"), false, UIUtils.T_SUCCESS);
+                                Objects.requireNonNull(getActivity()).finish();
+                                startActivity(new Intent(getActivity(), ManageActivity.class).putExtra("type", 3));
+                            }
+                        };
+                        JSONObject jsonObject =new JSONObject();
+//                        jsonObject.put("work_time", time);
+                        jsonObject.put("zfunit", unitname);
+                        jsonObject.put("biunitnature_id", biunitnature_id);
+                        jsonObject.put("bivisitpurpose_id", bivisitpurpose_id);
+                        jsonObject.put("detail", context);
+                        jsonObject.put("pic", json.getJSONObject("data").getString("filepath"));
+                        doNet.doPost(jsonObject, Consts.URL_ZFXCZGADD, getActivity(), true);
                     }
                 });
-//        if (NetworkChangeListener.onAvailable){
-//            showDialog("请选择是否要上传照片");
-//        }else {
-//            Toast.makeText(getActivity(), "您的网络出现了问题", Toast.LENGTH_SHORT).show();
-//        }
-
     }
 
 
-    private File file;
-    private String photoPath;
-    String img="";
-    private void showDialog(String str) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("选择");
-        builder.setMessage(str);
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                LoadingDialog.showDialog(getActivity(),"正在提交...");
-                get_data_form_server();
-            }
-        });
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (ContextCompat.checkSelfPermission(getActivity(),
-                                         Manifest.permission.CAMERA)
-                                 != PackageManager.PERMISSION_GRANTED) {
-                                 ActivityCompat.requestPermissions(getActivity(),
-                                                 new String[]{Manifest.permission.CAMERA},
-                                                 1);
-                             }else {
-                    SharedPreferences sharedPreferences=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-                    file = new File(Environment.getExternalStorageDirectory()
-                            + File.separator + sharedPreferences.getString("userid","")+LoadingDialog.getTime2()+".jpg");
-                    file.getParentFile().mkdirs();
-                    SD_CARD_TEMP_DIR = file.getPath();
-                    dialog.dismiss();
-                    Intent cameraIntent = new Intent(
-                            MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (Build.VERSION.SDK_INT>=24){
-                        //改变Uri  com.xykj.customview.fileprovider注意和xml中的一致
-                        Uri uri = FileProvider.getUriForFile(getActivity(), "com.example.administrator.policetong.fileprovider", file);
-                        //添加权限
-                        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                        startActivityForResult(cameraIntent, 1);
-                    }else{
-                        SD_CARD_TEMP_DIR = Environment.getExternalStorageDirectory()
-                                + File.separator + sharedPreferences.getString("userid","")+LoadingDialog.getTime2()+".jpg";//设定照相后保存的文件名，类似于缓存文件
-                        dialog.dismiss();
-                        cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                                Uri.fromFile(new File(SD_CARD_TEMP_DIR)));
-                        startActivityForResult(cameraIntent, 1);
-                    }
-                }
-
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-
-    @SuppressLint("HandlerLeak")
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case 1:
-                    LoadingDialog.disDialog();
-                    Toast.makeText(getActivity(), "上传成功", Toast.LENGTH_SHORT).show();
-                    showDialog("上传成功,请选择是否要继续上传照片");
-                    img=img+photo_name+"/";
-                    break;
-                case 2:
-                    LoadingDialog.disDialog();
-                    Toast.makeText(getActivity(), "上传失败,请检查网络", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
-    public void get_data_form_server() {
-        Map info=new HashMap();
-        SharedPreferences sp=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        info.put("username",sp.getString("username",""));
-        info.put("userid",sp.getString("userid",""));
-        info.put("unit",unitname);
-        info.put("unitnature",unit);
-        info.put("objective",purpose);
-        info.put("content",context);
-        info.put("img",img);
-        info.put("date",LoadingDialog.getTime());
-        info.put("group",sp.getString("group",""));
-        info.put("detachment",sp.getString("detachment",""));
-        getNetInfo.NetInfo(getActivity(), "insertvisit", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")){
-                    Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                    getActivity().finish();
-                }else {
-                    Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * 文件上传
-     *
-     * @param urlStr   接口路径
-     * @param filePath 本地图片路径
-     * @return
-     */
-    String photo_name;
-    public String formUpload(String urlStr, String filePath) {
-        String rsp = "";
-        int rews=0;
-        HttpURLConnection conn;
-        conn = null;
-        String BOUNDARY = "|"; // request头和上传文件内容分隔符
-        try {
-            URL url = new URL(urlStr);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(30000);
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setUseCaches(false);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("User-Agent",
-                    "Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-CN; rv:1.9.2.6)");
-            conn.setRequestProperty("Content-Type",
-                    "multipart/form-data; boundary=" + BOUNDARY);
-            OutputStream out = new DataOutputStream(conn.getOutputStream());
-            File file = new File(filePath);
-            String filename = file.getName();
-            photo_name=filename;
-            Log.e("formUpload: ", filename);
-            Log.e("formUpload: ", file.getPath());
-            String contentType = "";
-            if (filename.endsWith(".png")) {
-                contentType = "image/png";
-            }
-            if (filename.endsWith(".jpg")) {
-                contentType = "image/jpg";
-            }
-            if (filename.endsWith(".gif")) {
-                contentType = "image/gif";
-            }
-            if (filename.endsWith(".bmp")) {
-                contentType = "image/bmp";
-            }
-            if (contentType == null || contentType.equals("")) {
-                contentType = "application/octet-stream";
-            }
-            StringBuffer strBuf = new StringBuffer();
-            strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
-            strBuf.append("Content-Disposition: form-data; name=\"" + filePath
-                    + "\"; filename=\"" + filename + "\"\r\n");
-            strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
-            out.write(strBuf.toString().getBytes());
-            DataInputStream in = new DataInputStream(new FileInputStream(file));
-            int bytes = 0;
-            byte[] bufferOut = new byte[1024];
-            while ((bytes = in.read(bufferOut)) != -1) {
-                out.write(bufferOut, 0, bytes);
-            }
-            in.close();
-            byte[] endData = ("\r\n--" + BOUNDARY + "--\r\n").getBytes();
-            out.write(endData);
-            out.flush();
-            rews = conn.getResponseCode();
-            Log.w("formUpload: ", rews+"==");
-            out.close();
-
-            // 读取返回数据
-            StringBuffer buffer = new StringBuffer();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line).append("\n");
-            }
-            rsp = buffer.toString();
-            reader.close();
-            reader = null;
-        } catch (Exception e) {
-            LoadingDialog.disDialog();
-            e.printStackTrace();
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-                conn = null;
-            }
-        }
-        Log.e("formUpload: ", rsp);
-        if (rews==200){
-            handler.sendEmptyMessage(1);
-        }else {
-            handler.sendEmptyMessage(2);
-        }
-        return rsp;
-    }
-
+    private List<LocalMedia> selectList = new ArrayList<>();
     @Override
     public void getPhoto(List<LocalMedia> selectList) {
-        tv_photo.setText(String.format(getResources().getString(R.string.photo),selectList.size()+""));
+        this.selectList.addAll(selectList);
+        tv_photo.setText(String.format(getResources().getString(R.string.photo), this.selectList.size() + ""));
+        selectList.clear();
     }
 }

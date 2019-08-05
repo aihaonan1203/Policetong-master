@@ -6,144 +6,138 @@ package com.example.administrator.policetong.bean;
 
 public class SafetyChecks_bean {
 
+
     /**
-     * date : 2018-06-10 09:14:42
-     * detachment : 2
-     * img : 1012018-06-10-09-15-10.jpg|
-     * rectifydate : 2018-06-10 09:14:42
-     * distance : 5公里
-     * fdunit : 九江职业大学
-     * asunit : 九江职业大学
-     * userid : 101
-     * rectify : 是
-     * modify : 未修改
-     * road : 濂溪大道
-     * report : 是
-     * grop : 1
+     * id : 7
+     * work_time :
+     * biroad_id : 春江路
+     * mileage : dawda
+     * biunitnature_id : 企业
+     * biorganization_id : 九江市公安局
+     * summit : 是
+     * detail : dwadwadwa
+     * pic : 20190805/35bbe500335a84b7ab7825a11dcc90a4.JPEG,
+     * reform : 是
+     * reform_time :
+     * user_id : 超级管理员
+     * create_time : 2019-08-05 15:50:27
      */
 
-    private String date;
-    private String detachment;
-    private String img;
-    private String rectifydate;
-    private String distance;
-    private String fdunit;
-    private String asunit;
-    private String userid;
-    private String rectify;
-    private String road;
-    private String report;
-    private String grop;
+    private int id;
+    private String work_time;
+    private String biroad_id;
+    private String mileage;
+    private String biunitnature_id;
+    private String biorganization_id;
+    private String summit;
+    private String detail;
+    private String pic;
+    private String reform;
+    private String reform_time;
+    private String user_id;
+    private String create_time;
 
-
-    public SafetyChecks_bean(String date, String detachment, String img, String rectifydate, String distance, String fdunit, String asunit, String userid, String rectify, String road, String report, String grop) {
-        this.date = date;
-        this.detachment = detachment;
-        this.img = img;
-        this.rectifydate = rectifydate;
-        this.distance = distance;
-        this.fdunit = fdunit;
-        this.asunit = asunit;
-        this.userid = userid;
-        this.rectify = rectify;
-        this.road = road;
-        this.report = report;
-        this.grop = grop;
+    public int getId() {
+        return id;
     }
 
-    public String getDate() {
-        return date;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public String getWork_time() {
+        return work_time;
     }
 
-    public String getDetachment() {
-        return detachment;
+    public void setWork_time(String work_time) {
+        this.work_time = work_time;
     }
 
-    public void setDetachment(String detachment) {
-        this.detachment = detachment;
+    public String getBiroad_id() {
+        return biroad_id;
     }
 
-    public String getImg() {
-        return img;
+    public void setBiroad_id(String biroad_id) {
+        this.biroad_id = biroad_id;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public String getMileage() {
+        return mileage;
     }
 
-    public String getRectifydate() {
-        return rectifydate;
+    public void setMileage(String mileage) {
+        this.mileage = mileage;
     }
 
-    public void setRectifydate(String rectifydate) {
-        this.rectifydate = rectifydate;
+    public String getBiunitnature_id() {
+        return biunitnature_id;
     }
 
-    public String getDistance() {
-        return distance;
+    public void setBiunitnature_id(String biunitnature_id) {
+        this.biunitnature_id = biunitnature_id;
     }
 
-    public void setDistance(String distance) {
-        this.distance = distance;
+    public String getBiorganization_id() {
+        return biorganization_id;
     }
 
-    public String getFdunit() {
-        return fdunit;
+    public void setBiorganization_id(String biorganization_id) {
+        this.biorganization_id = biorganization_id;
     }
 
-    public void setFdunit(String fdunit) {
-        this.fdunit = fdunit;
+    public String getSummit() {
+        return summit;
     }
 
-    public String getAsunit() {
-        return asunit;
+    public void setSummit(String summit) {
+        this.summit = summit;
     }
 
-    public void setAsunit(String asunit) {
-        this.asunit = asunit;
+    public String getDetail() {
+        return detail;
     }
 
-    public String getUserid() {
-        return userid;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public String getPic() {
+        return pic;
     }
 
-    public String getRectify() {
-        return rectify;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
-    public void setRectify(String rectify) {
-        this.rectify = rectify;
+    public String getReform() {
+        return reform;
     }
 
-    public String getRoad() {
-        return road;
+    public void setReform(String reform) {
+        this.reform = reform;
     }
 
-    public void setRoad(String road) {
-        this.road = road;
+    public String getReform_time() {
+        return reform_time;
     }
 
-    public String getReport() {
-        return report;
+    public void setReform_time(String reform_time) {
+        this.reform_time = reform_time;
     }
 
-    public void setReport(String report) {
-        this.report = report;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public String getGrop() {
-        return grop;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public void setGrop(String grop) {
-        this.grop = grop;
+    public String getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 }
