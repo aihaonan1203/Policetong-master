@@ -29,6 +29,7 @@ import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.bean.new_bean.PointBean;
 import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.network.DoNet;
+import com.example.administrator.policetong.new_bean.DepBean;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -277,31 +278,26 @@ public class Util {
             }
         };
         doNet.doGet(Consts.COMMOM_URL+option,context,false);
-//        Map map=new HashMap();
-//        map.put("typecode",option);
-//        final List<String> list=new ArrayList<>();
-//        getNetInfo.NetInfoArray(context, "selectoption", new JSONObject(map), new getNetInfo.VolleyArrayCallback() {
-//            @Override
-//            public void onSuccess(JSONArray object) throws JSONException {
-//                Log.e("onSuccess: ",object.toString() );
-//                if (object.length()!=0){
-//                    for (int i = 0; i < object.length(); i++) {
-//                        JSONObject jsonObject= (JSONObject) object.get(i);
-//                        list.add(jsonObject.getString("opcontent"));
-//                    }
-//                }
-//                callBack.CallBack(list);
-//            }
-//
-//            @Override
-//            public void onError(VolleyError volleyError) {
-//                Toast.makeText(context, "网络出现问题，检查后重试", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+    }
+
+    public static void RequestOption(final Context context, String option,int dpt_id, final DepCallBack callBack){
+        DoNet doNet=new DoNet() {
+            @Override
+            public void doWhat(String response, int id) {
+                if (!GsonUtil.verifyResult_show(response)) {
+                    return;
+                }
+                List<DepBean> pointBeans = GsonUtil.parseJsonArrayWithGson(JSON.parseObject(response).getJSONArray("data").toString(), DepBean.class);
+                callBack.CallBack(pointBeans);
+            }
+        };
+        doNet.doGet(Consts.COMMOM_URL+option+"?dpt_id="+dpt_id,context,false);
     }
 
     public interface OptionCallBack{
         void CallBack(List<PointBean> list);
     }
-
+    public interface DepCallBack{
+        void CallBack(List<DepBean> list);
+    }
 }

@@ -41,10 +41,12 @@ import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.PreviewActivity;
+import com.example.administrator.policetong.base.App;
 import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.bean.new_bean.PointBean;
 import com.example.administrator.policetong.httppost.getNetInfo;
+import com.example.administrator.policetong.new_bean.DepBean;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.example.administrator.policetong.utils.Util;
@@ -209,6 +211,31 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
                     String[] arr=new String[list.size()];
                     for (int i = 0; i < list.size(); i++) {
                         arr[i]=list.get(i).getName();
+                    }
+                    Util.setMultiSelectDateIntoDialog(getActivity(), ds_text, ds_select, arr, new Util.CheckMroeCallBack() {
+                        @Override
+                        public void CallBack(int itemId) {
+
+                        }
+                    });
+                } else {
+                    ds_select.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
+        Util.RequestOption(getActivity(), "getDptUsers",App.userInfo.getUser().getDpt_id(), new Util.DepCallBack() {
+            @Override
+            public void CallBack(List<DepBean> list) {
+                if (list.size() != 0) {
+                    String[] arr=new String[list.size()];
+                    for (int i = 0; i < list.size(); i++) {
+                        arr[i]=list.get(i).getTruename();
                     }
                     Util.setMultiSelectDateIntoDialog(getActivity(), ds_text, ds_select, arr, new Util.CheckMroeCallBack() {
                         @Override
