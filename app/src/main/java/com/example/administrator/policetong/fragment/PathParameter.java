@@ -138,7 +138,7 @@ public class PathParameter extends Fragment implements View.OnClickListener {
         Map info=new HashMap();
         SharedPreferences sp=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
         info.put("username",sp.getString("username",""));
-        info.put("userid",sp.getString("userid",""));
+//        info.put("userid",sp.getString("userid",""));
         info.put("name",name);
         info.put("nature",nature);
         info.put("grade",grade);
