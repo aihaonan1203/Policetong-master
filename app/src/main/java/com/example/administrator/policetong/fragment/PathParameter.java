@@ -72,7 +72,7 @@ public class PathParameter extends Fragment implements View.OnClickListener {
         p_name=view.findViewById(R.id.pp_btn_name);
         p_nature=view.findViewById(R.id.pp_btn_nature);
         p_pavement=view.findViewById(R.id.pp_btn_pavement);
-        Util.RequestOption(getActivity(), "option5", new Util.RequestOptionCallBack() {
+        Util.RequestOption(getActivity(), "option5sss", new Util.RequestOptionCallBack() {
             @Override
             public void CallBack(List<String> list) {
                 if (list.size()!=0){
