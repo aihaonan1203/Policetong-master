@@ -1,33 +1,30 @@
 package com.example.administrator.policetong.fragment;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
+import com.alibaba.fastjson.JSON;
 import com.example.administrator.policetong.R;
-import com.example.administrator.policetong.httppost.getNetInfo;
-import com.example.administrator.policetong.utils.LoadingDialog;
+import com.example.administrator.policetong.activity.ManageActivity;
+import com.example.administrator.policetong.base.Consts;
+import com.example.administrator.policetong.bean.new_bean.PointBean;
+import com.example.administrator.policetong.network.DoNet;
+import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.NetworkChangeListener;
+import com.example.administrator.policetong.utils.UIUtils;
 import com.example.administrator.policetong.utils.Util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * 道路台账
@@ -43,11 +40,9 @@ public class PathParameter extends Fragment implements View.OnClickListener {
     private EditText pp_end;
     private EditText pp_distance;
     private Button pp_add_submit;
-    private Button p_name,p_nature,p_pavement;
+    private Button p_name,p_nature,p_pavement,p_grade;
+    private int road_id,biroadtype_id,biroadgrade_id;
 
-    public PathParameter() {
-        // Required empty public constructor
-    }
 
 
     @Override
@@ -59,6 +54,7 @@ public class PathParameter extends Fragment implements View.OnClickListener {
         return view;
     }
 
+
     private void initView(View view) {
         pp_name = (EditText) view.findViewById(R.id.pp_name);
         pp_nature = (EditText) view.findViewById(R.id.pp_nature);
@@ -68,17 +64,27 @@ public class PathParameter extends Fragment implements View.OnClickListener {
         pp_end = (EditText) view.findViewById(R.id.pp_end);
         pp_distance = (EditText) view.findViewById(R.id.pp_distance);
         pp_add_submit = (Button) view.findViewById(R.id.pp_add_submit);
+        p_grade = (Button) view.findViewById(R.id.p_grade);
         pp_add_submit.setOnClickListener(this);
         p_name=view.findViewById(R.id.pp_btn_name);
         p_nature=view.findViewById(R.id.pp_btn_nature);
         p_pavement=view.findViewById(R.id.pp_btn_pavement);
-        Util.RequestOption(getActivity(), "option5sss", new Util.RequestOptionCallBack() {
+        Objects.requireNonNull(getActivity()).findViewById(R.id.ac_tv_right).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void CallBack(List<String> list) {
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),ManageActivity.class).putExtra("type",1));
+            }
+        });
+        Util.RequestOption(getActivity(), "biRoad", new Util.OptionCallBack() {
+            @Override
+            public void CallBack(List<PointBean> list) {
                 if (list.size()!=0){
-                    int size = list.size();
-                    String[] arr =list.toArray(new String[size]);
-                    Util.setRadioDateIntoDialog(getActivity(),pp_name,p_name,arr);
+                    Util.setRadioDateIntoDialog(getActivity(), pp_name, p_name, list, new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            road_id=itemId;
+                        }
+                    });
                 }else {
                     p_name.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -87,43 +93,66 @@ public class PathParameter extends Fragment implements View.OnClickListener {
                         }
                     });
                 }
-                Util.RequestOption(getActivity(), "option10", new Util.RequestOptionCallBack() {
-                    @Override
-                    public void CallBack(List<String> list) {
-                        if (list.size()!=0){
-                            int size = list.size();
-                            String[] arr =list.toArray(new String[size]);
-                            Util.setRadioDateIntoDialog(getActivity(),pp_pavement,p_pavement,arr);
-                        }else {
-                            p_pavement.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+            }
+        });
+        Util.RequestOption(getActivity(), "biRoadtype", new Util.OptionCallBack() {
+            @Override
+            public void CallBack(List<PointBean> list) {
+                if (list.size()!=0){
+                    Util.setRadioDateIntoDialog(getActivity(),pp_nature,p_nature,list,new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            biroadtype_id=itemId;
                         }
-                        Util.RequestOption(getActivity(), "option8", new Util.RequestOptionCallBack() {
-                            @Override
-                            public void CallBack(List<String> list) {
-                                if (list.size()!=0){
-                                    int size = list.size();
-                                    String[] arr =list.toArray(new String[size]);
-                                    Util.setRadioDateIntoDialog(getActivity(),pp_nature,p_nature,arr);
-                                }else {
-                                    p_nature.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                });
+                    });
+                }else {
+                    p_name.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+        Util.RequestOption(getActivity(), "biRoadgrade", new Util.OptionCallBack() {
+            @Override
+            public void CallBack(List<PointBean> list) {
+                if (list.size()!=0){
+                    Util.setRadioDateIntoDialog(getActivity(),pp_grade,p_grade,list,new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            biroadgrade_id=itemId;
+                        }
+                    });
+                }else {
+                    p_name.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+        Util.RequestOption(getActivity(), "biRoadcondition", new Util.OptionCallBack() {
+            @Override
+            public void CallBack(List<PointBean> list) {
+                if (list.size()!=0){
+                    Util.setRadioDateIntoDialog(getActivity(),pp_pavement,p_pavement,list,null);
+                }else {
+                    p_name.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -134,41 +163,26 @@ public class PathParameter extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void get_data_form_server(String name,String nature,String grade,String pavement,String start,String end,String distance) {
-        Map info=new HashMap();
-        SharedPreferences sp=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        info.put("username",sp.getString("username",""));
-//        info.put("userid",sp.getString("userid",""));
-        info.put("name",name);
-        info.put("nature",nature);
-        info.put("grade",grade);
-        info.put("pavement",pavement);
-        info.put("start",start);
-        info.put("end",end);
-        info.put("distance",distance);
-        info.put("date", LoadingDialog.getTime());
-        info.put("group",sp.getString("group",""));
-        info.put("detachment",sp.getString("detachment",""));
-        getNetInfo.NetInfo(getActivity(), "insertroad", new JSONObject(info), new getNetInfo.VolleyCallback() {
+    public void get_data_form_server(String pavement,String start,String end,String distance) {
+        com.alibaba.fastjson.JSONObject jsonObject=new com.alibaba.fastjson.JSONObject();
+        jsonObject.put("road_id",road_id);
+        jsonObject.put("biroadtype_id",biroadtype_id);
+        jsonObject.put("biroadgrade_id",biroadgrade_id);
+        jsonObject.put("pavement",pavement);
+        jsonObject.put("startpoint",start);
+        jsonObject.put("endpoint",end);
+        jsonObject.put("mileage",distance);
+        DoNet doNet = new DoNet() {
             @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")){
-                    Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                    getActivity().finish();
-                }else {
-                    Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
+            public void doWhat(String response, int id) {
+                if (!GsonUtil.verifyResult_show(response)) {
+                    return;
                 }
+                UIUtils.t(JSON.parseObject(response).getString("message"),false,UIUtils.T_SUCCESS);
+                Objects.requireNonNull(getActivity()).finish();
             }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
+        };
+        doNet.doPost(jsonObject,Consts.URL_ROADTZADD, getActivity(), true);
     }
 
     private void submit() {
@@ -215,7 +229,6 @@ public class PathParameter extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "您的网络出现了问题", Toast.LENGTH_SHORT).show();
             return;
         }
-        LoadingDialog.showDialog(getActivity(),"正在提交...");
-        get_data_form_server(name,nature,grade,pavement,start,end,distance);
+        get_data_form_server(pavement,start,end,distance);
     }
 }

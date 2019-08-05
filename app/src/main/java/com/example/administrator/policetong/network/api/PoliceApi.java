@@ -21,6 +21,8 @@ import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -45,7 +47,9 @@ public interface PoliceApi {
 
 
 
-
+    @Multipart
+    @POST()
+    Observable<ResponseBody> upload(@Url()String url,@Header ("token")String token,@Header ("user")String user,@Part MultipartBody.Part imgs);
 
     @Multipart
     @POST()//上传图片

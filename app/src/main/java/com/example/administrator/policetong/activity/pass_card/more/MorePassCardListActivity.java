@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.policetong.R;
@@ -64,32 +65,55 @@ public class MorePassCardListActivity extends BaseActivity {
                 helper.setText(R.id.tv_pass_card_want_time,item.getWanttime());
                 helper.setText(R.id.tv_pass_card_start,String.valueOf(item.getStartpoint()));
                 helper.setText(R.id.tv_pass_card_end,String.valueOf(item.getEndpoint()));
-                if (item.getResult()==1){
+                if (item.getStatus()==0){
+                    helper.setImageResource(R.id.iv_check,R.drawable.icon_zhipai);
+                }else if (item.getStatus()==3){
+                    helper.setGone(R.id.iv_check,false);
+                }else{
+                    helper.setImageResource(R.id.iv_check,R.drawable.icon_sh);
+                }
+                helper.getView(R.id.iv_check).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (item.getStatus()){
+                            case 0:
+                                startActivityForResult(new Intent(MorePassCardListActivity.this,AssignActivity.class)
+                                        .putExtra("name",item.getName())
+                                        .putExtra("phone",item.getPhone())
+                                        .putExtra("id",item.getId()+"")
+                                        .putExtra("wxId",item.getWx_uid()),200);
+                                break;
+                            case 1:
+                                startActivityForResult(new Intent(MorePassCardListActivity.this,MoreCheckActivity.class)
+                                        .putExtra("name",item.getName())
+                                        .putExtra("phone",item.getPhone())
+                                        .putExtra("id",item.getId()+""),200);
+                                break;
+                            case 2:
+                                startActivityForResult(new Intent(MorePassCardListActivity.this,SureCheckActivity.class)
+                                        .putExtra("id",item.getId()+""),200);
+                                break;
+                            case 3:
+                                break;
+                        }
+                    }
+                });
+                if (item.getResult()==1||item.getResult()==2){
                     helper.setText(R.id.tv_pass_card_time,item.getTxstarttime()+"-"+item.getTxendtime());
                     helper.getView(R.id.iv_check).setVisibility(View.GONE);
                 }else {
                     helper.setText(R.id.tv_pass_card_time,"");
-                    if (item.getResult()==0){
-                        helper.getView(R.id.iv_check).setVisibility(View.VISIBLE);
-                        helper.getView(R.id.iv_check).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                startActivityForResult(new Intent(MorePassCardListActivity.this,OneCheckPassCardActivity.class).putExtra("name",item.getName()).putExtra("phone",item.getPhone()).putExtra("id",String.valueOf(item.getId())),200);
-                            }
-                        });
-                    }else {
-                        helper.getView(R.id.iv_check).setVisibility(View.GONE);
-                    }
+                    helper.getView(R.id.iv_check).setVisibility(View.VISIBLE);
                 }
                 Utils.setTextResult(item.getResult(),((TextView)helper.getView(R.id.tv_pass_card_status)));
-                Utils.setTextStatus(item.getResult(),((TextView)helper.getView(R.id.tv_pass_card_result)));
+                Utils.setTextStatus(item.getStatus(),((TextView)helper.getView(R.id.tv_pass_card_result)));
             }
         };
         mRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter mAdapter, View view, int position) {
-                startActivity(new Intent(MorePassCardListActivity.this,MorePassCardInfoActivity.class).putExtra("card_id",String.valueOf(adapter.getData().get(position).getId())));
+                startActivity(new Intent(MorePassCardListActivity.this,MorePassCardInfoActivity.class).putExtra("id",String.valueOf(adapter.getData().get(position).getId())));
             }
         });
     }
@@ -122,12 +146,13 @@ public class MorePassCardListActivity extends BaseActivity {
                 if (!GsonUtil.verifyResult_show(response)){
                     return;
                 }
-                List<PassCardBean> passCardBeans = GsonUtil.parseJsonArrayWithGson(JSON.parseObject(response).getJSONObject("data").getJSONArray("list").toString(), PassCardBean.class);
-                Log.e("doWhat: ",passCardBeans.size()+"" );
-                if (passCardBeans.size()==0){
+                Log.e("doWhat: ",response);
+                JSONArray jsonArray = JSON.parseObject(response).getJSONObject("data").getJSONArray("list");
+                if (jsonArray==null||jsonArray.size()==0){
                     adapter.setEmptyView(notDataView);
                     return;
                 }
+                List<PassCardBean> passCardBeans = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), PassCardBean.class);
                 adapter.setNewData(passCardBeans);
             }
         };

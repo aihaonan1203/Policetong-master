@@ -6,46 +6,61 @@ package com.example.administrator.policetong.bean;
 
 public class Road_bean {
 
+
     /**
-     * pavement : 1
-     * date : 2018年06月13日 02:15:22
-     * detachment : 2
-     * modify : 未修改
-     * distance : awdwd
-     * nature : 城市道路
-     * grade : awda
-     * name : dawd
-     * start : awdawd
-     * end : dwad
-     * grop : 1
-     * userid : 101
+     * id : 6
+     * road_id : 春江路
+     * biroadtype_id : 村村通到路
+     * biroadgrade_id : 沥青
+     * pavement : 损毁严重
+     * startpoint : 1000
+     * endpoint : 1000
+     * user_id : 超级管理员
+     * mileage : 100000
+     * create_time : 2019-08-04 20:11:53
      */
 
+    private int id;
+    private String road_id;
+    private String biroadtype_id;
+    private String biroadgrade_id;
     private String pavement;
-    private String date;
-    private String detachment;
-    private String modify;
-    private String distance;
-    private String nature;
-    private String grade;
-    private String name;
-    private String start;
-    private String end;
-    private String grop;
-    private String userid;
+    private String startpoint;
+    private String endpoint;
+    private String user_id;
+    private String mileage;
+    private String create_time;
 
-    public Road_bean(String pavement, String date, String detachment, String distance, String nature, String grade, String name, String start, String end, String grop, String userid) {
-        this.pavement = pavement;
-        this.date = date;
-        this.detachment = detachment;
-        this.distance = distance;
-        this.nature = nature;
-        this.grade = grade;
-        this.name = name;
-        this.start = start;
-        this.end = end;
-        this.grop = grop;
-        this.userid = userid;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getRoad_id() {
+        return road_id;
+    }
+
+    public void setRoad_id(String road_id) {
+        this.road_id = road_id;
+    }
+
+    public String getBiroadtype_id() {
+        return biroadtype_id;
+    }
+
+    public void setBiroadtype_id(String biroadtype_id) {
+        this.biroadtype_id = biroadtype_id;
+    }
+
+    public String getBiroadgrade_id() {
+        return biroadgrade_id;
+    }
+
+    public void setBiroadgrade_id(String biroadgrade_id) {
+        this.biroadgrade_id = biroadgrade_id;
     }
 
     public String getPavement() {
@@ -56,91 +71,43 @@ public class Road_bean {
         this.pavement = pavement;
     }
 
-    public String getDate() {
-        return date;
+    public String getStartpoint() {
+        return startpoint;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStartpoint(String startpoint) {
+        this.startpoint = startpoint;
     }
 
-    public String getDetachment() {
-        return detachment;
+    public String getEndpoint() {
+        return endpoint;
     }
 
-    public void setDetachment(String detachment) {
-        this.detachment = detachment;
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
 
-    public String getModify() {
-        return modify;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setModify(String modify) {
-        this.modify = modify;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public String getDistance() {
-        return distance;
+    public String getMileage() {
+        return mileage;
     }
 
-    public void setDistance(String distance) {
-        this.distance = distance;
+    public void setMileage(String mileage) {
+        this.mileage = mileage;
     }
 
-    public String getNature() {
-        return nature;
+    public String getCreate_time() {
+        return create_time;
     }
 
-    public void setNature(String nature) {
-        this.nature = nature;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-
-    public String getEnd() {
-        return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
-    }
-
-    public String getGrop() {
-        return grop;
-    }
-
-    public void setGrop(String grop) {
-        this.grop = grop;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 }

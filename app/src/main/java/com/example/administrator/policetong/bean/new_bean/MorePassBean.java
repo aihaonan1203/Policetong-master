@@ -47,6 +47,24 @@ public class MorePassBean {
         private String failure_cause;
         private String zprname;
         private String linelist;
+        private String fqdesc;
+        private String zxdesc;
+
+        public String getFqdesc() {
+            return fqdesc;
+        }
+
+        public void setFqdesc(String fqdesc) {
+            this.fqdesc = fqdesc;
+        }
+
+        public String getZxdesc() {
+            return zxdesc;
+        }
+
+        public void setZxdesc(String zxdesc) {
+            this.zxdesc = zxdesc;
+        }
 
         public int getId() {
             return id;

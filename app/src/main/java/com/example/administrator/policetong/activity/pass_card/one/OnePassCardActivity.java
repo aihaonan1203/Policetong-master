@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.policetong.R;
@@ -80,7 +81,8 @@ public class OnePassCardActivity extends BaseActivity {
                         helper.getView(R.id.iv_check).setVisibility(View.GONE);
                     }
                 }
-                Utils.setTextStatus(item.getResult(),((TextView)helper.getView(R.id.tv_pass_card_status)));
+                helper.setGone(R.id.tv_pass_card_result,false);
+                Utils.setTextResult(item.getResult(),((TextView)helper.getView(R.id.tv_pass_card_status)));
             }
         };
         mRecyclerView.setAdapter(adapter);
@@ -120,7 +122,13 @@ public class OnePassCardActivity extends BaseActivity {
                 if (!GsonUtil.verifyResult_show(response)){
                     return;
                 }
-                List<PassCardBean> passCardBeans = GsonUtil.parseJsonArrayWithGson(JSON.parseObject(response).getJSONObject("data").getJSONArray("list").toString(), PassCardBean.class);
+                Log.e("doWhat: ",response);
+                JSONArray jsonArray = JSON.parseObject(response).getJSONObject("data").getJSONArray("list");
+                if (jsonArray==null||jsonArray.size()==0){
+                    adapter.setEmptyView(notDataView);
+                    return;
+                }
+                List<PassCardBean> passCardBeans = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), PassCardBean.class);
                 Log.e("doWhat: ",passCardBeans.size()+"" );
                 if (passCardBeans.size()==0){
                     adapter.setEmptyView(notDataView);

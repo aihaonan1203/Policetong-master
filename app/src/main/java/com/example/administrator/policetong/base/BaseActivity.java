@@ -128,7 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         Utils.checkNotNull(fragment);
         getSupportFragmentManager().beginTransaction()
                 .add(frameId, fragment, fragment.getClass().getSimpleName())
-                .addToBackStack(fragment.getClass().getSimpleName())
+//                .addToBackStack(fragment.getClass().getSimpleName())
                 .commitAllowingStateLoss();
 
     }

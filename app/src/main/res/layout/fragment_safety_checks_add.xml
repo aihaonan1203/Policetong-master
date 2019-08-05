@@ -81,6 +81,7 @@
                 android:layout_height="@dimen/k_height"
                 android:layout_centerVertical="true"
                 android:background="@drawable/kuang"
+                android:enabled="false"
                 android:inputType="text" />
 
             <Button
@@ -145,6 +146,7 @@
                 android:id="@+id/sg_car_type"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/k_height"
+                android:enabled="false"
                 android:layout_centerVertical="true"
                 android:background="@drawable/kuang"
                 android:inputType="text" />
@@ -188,6 +190,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/k_height"
                 android:layout_centerVertical="true"
+                android:enabled="false"
                 android:background="@drawable/kuang"
                 android:inputType="text" />
 
@@ -280,6 +283,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:text="整改详情："
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/safety_xq"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/k_height"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/kuang"
+            android:paddingLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
         android:gravity="center_vertical"
@@ -306,6 +333,7 @@
             android:text="预览"
             android:layout_width="40dp"
             android:layout_height="30dp"
+            android:visibility="gone"
             android:background="@color/mycolor"
             android:textColor="@color/text_white"
             android:layout_marginEnd="10dp"

@@ -81,7 +81,11 @@
         <activity android:name=".activity.PictureActivity" />
         <activity android:name=".activity.pass_card.one.OneSelectPointActivity" />
         <activity android:name=".activity.pass_card.more.MorePassCardListActivity" />
-        <activity android:name=".activity.pass_card.more.MorePassCardInfoActivity"></activity>
+        <activity android:name=".activity.pass_card.more.MorePassCardInfoActivity" />
+        <activity android:name=".activity.pass_card.more.AssignActivity" />
+        <activity android:name=".activity.pass_card.more.MoreCheckActivity" />
+        <activity android:name=".activity.pass_card.more.SureCheckActivity" />
+        <activity android:name=".activity.ManageActivity"></activity>
     </application>
 
 </manifest>

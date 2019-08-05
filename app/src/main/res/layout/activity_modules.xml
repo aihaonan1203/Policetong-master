@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:src="@drawable/icon_lishi"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
