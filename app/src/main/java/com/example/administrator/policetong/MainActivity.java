@@ -108,6 +108,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private List<NoticeBean.MsgArrayBean> msgArrayBeans;
     private List<GongGaoBean> data = new ArrayList<>();
 
+    private int test;
+
     @SuppressLint("ObsoleteSdkInt")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
