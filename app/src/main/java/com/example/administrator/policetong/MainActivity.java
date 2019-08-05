@@ -116,8 +116,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private List<NoticeBean.MsgArrayBean> msgArrayBeans;
     private List<GongGaoBean> data = new ArrayList<>();
 
-    private int test;
-
     @SuppressLint("ObsoleteSdkInt")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,15 +142,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 dingwei();
             }
             updateVision();
-//            updata_mag();
-//            timer = new Timer();
-//            timer.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-////                    get_notice2();
-//                    getGuard();
-//                }
-//            }, 0, 10000);
         } catch (Exception e) {
 
         }

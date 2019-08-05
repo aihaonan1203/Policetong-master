@@ -157,7 +157,7 @@ public class PathParameter_manage extends BaseFragment {
 
 
     private void initView(View view) {
-        notDataView=NoDataOrNetError.noData(mRecyclerView, getActivity(), "您没有审核通行证的权限呦！");
+        notDataView=NoDataOrNetError.noData(mRecyclerView, getActivity(), "当前没有数据呦！");
         listbean=new ArrayList<>();
         mRecyclerView =view.findViewById(R.id.mRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

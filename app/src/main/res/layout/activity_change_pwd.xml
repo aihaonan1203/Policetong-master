@@ -32,76 +32,143 @@
     </RelativeLayout>
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="旧密码"
-        android:textSize="16sp"
-        android:padding="16dp"
-        />
-
-    <EditText
-        android:id="@+id/et_old_pwd"
-        android:background="@drawable/kuang"
-        android:padding="8dp"
-        android:digits="@string/digits"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        />
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="15dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="新密码"
-        android:textSize="16sp"
-        android:padding="16dp"
-        />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_old_pwd" />
 
-    <EditText
-        android:id="@+id/et_new_pwd"
-        android:padding="8dp"
-        android:background="@drawable/kuang"
-        android:inputType="textPassword"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="旧密码"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
+
+        <EditText
+            android:id="@+id/et_old_pwd"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:ellipsize="end"
+            android:inputType="textPassword"
+            android:hint="请输入旧密码"
+            android:textAlignment="textEnd"
+            android:textCursorDrawable="@null"
+            android:layout_marginEnd="10dp"
+            android:textSize="@dimen/text_commonbig" />
+
+
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:digits="@string/digits"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        />
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="15dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="确认密码"
-        android:textSize="16sp"
-        android:padding="16dp"
-        />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_new_pwd" />
 
-    <EditText
-        android:id="@+id/et_new_pwd2"
-        android:padding="8dp"
-        android:background="@drawable/kuang"
-        android:inputType="textPassword"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="新密码"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
+
+        <EditText
+            android:id="@+id/et_new_pwd"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:ellipsize="end"
+            android:hint="请输入新密码"
+            android:textAlignment="textEnd"
+            android:textCursorDrawable="@null"
+            android:layout_marginEnd="10dp"
+            android:textSize="@dimen/text_commonbig" />
+
+
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:digits="@string/digits"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="50dp"
-        />
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_qr_pwd" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="确认密码"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
+
+        <EditText
+            android:id="@+id/et_new_pwd2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:inputType="textPassword"
+            android:ellipsize="end"
+            android:hint="请确认新密码"
+            android:textAlignment="textEnd"
+            android:textCursorDrawable="@null"
+            android:layout_marginEnd="10dp"
+            android:textSize="@dimen/text_commonbig" />
+
+
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
 
     <Button
         android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@color/colorMain"
-        android:text="确认"
-        android:textColor="@color/text_white"
-        android:textStyle="bold"
-        />
+        android:background="@drawable/member_btn_bg"
+        android:text="提交"
+        android:layout_margin="70dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 
 </LinearLayout>

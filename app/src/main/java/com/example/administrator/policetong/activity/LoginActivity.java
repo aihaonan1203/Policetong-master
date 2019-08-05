@@ -31,6 +31,7 @@ import com.example.administrator.policetong.utils.SPUtils;
 import com.master.permissionhelper.BuildConfig;
 import com.master.permissionhelper.PermissionHelper;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -198,12 +199,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 .subscribe(new VerifyConsumer() {
                     @Override
                     public void result(String result) {
-                        App.initUser(result);
-                        SPUtils.saveBoolean("isLogin", true);
-                        SPUtils.saveString("userId", name);
-                        SPUtils.saveString("password", pwd);
-                        finish();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        try {
+                            JSONObject jsonObject1=new JSONObject(result);
+                            if (jsonObject1.getString("token").isEmpty()){
+                                return;
+                            }
+                            App.initUser(result);
+                            SPUtils.saveBoolean("isLogin", true);
+                            SPUtils.saveString("userId", name);
+                            SPUtils.saveString("password", pwd);
+                            finish();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new CommonThrowable() {
                     @Override

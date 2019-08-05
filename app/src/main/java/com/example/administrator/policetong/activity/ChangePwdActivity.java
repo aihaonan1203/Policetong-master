@@ -9,11 +9,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.base.App;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.SPUtils;
+import com.example.administrator.policetong.utils.UIUtils;
 
 import org.json.JSONObject;
 
@@ -23,6 +27,7 @@ import java.util.Map;
 import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
 public class ChangePwdActivity extends BaseActivity {
 
@@ -59,28 +64,33 @@ public class ChangePwdActivity extends BaseActivity {
                     Toast.makeText(ChangePwdActivity.this, "两次输入的密码不一样", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (newpwd.length()<=5){
+                    Toast.makeText(ChangePwdActivity.this, "密码长度最少为六位！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Map<String,String> map=new HashMap<>();
-                map.put("userid",String.valueOf(userInfo.getUser().getUid()));
-                map.put("oldpassword",oldpwd);
-                map.put("newpassword",newpwd2);
+                map.put("oldpsd",oldpwd);
+                map.put("newpsd",newpwd2);
                 String string = new JSONObject(map).toString();
-                disposable= Network.getPoliceApi(true).changePwd(RequestBody.create(MediaType.parse("application/json"),string))
-                        .compose(BaseActivity.<BaseBean>applySchedulers())
-                        .subscribe(new Consumer<BaseBean>() {
+                disposable= Network.getPoliceApi(true).changePwd(App.userInfo.getToken(),App.userInfo.getUser().getUser(),RequestBody.create(MediaType.parse("application/json"),string))
+                        .compose(BaseActivity.<ResponseBody>applySchedulers())
+                        .subscribe(new Consumer<ResponseBody>() {
                             @Override
-                            public void accept(BaseBean bean) throws Exception {
-                                if (bean.getCode()==0) {
-                                    Toast.makeText(ChangePwdActivity.this, "修改成功~", Toast.LENGTH_SHORT).show();
-                                    SPUtils.saveBoolean("save", false);
-                                    finish();
-                                    Intent intent = new Intent(ChangePwdActivity.this, LoginActivity.class);
-                                    startActivity(intent);
+                            public void accept(ResponseBody bean) throws Exception {
+                                String repsonse = bean.string();
+                                if (!GsonUtil.verifyResult_show(repsonse)) {
+                                    return;
                                 }
+                                UIUtils.t(String.valueOf(JSON.parseObject(repsonse).getString("message")),false,UIUtils.T_SUCCESS);
+                                SPUtils.saveBoolean("isLogin", false);
+                                finish();
+                                startActivity(new Intent(ChangePwdActivity.this,LoginActivity.class));
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
                                 Log.e("accept: ","" );
+                                UIUtils.t("修改失败，请稍后再试！",false,UIUtils.T_SUCCESS);
                             }
                         });
             }

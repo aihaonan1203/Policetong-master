@@ -17,6 +17,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
@@ -61,8 +62,8 @@ public interface PoliceApi {
     @POST("notice/getNotice")//公告查询
     Observable<BaseBean<List<GongGaoBean>>> getNotice(@Body RequestBody test);
 
-    @POST("user/changePwd")//修改密码
-    Observable<BaseBean> changePwd(@Body RequestBody test);
+    @POST("editpsw")//修改密码
+    Observable<ResponseBody> changePwd(@Header ("token")String token, @Header ("user")String user, @Body RequestBody test);
 
     @GET("squInfo/getSqu")//获取中队列表
     Observable<BaseBean<List<ZDBean>>> getSqu();

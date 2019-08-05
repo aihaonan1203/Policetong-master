@@ -3,15 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/text_white"
     tools:context="com.example.administrator.policetong.fragment.manage.PoliceConfirmed_manage">
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mRecyclerView"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
        />
