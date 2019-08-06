@@ -86,7 +86,6 @@ public class DailyService_manage extends Fragment {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
-                showDialog(id);
             }
 
         });
@@ -112,104 +111,7 @@ public class DailyService_manage extends Fragment {
 
     }
 
-    private void showDialog(final int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = View.inflate(getActivity(), R.layout.fragment_daily, null);
-        Button cancle = view.findViewById(R.id.ds_add_cancle);
-        Button submit = view.findViewById(R.id.ds_add_submit);
-        submit.setText("修改");
-        cancle.setVisibility(View.VISIBLE);
-        LinearLayout linearLayout1=view.findViewById(R.id.mLinerLayout1);
-        LinearLayout linearLayout2=view.findViewById(R.id.mLinerLayout2);
-        linearLayout2.setVisibility(View.VISIBLE);
-        linearLayout1.setVisibility(View.GONE);
-        TextView textView=view.findViewById(R.id.ds_text);
-        textView.setVisibility(View.GONE);
-        final EditText ds_start_time = view.findViewById(R.id.ds_start_time);
-        final EditText ds_end_time = view.findViewById(R.id.ds_end_time);
-        final EditText ds_police = view.findViewById(R.id.ds_police);
-        final EditText ds_paddr = view.findViewById(R.id.ds_paddr);
-        final EditText ds_licheng = view.findViewById(R.id.ds_licheng);
-        final EditText ds_context = view.findViewById(R.id.ds_context);
-        final EditText ds_zdcc = view.findViewById(R.id.input_data);
-        final EditText ds_qwtype = view.findViewById(R.id.ds_qwtype);
-        final Daily_bean bean = listbean.get(id);
-        ds_start_time.setText(bean.getBegintime());
-        ds_end_time.setText(bean.getEndtime());
-        ds_police.setText(bean.getForces());
-        ds_paddr.setText(bean.getRoad());
-        ds_licheng.setText(bean.getDistance());
-        ds_zdcc.setText(bean.getBehavior());
-        ds_context.setText(bean.getContent());
-        String ai[]=getResources().getStringArray(R.array.qwtype);
-        for (int i = 0; i < ai.length; i++) {
-            if (bean.getWorktype().equals(ai[i])){
-                ds_qwtype.setSelection(i);
-            }
-        }
-        builder.setView(view);
-        final AlertDialog dialog = builder.create();
-        cancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                starttime = ds_start_time.getText().toString().trim();
-                if (TextUtils.isEmpty(starttime)) {
-                    Toast.makeText(getContext(), "开始时间不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                endtime = ds_end_time.getText().toString().trim();
-                if (TextUtils.isEmpty(endtime)) {
-                    Toast.makeText(getContext(), "结束时间不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                police = ds_police.getText().toString().trim();
-                if (TextUtils.isEmpty(police)) {
-                    Toast.makeText(getContext(), "出动警力不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                paddr = ds_paddr.getText().toString().trim();
-                if (TextUtils.isEmpty(paddr)) {
-                    Toast.makeText(getContext(), "道路不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                licheng = ds_licheng.getText().toString().trim();
-                if (TextUtils.isEmpty(licheng)) {
-                    Toast.makeText(getContext(), "里程/参照物不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                context = ds_context.getText().toString().trim();
-                if (TextUtils.isEmpty(context)) {
-                    Toast.makeText(getContext(), "简要内容不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                data=ds_zdcc.getText().toString().trim();
-                if (TextUtils.isEmpty(data)){
-                    Toast.makeText(getContext(), "您还没有选择重点查处违法行为", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                s = ds_qwtype.getText().toString();
-                if (TextUtils.isEmpty(s)){
-                    Toast.makeText(getContext(), "勤务类型不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                dialog.dismiss();
-                LoadingDialog.showDialog(getActivity(), "正在提交内容！");
-                amend_data(bean);
-            }
-        });
-        dialog.show();
-    }
     String starttime,endtime,police,paddr,licheng,context,s,data;
 
     private void amend_data(final Daily_bean bean) {

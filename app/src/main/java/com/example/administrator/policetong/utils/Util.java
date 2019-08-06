@@ -198,7 +198,7 @@ public class Util {
                 String result = "";
                 for (int i = 0; i < flags.length; i++) {
                     if(flags[i]){
-                        result=result+items[i]+"、";
+                        result=result+items[i]+",";
                     }
                 }
                 editText.setText(result.substring(0, result.length()-1));

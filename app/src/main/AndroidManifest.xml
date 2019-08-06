@@ -85,7 +85,8 @@
         <activity android:name=".activity.pass_card.more.AssignActivity" />
         <activity android:name=".activity.pass_card.more.MoreCheckActivity" />
         <activity android:name=".activity.pass_card.more.SureCheckActivity" />
-        <activity android:name=".activity.ManageActivity"></activity>
+        <activity android:name=".activity.ManageActivity"/>
+        <activity android:name=".activity.LabelManageActivity"/>
     </application>
 
 </manifest>

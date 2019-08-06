@@ -39,6 +39,7 @@ import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.activity.LabelManageActivity;
 import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.activity.PreviewActivity;
 import com.example.administrator.policetong.base.App;
@@ -66,6 +67,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +85,7 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
     private EditText ds_paddr;
     private EditText ds_licheng;
     private EditText ds_qwtype;
-    private Button ds_select, ds_paddr_btn, ds_qwtype_btn;
+    private Button ds_select, ds_paddr_btn, ds_qwtype_btn,btn_ds_police;
     private EditText ds_text;
     private EditText ds_context;
     private Button ds_add_submit;
@@ -92,22 +94,16 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
     private static String SD_CARD_TEMP_DIR;
     private File file;
     private ModulesActivity activity;
-    private int road_id;
 
-    public DailyService() {
-        // Required empty public constructor
-    }
-
-    double lontitude, latitude;
     boolean state;
-    private Button btn_preview;
-    private ImageView iv_take_photo;
+    private Button iv_take_photo;
     private TextView tv_photo;
+    private ArrayList<String> idPoliceList=new ArrayList<>();
+    private ArrayList<String> idDoList=new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_daily, container, false);
         initView(view);
         ModulesActivity modulesActivity = (ModulesActivity) getActivity();
@@ -128,26 +124,26 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        ds_start_time = (EditText) view.findViewById(R.id.ds_start_time);
-        ds_end_time = (EditText) view.findViewById(R.id.ds_end_time);
-        ds_police = (EditText) view.findViewById(R.id.ds_police);
-        ds_paddr = (EditText) view.findViewById(R.id.ds_paddr);
-        ds_licheng = (EditText) view.findViewById(R.id.ds_licheng);
-        ds_qwtype = (EditText) view.findViewById(R.id.ds_qwtype);
-        ds_select = (Button) view.findViewById(R.id.ds_select);
-        ds_start_select_time = (Button) view.findViewById(R.id.ds_start_select_time);
-        ds_end_select_time = (Button) view.findViewById(R.id.ds_end_select_time);
+        ds_start_time =  view.findViewById(R.id.ds_start_time);
+        ds_end_time =  view.findViewById(R.id.ds_end_time);
+        ds_police =  view.findViewById(R.id.ds_police);
+        ds_paddr =  view.findViewById(R.id.ds_paddr);
+        ds_licheng =  view.findViewById(R.id.ds_licheng);
+        ds_qwtype =  view.findViewById(R.id.ds_qwtype);
+        ds_select =  view.findViewById(R.id.ds_select);
+        ds_start_select_time =  view.findViewById(R.id.ds_start_select_time);
+        ds_end_select_time =  view.findViewById(R.id.ds_end_select_time);
         ds_start_select_time.setOnClickListener(this);
         ds_end_select_time.setOnClickListener(this);
-        ds_paddr_btn = (Button) view.findViewById(R.id.ds_btn_paddr);
-        ds_qwtype_btn = (Button) view.findViewById(R.id.ds_btn_qwtype);
-        ds_text = (EditText) view.findViewById(R.id.ds_text);
-        ds_context = (EditText) view.findViewById(R.id.ds_context);
-        ds_add_submit = (Button) view.findViewById(R.id.ds_add_submit);
+        ds_paddr_btn =  view.findViewById(R.id.ds_btn_paddr);
+        ds_qwtype_btn =  view.findViewById(R.id.ds_btn_qwtype);
+        btn_ds_police =  view.findViewById(R.id.btn_ds_police);
+        ds_text =  view.findViewById(R.id.ds_text);
+        ds_context =  view.findViewById(R.id.ds_context);
+        ds_add_submit =  view.findViewById(R.id.ds_add_submit);
         ds_end_time.setText(LoadingDialog.getTime());
         ds_start_time.setText(LoadingDialog.getTime());
         ds_add_submit.setOnClickListener(this);
-        btn_preview = (Button) view.findViewById(R.id.btn_preview);
         iv_take_photo = view.findViewById(R.id.iv_take_photo);
         tv_photo = view.findViewById(R.id.tv_photo);
         tv_photo.setText(String.format(getResources().getString(R.string.photo), "0"));
@@ -157,17 +153,6 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
                 takePhoto();
             }
         });
-        btn_preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectList == null || selectList.size() == 0) {
-                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                EventBus.getDefault().postSticky(new EvenMsg<>("", selectList));
-                startActivity(new Intent(getActivity(), PreviewActivity.class));
-            }
-        });
         Util.RequestOption(getActivity(), "biRoad", new Util.OptionCallBack() {
             @Override
             public void CallBack(List<PointBean> list) {
@@ -175,7 +160,7 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
                     Util.setRadioDateIntoDialog(getActivity(), ds_paddr, ds_paddr_btn, list, new Util.SelectOpintCallBack() {
                         @Override
                         public void selectItem(int itemId) {
-                            road_id = itemId;
+
                         }
                     });
                 } else {
@@ -204,103 +189,44 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
             }
         });
 
-        Util.RequestOption(getActivity(), "biIllegalacts", new Util.OptionCallBack() {
+        ds_select.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void CallBack(List<PointBean> list) {
-                if (list.size() != 0) {
-                    String[] arr=new String[list.size()];
-                    for (int i = 0; i < list.size(); i++) {
-                        arr[i]=list.get(i).getName();
-                    }
-                    Util.setMultiSelectDateIntoDialog(getActivity(), ds_text, ds_select, arr, new Util.CheckMroeCallBack() {
-                        @Override
-                        public void CallBack(int itemId) {
-
-                        }
-                    });
-                } else {
-                    ds_select.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LabelManageActivity.class);
+                intent.putExtra("userIdList", idDoList);
+                intent.putExtra("type","2");
+                startActivityForResult(intent,200);
             }
         });
 
-        Util.RequestOption(getActivity(), "getDptUsers",App.userInfo.getUser().getDpt_id(), new Util.DepCallBack() {
+        btn_ds_police.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void CallBack(List<DepBean> list) {
-                if (list.size() != 0) {
-                    String[] arr=new String[list.size()];
-                    for (int i = 0; i < list.size(); i++) {
-                        arr[i]=list.get(i).getTruename();
-                    }
-                    Util.setMultiSelectDateIntoDialog(getActivity(), ds_text, ds_select, arr, new Util.CheckMroeCallBack() {
-                        @Override
-                        public void CallBack(int itemId) {
-
-                        }
-                    });
-                } else {
-                    ds_select.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LabelManageActivity.class);
+                intent.putExtra("userIdList", idPoliceList);
+                intent.putExtra("type","1");
+                startActivityForResult(intent,200);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==200) {
+            if (resultCode==666){
+                idPoliceList = data.getStringArrayListExtra("idList");
+                ds_police.setText(String.valueOf(data.getStringArrayListExtra("nameList")));
+            }
+            if (resultCode==999){
+                idDoList = data.getStringArrayListExtra("idList");
+                ds_text.setText(String.valueOf(data.getStringArrayListExtra("nameList")));
+            }
+        }
     }
 
     String starttime, endtime, police, paddr, licheng, context, s, data;
 
-    public void get_data_form_server() {
-        Map info = new HashMap();
-        SharedPreferences sp = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        try {
-            info.put("longitude", activity.j.getString("longitude"));
-            info.put("latitude", activity.j.getString("latitude"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        info.put("username", sp.getString("username", ""));
-        info.put("userid", sp.getString("userid", ""));
-        info.put("begintime", starttime);
-        info.put("endtime", endtime);
-        info.put("forces", police);
-        info.put("road", paddr);
-        info.put("img", img);
-        info.put("date", LoadingDialog.getTime());
-        info.put("distance", licheng);
-        info.put("worktype", s);
-        info.put("content", context);
-        info.put("behavior", data);
-        info.put("group", sp.getString("group", ""));
-        info.put("detachment", sp.getString("detachment", ""));
-        getNetInfo.NetInfo(getActivity(), "insertdaily", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ", object.toString());
-                if (object.getString("RESULT").equals("S")) {
-                    Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                    getActivity().finish();
-                } else {
-                    Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     private void submit() {
         activity = (ModulesActivity) getActivity();
@@ -378,7 +304,7 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 LoadingDialog.showDialog(getActivity(), "正在提交...");
-                get_data_form_server();
+
             }
         });
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
