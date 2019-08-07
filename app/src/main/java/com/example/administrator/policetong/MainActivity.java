@@ -104,14 +104,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView tv_zfzg;
     private ImageView tv_rcqw;
     private ImageView tv_dltz;
-    private ImageView tv_manage;
     private ImageView iv_study;
     private ImageView iv_tingchechang;
     private ImageView iv_shigu;
-    private ImageView tv_tx;
     private TextView ac_username;
     private static final int BAIDU_READ_PHONE_STATE = 100;
-    private Timer timer;
     private String json = "";
     private List<NoticeBean.MsgArrayBean> msgArrayBeans;
     private List<GongGaoBean> data = new ArrayList<>();
@@ -331,9 +328,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.tv_dltz:
                 bundle.putInt("id", 6);
                 break;
-            case R.id.tv_manage:
-                bundle.putInt("id", 7);
-                break;
             case R.id.tv_study:
                 bundle.putInt("id", 8);
                 break;
@@ -431,11 +425,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         iv_study.setOnClickListener(this);
         iv_tingchechang = findViewById(R.id.iv_tingchecgang);
         iv_shigu = findViewById(R.id.iv_shigu);
-        tv_tx = findViewById(R.id.ac_photo);
         iv_tingchechang.setOnClickListener(this);
         iv_shigu.setOnClickListener(this);
-        tv_manage = findViewById(R.id.tv_manage);
-        tv_manage.setOnClickListener(this);
         ac_username.setText(userInfo.getUser().getTruename());
     }
 

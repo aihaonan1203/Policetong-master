@@ -1,94 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="10dp">
+    >
 
-    <TextView
-        android:id="@+id/pc_item_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:textSize="22sp" />
-
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:padding="5dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardUseCompatPadding="true">
 
 
-        <TextView
-            android:id="@+id/ds_item_starttime"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="开始时间："
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/ds_item_endtime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="结束时间："
-            android:textSize="16sp" />
+            android:layout_marginStart="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
 
-        <TextView
-            android:id="@+id/ds_item_jingli"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="出动警力："
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/ds_item_starttime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="开始时间："
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/ds_item_endtime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="结束时间："
+                android:textSize="16sp" />
 
 
-        <TextView
-            android:id="@+id/ds_item_paddr"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="道路:"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/ds_item_licheng"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="里程/参照物:"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/ds_item_qwtype"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="勤务类型:"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/ds_item_jingli"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="出动警力："
+                android:textSize="16sp" />
 
 
-        <TextView
-            android:id="@+id/ds_item_adccwfxw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="重点查处违法行为:"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/ds_item_paddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="道路:"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/ds_item_context"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="简要内容:"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/ds_item_licheng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="里程/参照物:"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/ds_item_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="提交时间：2018-11-20 09:15:30"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/ds_item_qwtype"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="勤务类型:"
+                android:textSize="16sp" />
 
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/ds_item_adccwfxw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="重点查处违法行为:"
+                android:textSize="16sp" />
 
+            <TextView
+                android:id="@+id/ds_item_context"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="简要内容:"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/ds_item_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="提交时间：2018-11-20 09:15:30"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>

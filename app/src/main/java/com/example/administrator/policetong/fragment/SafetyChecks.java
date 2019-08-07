@@ -1,95 +1,47 @@
 package com.example.administrator.policetong.fragment;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.android.volley.VolleyError;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.ManageActivity;
-import com.example.administrator.policetong.activity.ModulesActivity;
-import com.example.administrator.policetong.activity.PreviewActivity;
 import com.example.administrator.policetong.base.App;
-import com.example.administrator.policetong.base.BaseActivity;
-import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.base.Consts;
-import com.example.administrator.policetong.bean.EvenMsg;
 import com.example.administrator.policetong.bean.new_bean.PointBean;
-import com.example.administrator.policetong.httppost.getNetInfo;
 import com.example.administrator.policetong.network.DoNet;
-import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
-import com.example.administrator.policetong.utils.NetworkChangeListener;
 import com.example.administrator.policetong.utils.UIUtils;
 import com.example.administrator.policetong.utils.Util;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
-import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-import io.reactivex.functions.Consumer;
 import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -109,8 +61,7 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
     private Button sg_select_zgtime;
     private EditText safety_xq;
     private Button unit_btn, fxunit_btn, paddr_btn;
-    private Button btn_preview;
-    private ImageView iv_take_photo;
+    private Button iv_take_photo;
     private TextView tv_photo;
     private int biroad_id;
     private int biorganization_id;
@@ -153,21 +104,9 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
         fxunit_btn = view.findViewById(R.id.sg_shoushang_s);
         paddr_btn = view.findViewById(R.id.sg_type_btn);
         unit_btn = view.findViewById(R.id.safety_car_type_select);
-        btn_preview = view.findViewById(R.id.btn_preview);
         iv_take_photo = view.findViewById(R.id.iv_take_photo);
         tv_photo = view.findViewById(R.id.tv_photo);
         tv_photo.setText(String.format(getResources().getString(R.string.photo), "0"));
-        btn_preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectList == null || selectList.size() == 0) {
-                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                EventBus.getDefault().postSticky(new EvenMsg<>("", selectList));
-                startActivity(new Intent(getActivity(), PreviewActivity.class));
-            }
-        });
         Util.RequestOption(getActivity(), "biRoad", new Util.OptionCallBack() {
             @Override
             public void CallBack(List<PointBean> list) {

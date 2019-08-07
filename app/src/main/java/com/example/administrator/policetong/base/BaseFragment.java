@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.example.administrator.policetong.new_bean.UserBean;
 import com.example.administrator.policetong.utils.SPUtils;
 import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
@@ -60,7 +58,7 @@ public abstract class BaseFragment extends Fragment {
         part[i] = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
     }
 
-    protected List<LocalMedia> selectList;
+    protected List<LocalMedia> BaseselectList;
 
     protected void takePhoto(){
         PictureSelector.create(this)
@@ -68,7 +66,7 @@ public abstract class BaseFragment extends Fragment {
                 .maxSelectNum(9)
                 .isCamera(true)
                 .compress(true)// 是否压缩
-                .selectionMedia(selectList)
+                .selectionMedia(BaseselectList)
                 .forResult(CHOOSE_REQUEST);
     }
 
@@ -76,7 +74,7 @@ public abstract class BaseFragment extends Fragment {
         PictureSelector.create(this)
                 .openCamera(PictureMimeType.ofImage())
                 .compress(true)// 是否压缩
-                .selectionMedia(selectList)
+                .selectionMedia(BaseselectList)
                 .forResult(CHOOSE_REQUEST);
     }
 
@@ -87,8 +85,8 @@ public abstract class BaseFragment extends Fragment {
             switch (requestCode) {
                 case CHOOSE_REQUEST:
                     // 图片、视频、音频选择结果回调
-                    selectList = PictureSelector.obtainMultipleResult(data);
-                    getPhoto(selectList);
+                    BaseselectList = PictureSelector.obtainMultipleResult(data);
+                    getPhoto(BaseselectList);
                     break;
             }
         }

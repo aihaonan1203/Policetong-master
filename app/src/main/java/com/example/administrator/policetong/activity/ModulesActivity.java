@@ -103,10 +103,10 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
                     getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new PathParameter()).commit();
                     ac_tv_title.setText("道路台账");
                     break;
-                case 7:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new Fragment_manage()).commit();
-                    ac_tv_title.setText("管理/查看我的提交");
-                    break;
+//                case 7:
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new Fragment_manage()).commit();
+//                    ac_tv_title.setText("管理/查看我的提交");
+//                    break;
                 case 8:
                     getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new StuddyFragment()).commit();
                     ac_tv_title.setText("学习台账");

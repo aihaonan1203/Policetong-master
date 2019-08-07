@@ -29,6 +29,8 @@ public class Consts {
     public static final String URL_AQYHPCLIST=COMMOM_URL+"aqyhpcList";
     public static final String URL_ZFXCZGADD=COMMOM_URL+"zfxczgAdd";
     public static final String URL_ZFXCZGLIST=COMMOM_URL+"zfxczgList";
+    public static final String URL_RCQWADD=COMMOM_URL+"rcqwAdd";
+    public static final String URL_RCQWLIST=COMMOM_URL+"rcqwList";
 
 
 

@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.fragment.DailyService;
+import com.example.administrator.policetong.fragment.manage.DailyService_manage;
 import com.example.administrator.policetong.fragment.manage.PathParameter_manage;
 import com.example.administrator.policetong.fragment.manage.SafetyChecks_manage;
 import com.example.administrator.policetong.fragment.manage.VisitRectification_manage;
@@ -30,6 +32,9 @@ public class ManageActivity extends BaseActivity {
                 break;
             case 3:
                 addFragment(new VisitRectification_manage(), R.id.mFrameLayout);
+                break;
+            case 4:
+                addFragment(new DailyService_manage(), R.id.mFrameLayout);
                 break;
         }
 

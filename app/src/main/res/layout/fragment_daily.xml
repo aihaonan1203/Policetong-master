@@ -199,7 +199,6 @@
                         android:background="@null"
                         android:textColor="#333333"
                         android:ellipsize="end"
-                        android:enabled="false"
                         android:hint="请输入里程/参照物"
                         android:layout_marginEnd="35dp"
                         android:textAlignment="textEnd"
@@ -384,7 +383,7 @@
                     android:layout_marginStart="15dp"
                     android:textColor="#333333"
                     android:background="@null"
-                    android:hint="检查车辆X台，其中X多少X台，X多少X台，X多少X台，二三轮车X台，查扣XX台"
+                    android:text="检查车辆X台，其中X多少X台，X多少X台，X多少X台，二三轮车X台，查扣XX台"
                     android:textCursorDrawable="@null"
                     android:textSize="@dimen/text_commonbig" />
 

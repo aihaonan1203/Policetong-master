@@ -2,56 +2,51 @@ package com.example.administrator.policetong.fragment.manage;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.VolleyError;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.base.BaseFragment;
+import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.bean.Daily_bean;
-import com.example.administrator.policetong.bean.VisitRectification_bean;
-import com.example.administrator.policetong.fragment.Fragment_manage;
-import com.example.administrator.policetong.httppost.getNetInfo;
-import com.example.administrator.policetong.utils.LoadingDialog;
+import com.example.administrator.policetong.network.DoNet;
+import com.example.administrator.policetong.utils.GsonUtil;
+import com.example.administrator.policetong.view.NoDataOrNetError;
+import com.luck.picture.lib.entity.LocalMedia;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DailyService_manage extends Fragment {
+public class DailyService_manage extends BaseFragment {
     List<Daily_bean> listbean;
-    private ListView pc_manage_listview;
-    private TextView nodata;
-    private MyAdapter myAdapter;
+    private RecyclerView mRecyclerView;
+    private MyAdapter adapter;
+    private View notDataView;
+    private int pageSize=10;
+    private int pageIndex=1;
+    private View NetErrorView;
 
     public DailyService_manage() {
         // Required empty public constructor
@@ -59,14 +54,54 @@ public class DailyService_manage extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_daily_service_manage, container, false);
+        View view=inflater.inflate(R.layout.fragment_path_parameter_manage, container, false);
+        ((TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.title_name)).setText("日常勤务目录");
         view.setClickable(true);
         initView(view);
-        getNetData();
+        getNetData(true);
         return view;
+    }
+
+    public void getNetData(boolean needDialog) {
+        if (needDialog){
+            pageIndex=1;
+        }
+        DoNet doNet=new DoNet() {
+            @Override
+            public void doWhat(String response, int id) {
+                if (!GsonUtil.verifyResult_show(response)){
+                    return;
+                }
+                Log.e("doWhat: ",response);
+                JSONObject json = JSON.parseObject(response).getJSONObject("data");
+                if (json.getIntValue("total")==0){
+                    adapter.setEmptyView(notDataView);
+                    return;
+                }
+                com.alibaba.fastjson.JSONArray jsonArray = json.getJSONArray("data");
+                List<Daily_bean> data = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), Daily_bean.class);
+                adapter.setNewData(data);
+                if (data.size()<pageSize){
+                    adapter.loadMoreEnd();
+                }else {
+                    adapter.loadMoreComplete();
+                    pageIndex++;
+                }
+            }
+        };
+        doNet.setOnErrorListener(new DoNet.OnErrorListener() {
+            @Override
+            public void onError(int code) {
+                adapter.setEmptyView(NetErrorView);
+            }
+        });
+        RequestParams requestParams=new RequestParams(Consts.URL_RCQWLIST);
+        requestParams.addParameter("limit",pageSize);
+        requestParams.addParameter("page",pageIndex);
+        doNet.doGet(Consts.URL_RCQWLIST,getActivity(), needDialog);
     }
 
 
@@ -112,200 +147,59 @@ public class DailyService_manage extends Fragment {
     }
 
 
-    String starttime,endtime,police,paddr,licheng,context,s,data;
-
-    private void amend_data(final Daily_bean bean) {
-        Map info = new HashMap();
-        info.put("userid", bean.getUserid());
-        info.put("date", bean.getDate());
-        getNetInfo.NetInfo(getActivity(), "updatedaily", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")) {
-                    get_data_form_server(bean);
-                } else {
-                    Toast.makeText(getActivity(), "修改失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void get_data_form_server(Daily_bean bean) {
-        Map info=new HashMap();
-        SharedPreferences sp=getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        info.put("username",sp.getString("username",""));
-        info.put("userid",sp.getString("userid",""));
-        info.put("begintime",starttime);
-        info.put("endtime",endtime);
-        info.put("forces",police);
-        info.put("road",paddr);
-        info.put("img",bean.getImg());
-        info.put("date",bean.getDate());
-        info.put("distance",licheng);
-        info.put("worktype",s);
-        info.put("content",context);
-        info.put("behavior",data);
-        info.put("group",sp.getString("group",""));
-        info.put("detachment",sp.getString("detachment",""));
-        getNetInfo.NetInfo(getActivity(), "insertdaily", new JSONObject(info), new getNetInfo.VolleyCallback() {
-            @Override
-            public void onSuccess(JSONObject object) throws JSONException {
-                Log.e("onSuccess: ",object.toString() );
-                if (object.getString("RESULT").equals("S")){
-                    Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                    getNetData();
-                }else {
-                    Toast.makeText(getActivity(), "提交失败", Toast.LENGTH_SHORT).show();
-                    LoadingDialog.disDialog();
-                }
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.disDialog();
-                Toast.makeText(getActivity(), "提交失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private class MyAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return listbean.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return listbean.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = View.inflate(getActivity(), R.layout.dailyservice_item, null);
-                view.setTag(new MyAdapter.ViewHolder(view));
-            }
-            set_data_into_layout(i,listbean.get(i),(MyAdapter.ViewHolder)view.getTag());
-            return view;
-        }
-
-        @SuppressLint("SetTextI18n")
-        private void set_data_into_layout(int i, Daily_bean bean,ViewHolder holder) {
-            holder.pc_item_id.setText(i+1+"");
-            holder.ds_item_starttime.setText("开始时间："+bean.getBegintime());
-            holder.ds_item_endtime.setText("结束时间："+bean.getEndtime());
-            holder.ds_item_jingli.setText("出动警力："+bean.getForces());
-            holder.ds_item_paddr.setText("道路："+bean.getRoad());
-            holder.ds_item_licheng.setText("里程/参照物："+bean.getDistance());
-            holder.ds_item_qwtype.setText("勤务类型："+bean.getWorktype());
-            holder.ds_item_adccwfxw.setText("重点查处违法行为："+bean.getBehavior());
-            holder.ds_item_context.setText("简要内容："+bean.getContent());
-            holder.ds_item_time.setText("提交时间："+bean.getDate());
-        }
-
-        private class ViewHolder {
-            public View rootView;
-            public TextView pc_item_id;
-            public TextView ds_item_starttime;
-            public TextView ds_item_endtime;
-            public TextView ds_item_jingli;
-            public TextView ds_item_paddr;
-            public TextView ds_item_licheng;
-            public TextView ds_item_qwtype;
-            public TextView ds_item_adccwfxw;
-            public TextView ds_item_context;
-            public TextView ds_item_time;
-
-            public ViewHolder(View rootView) {
-                this.rootView = rootView;
-                this.pc_item_id = (TextView) rootView.findViewById(R.id.pc_item_id);
-                this.ds_item_starttime = (TextView) rootView.findViewById(R.id.ds_item_starttime);
-                this.ds_item_endtime = (TextView) rootView.findViewById(R.id.ds_item_endtime);
-                this.ds_item_jingli = (TextView) rootView.findViewById(R.id.ds_item_jingli);
-                this.ds_item_paddr = (TextView) rootView.findViewById(R.id.ds_item_paddr);
-                this.ds_item_licheng = (TextView) rootView.findViewById(R.id.ds_item_licheng);
-                this.ds_item_qwtype = (TextView) rootView.findViewById(R.id.ds_item_qwtype);
-                this.ds_item_adccwfxw = (TextView) rootView.findViewById(R.id.ds_item_adccwfxw);
-                this.ds_item_context = (TextView) rootView.findViewById(R.id.ds_item_context);
-                this.ds_item_time = (TextView) rootView.findViewById(R.id.ds_item_time);
-            }
-        }
-    }
-    public void getNetData() {
-        listbean.clear();
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        Map map = new HashMap();
-        map.put("userid", sharedPreferences.getString("userid", ""));
-        getNetInfo.NetInfoArray(getActivity(), "selectdaily", new JSONObject(map), new getNetInfo.VolleyArrayCallback() {
-            @Override
-            public void onSuccess(JSONArray object) throws JSONException {
-                for (int i = 0; i < object.length(); i++) {
-                    JSONObject j = (JSONObject) object.get(i);
-                    if (j.getString("modify").equals("未修改")) {
-                        listbean.add(new Daily_bean(j.getString("date"),j.getString("detachment"),j.getString("img"),j.getString("distance"),j.getString("endtime"),
-                                j.getString("worktype"),j.getString("begintime"),j.getString("userid"),j.getString("content"),j.getString("road"),j.getString("forces"),
-                                j.getString("behavior"),j.getString("grop")));
-                    }
-                }
-                if (listbean.size() == 0) {
-                    nodata.setVisibility(View.VISIBLE);
-                    pc_manage_listview.setVisibility(View.GONE);
-                } else {
-                    Collections.reverse(listbean);
-                    nodata.setVisibility(View.GONE);
-                    pc_manage_listview.setVisibility(View.VISIBLE);
-                }
-                LoadingDialog.disDialog();
-                shuaxinListview();
-            }
-
-            @Override
-            public void onError(VolleyError volleyError) {
-                LoadingDialog.showToast_shibai(getActivity());
-                LoadingDialog.disDialog();
-            }
-        });
-    }
-
-    public void shuaxinListview() {
-        if (myAdapter == null) {
-            myAdapter = new MyAdapter();
-            pc_manage_listview.setAdapter(myAdapter);
-        } else {
-            myAdapter.notifyDataSetChanged();
-        }
-    }
 
     private void initView(View view) {
-        listbean=new ArrayList<>();
-        pc_manage_listview =view.findViewById(R.id.pc_manage_listview);
-        nodata = view.findViewById(R.id.nodata);
-        pc_manage_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showPopueWindow(i);
-            }
-        });
-        (getActivity().findViewById(R.id.ac_arrow_back)).setOnClickListener(new View.OnClickListener() {
+        notDataView= NoDataOrNetError.noData(mRecyclerView, getActivity(), "当前没有数据呦！");
+        NetErrorView = NoDataOrNetError.netError(mRecyclerView, getActivity());
+        NetErrorView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getParentFragment().getChildFragmentManager().beginTransaction().replace(R.id.pc_context,new Fragment_manage()).commit();
+                getNetData(true);
             }
         });
+        listbean=new ArrayList<>();
+        mRecyclerView =view.findViewById(R.id.mRecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new MyAdapter();
+        mRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                showPopueWindow(position);
+            }
+        });
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getNetData(false);
+            }
+        },mRecyclerView);
+    }
+
+
+    @Override
+    public void getPhoto(List<LocalMedia> selectList) {
+
+    }
+
+    private class MyAdapter extends BaseQuickAdapter<Daily_bean,BaseViewHolder> {
+
+
+        public MyAdapter() {
+            super(R.layout.dailyservice_item);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, Daily_bean bean) {
+            helper.setText(R.id.ds_item_starttime,"开始时间："+bean.getStart_time());
+            helper.setText(R.id.ds_item_endtime,"结束时间："+bean.getEnd_time());
+            helper.setText(R.id.ds_item_jingli,"出动警力："+bean.getUsers_id());
+            helper.setText(R.id.ds_item_paddr,"道路："+bean.getBiroad_id());
+            helper.setText(R.id.ds_item_licheng,"里程/参照物："+bean.getReference());
+            helper.setText(R.id.ds_item_qwtype,"勤务类型："+bean.getBidutytype_id());
+            helper.setText(R.id.ds_item_adccwfxw,"重点查处违法行为："+bean.getBiillegalacts_id());
+            helper.setText(R.id.ds_item_context,"简要内容："+bean.getContent());
+            helper.setText(R.id.ds_item_time,"创建时间："+bean.getWork_time());
+        }
     }
 }

@@ -106,11 +106,11 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
         btnPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectList == null || selectList.size() == 0) {
+                if (BaseselectList == null || BaseselectList.size() == 0) {
                     Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                EventBus.getDefault().postSticky(new EvenMsg<>("", selectList));
+                EventBus.getDefault().postSticky(new EvenMsg<>("", BaseselectList));
                 startActivity(new Intent(getActivity(), PreviewActivity.class));
             }
         });
@@ -173,7 +173,7 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
         String time = etParkTime.getText().toString().trim();
         String type = etParkType.getText().toString().trim();
         String remark = tvParkRemark.getText().toString().trim();
-        if (selectList == null || selectList.size() == 0) {
+        if (BaseselectList == null || BaseselectList.size() == 0) {
             Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -194,9 +194,9 @@ public class ParkManageFragment extends BaseFragment implements View.OnClickList
                 .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
                     @Override
                     public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
-                        MultipartBody.Part[] part = new MultipartBody.Part[selectList.size()];
-                        for (int i = 0; i < selectList.size(); i++) {
-                            createFilePart(part, i, new File(selectList.get(i).getPath()));
+                        MultipartBody.Part[] part = new MultipartBody.Part[BaseselectList.size()];
+                        for (int i = 0; i < BaseselectList.size(); i++) {
+                            createFilePart(part, i, new File(BaseselectList.get(i).getPath()));
                         }
                         return Network.getPoliceApi(false).uploadImage("park/uploadEntranceImg", part);
                     }

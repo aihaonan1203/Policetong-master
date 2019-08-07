@@ -6,8 +6,8 @@ android {
         applicationId "com.example.administrator.policetong"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 3
-        versionName "3.1.1"
+        versionCode 4
+        versionName "4.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -80,6 +80,7 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.2.8'
     implementation 'com.qianwen:update-app:3.5.2'
     implementation 'com.lzy.net:okgo:3.0.4'
+    implementation 'org.xutils:xutils:3.3.38'
     implementation files('libs/photoview-library-1.2.2.jar')
     implementation files('libs/universal-image-loader-1.9.2_sources.jar')
 }
