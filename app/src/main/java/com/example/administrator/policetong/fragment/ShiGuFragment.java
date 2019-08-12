@@ -4,104 +4,100 @@ package com.example.administrator.policetong.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.R;
-import com.example.administrator.policetong.activity.AccidentActivity;
-import com.example.administrator.policetong.activity.ModulesActivity;
-import com.example.administrator.policetong.activity.PreviewActivity;
-import com.example.administrator.policetong.base.BaseBean;
+import com.example.administrator.policetong.activity.ManageActivity;
+import com.example.administrator.policetong.fragment.manage.Accident_Manage;
+import com.example.administrator.policetong.activity.LabelManageActivity;
+import com.example.administrator.policetong.base.App;
 import com.example.administrator.policetong.base.BaseFragment;
-import com.example.administrator.policetong.bean.EvenMsg;
-import com.example.administrator.policetong.network.Network;
-import com.example.administrator.policetong.new_bean.AccidentBean;
-import com.example.administrator.policetong.utils.LoadingDialog;
-import com.google.gson.Gson;
+import com.example.administrator.policetong.base.Consts;
+import com.example.administrator.policetong.bean.new_bean.PointBean;
+import com.example.administrator.policetong.network.DoNet;
+import com.example.administrator.policetong.utils.GsonUtil;
+import com.example.administrator.policetong.utils.UIUtils;
+import com.example.administrator.policetong.utils.Util;
 import com.luck.picture.lib.entity.LocalMedia;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.ObservableSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+import okhttp3.Call;
 
 public class ShiGuFragment extends BaseFragment implements View.OnClickListener {
 
-    private Button sg_add_submit;
+    private Button sg_type_btn;
+    private Button sg_shoushang_s;
+    private Button sg_chesun_s;
+    private Button sg_canyu_s;
     private EditText sg_time;
+    private EditText ds_police;
     private EditText sg_type;
     private EditText sg_canyu;
-    private EditText sg_car_type;
+    private EditText ds_context;
     private EditText sg_shoushang;
     private EditText sg_chesun;
-    private Button sg_select_time;
-    private LinearLayout llyt_photo;
-    private static String SD_CARD_TEMP_DIR;
-
-    private File file;
-    private Button btn_preview;
-    private ImageView iv_take_photo;
+    private ArrayList<String> idPoliceList=new ArrayList<>();
     private TextView tv_photo;
-    private ModulesActivity activity;
-    private ImageView iv_right;
+    private StringBuilder users_id=new StringBuilder();
+    private int participant_id;
+    private int injured_id;
+    private int vehicledamage_id;
+    private int accident_id;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        activity = (ModulesActivity) getActivity();
         View view=inflater.inflate(R.layout.fragment_shi_gu, container, false);
         view.setClickable(true);
         initView(view);
+        Objects.requireNonNull(getActivity()).findViewById(R.id.ac_tv_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),ManageActivity.class).putExtra("type",5));
+            }
+        });
         return view;
     }
 
-    private AccidentBean bean;
-    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
-    public void XX(AccidentBean bean) {
-        this.bean = bean;
-    }
 
     private void initView(View view) {
-        sg_add_submit =view.findViewById(R.id.sg_add_submit);
+        Button sg_add_submit = view.findViewById(R.id.sg_add_submit);
         sg_add_submit.setOnClickListener(this);
-        sg_time = (EditText) view.findViewById(R.id.sg_time);
-        sg_type = (EditText) view.findViewById(R.id.sg_type);
-        sg_canyu = (EditText) view.findViewById(R.id.jb_lingdao);
-        sg_car_type = (EditText) view.findViewById(R.id.sg_car_type);
-        sg_shoushang = (EditText) view.findViewById(R.id.sg_shoushang);
-        sg_chesun = (EditText) view.findViewById(R.id.sg_chesun);
-        sg_select_time = (Button) view.findViewById(R.id.sg_select_time);
-        llyt_photo =view.findViewById(R.id.llyt_photo);
+        sg_time =  view.findViewById(R.id.sg_time);
+        ds_police =  view.findViewById(R.id.ds_police);
+        Button btn_ds_police = view.findViewById(R.id.btn_ds_police);
+        sg_chesun_s =  view.findViewById(R.id.sg_chesun_s);
+        sg_shoushang_s =  view.findViewById(R.id.sg_shoushang_s);
+        sg_type =  view.findViewById(R.id.sg_type);
+        sg_canyu =  view.findViewById(R.id.jb_lingdao);
+        ds_context =  view.findViewById(R.id.ds_context);
+        sg_shoushang =  view.findViewById(R.id.sg_shoushang);
+        sg_canyu_s =  view.findViewById(R.id.sg_canyu_s);
+        sg_chesun =  view.findViewById(R.id.sg_chesun);
+        Button sg_select_time = view.findViewById(R.id.sg_select_time);
+        sg_type_btn =view.findViewById(R.id.sg_type_btn);
         sg_select_time.setOnClickListener(this);
-        btn_preview = (Button) view.findViewById(R.id.btn_preview);
-        iv_take_photo=view.findViewById(R.id.iv_take_photo);
+        Button iv_take_photo = view.findViewById(R.id.iv_take_photo);
         tv_photo=view.findViewById(R.id.tv_photo);
         tv_photo.setText(String.format(getResources().getString(R.string.photo),"0"));
         iv_take_photo.setOnClickListener(new View.OnClickListener() {
@@ -110,159 +106,219 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
                 takePhoto();
             }
         });
-        btn_preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (BaseselectList ==null|| BaseselectList.size()==0){
-                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                EventBus.getDefault().postSticky(new EvenMsg<>("", BaseselectList));
-                startActivity(new Intent(getActivity(),PreviewActivity.class));
-            }
-        });
         iv_take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takePhoto();
+                takeOnePhoto();
             }
         });
-        btn_preview.setOnClickListener(new View.OnClickListener() {
+
+        Util.RequestOption(getActivity(), "biAccident", new Util.OptionCallBack() {
             @Override
-            public void onClick(View view) {
-                if (BaseselectList ==null|| BaseselectList.size()==0){
-                    Toast.makeText(getActivity(), "请先选择照片!!!", Toast.LENGTH_SHORT).show();
-                    return;
+            public void CallBack(List<PointBean> list) {
+                if (list.size() != 0) {
+                    Util.setRadioDateIntoDialog(getActivity(), sg_type,sg_type_btn , list, new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            accident_id = itemId;
+                        }
+                    });
+                } else {
+                    sg_type_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-                EventBus.getDefault().postSticky(new EvenMsg<>("", BaseselectList));
-                startActivity(new Intent(getActivity(),PreviewActivity.class));
             }
         });
-        iv_right = ModulesActivity.getmContext().findViewById(R.id.ac_tv_right);
-        iv_right.setVisibility(View.VISIBLE);
-        iv_right.setOnClickListener(new View.OnClickListener() {
+
+        Util.RequestOption(getActivity(), "biParticipant", new Util.OptionCallBack() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(),AccidentActivity.class));
+            public void CallBack(List<PointBean> list) {
+                if (list.size() != 0) {
+                    Util.setRadioDateIntoDialog(getActivity(), sg_canyu,sg_canyu_s , list, new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            participant_id = itemId;
+                        }
+                    });
+                } else {
+                    sg_canyu_s.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
-        if (bean!=null&& activity.id==12){
-            llyt_photo.setVisibility(View.INVISIBLE);
-            sg_time.setText(bean.getDate());
-            sg_type.setText(bean.getType());
-            sg_canyu.setText(bean.getParticipant());
-            sg_car_type.setText(bean.getCarType());
-            sg_shoushang.setText(bean.getHurtType());
-            sg_chesun.setText(bean.getCarAmage());
+
+        Util.RequestOption(getActivity(), "biInjured", new Util.OptionCallBack() {
+            @Override
+            public void CallBack(List<PointBean> list) {
+                if (list.size() != 0) {
+                    Util.setRadioDateIntoDialog(getActivity(), sg_shoushang,sg_shoushang_s , list, new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            injured_id = itemId;
+                        }
+                    });
+                } else {
+                    sg_shoushang_s.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
+        Util.RequestOption(getActivity(), "biVehicledamage", new Util.OptionCallBack() {
+            @Override
+            public void CallBack(List<PointBean> list) {
+                if (list.size() != 0) {
+                    Util.setRadioDateIntoDialog(getActivity(), sg_chesun,sg_chesun_s , list, new Util.SelectOpintCallBack() {
+                        @Override
+                        public void selectItem(int itemId) {
+                            vehicledamage_id = itemId;
+                        }
+                    });
+                } else {
+                    sg_chesun_s.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
+        btn_ds_police.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LabelManageActivity.class);
+                intent.putExtra("userIdList", idPoliceList);
+                intent.putExtra("type","1");
+                startActivityForResult(intent,200);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==200) {
+            if (resultCode==666){
+                idPoliceList = data.getStringArrayListExtra("idList");
+                for (int i = 0; i < idPoliceList.size(); i++) {
+                    users_id.append(idPoliceList.get(i)).append(",");
+                }
+                users_id.deleteCharAt(users_id.length()-1);
+                ds_police.setText(String.valueOf(data.getStringArrayListExtra("nameList")));
+            }
         }
     }
 
+    private void submit(){
 
-    private void submit() throws JSONException{
-        assert activity != null;
-        if (activity.j==null) {
-            Toast.makeText(getActivity(), "位置信息获取失败，请检查网络", Toast.LENGTH_SHORT).show();
+        if (App.getInstance().getLocationBean()==null) {
+            Toast.makeText(getActivity(), "位置信息获取失败", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (BaseselectList ==null|| BaseselectList.size()==0){
-            if (activity.id!=12){
-                Toast.makeText(getActivity(), "请先选择上传的图片!", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if ( selectList.size()==0){
+            Toast.makeText(getActivity(), "请先选择上传的图片!", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // validate
-        String time = sg_time.getText().toString().trim();
-        if (TextUtils.isEmpty(time)) {
+        if (TextUtils.isEmpty(sg_time.getText().toString().trim())) {
             Toast.makeText(getContext(), "时间不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String type = sg_type.getText().toString().trim();
-        if (TextUtils.isEmpty(type)) {
+        if (TextUtils.isEmpty( sg_type.getText().toString().trim())) {
             Toast.makeText(getContext(), "类型不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String canyu = sg_canyu.getText().toString().trim();
-        if (TextUtils.isEmpty(canyu)) {
+        if (TextUtils.isEmpty(sg_canyu.getText().toString().trim())) {
             Toast.makeText(getContext(), "参与方不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String car_type = sg_car_type.getText().toString().trim();
-        if (TextUtils.isEmpty(car_type)) {
-            Toast.makeText(getContext(), "车辆类型不能为空", Toast.LENGTH_SHORT).show();
+        if (users_id.length()==0){
+            Toast.makeText(getContext(), "出动警力不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String shoushang = sg_shoushang.getText().toString().trim();
-        if (TextUtils.isEmpty(shoushang)) {
+        if (TextUtils.isEmpty(sg_shoushang.getText().toString().trim())) {
             Toast.makeText(getContext(), "受伤情况不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String chesun = sg_chesun.getText().toString().trim();
-        if (TextUtils.isEmpty(chesun)) {
-            Toast.makeText(getContext(), "车损不能为空", Toast.LENGTH_SHORT).show();
+
+        if (TextUtils.isEmpty(sg_chesun.getText().toString().trim())) {
+            Toast.makeText(getContext(), "车损情况不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        AccidentBean bean=new AccidentBean();
-        bean.setUserId(userInfo.getUserId());
-        bean.setDate(time);
-        bean.setLongitude(activity.j.getString("longitude"));
-        bean.setLatitude(activity.j.getString("latitude"));
-        bean.setType(type);
-        bean.setParticipant(canyu);
-        bean.setCarType(car_type);
-        bean.setHurtType(shoushang);
-        bean.setCarAmage(chesun);
-        if (activity.id==12){
-            bean.setId(this.bean.getId());
-            bean.setOperate("2");
-        }else {
-            bean.setOperate("1");
+        if (TextUtils.isEmpty(ds_context.getText().toString().trim())) {
+            Toast.makeText(getContext(), "事故出警详情描述不能为空", Toast.LENGTH_SHORT).show();
+            return;
         }
-        String s = new Gson().toJson(bean);
-        LoadingDialog.showDialog(getActivity(),"正在提交...");
-        disposable= Network.getPoliceApi(false).addAccident(RequestBody.create(MediaType.parse("application/json"),s))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer<BaseBean>() {
+        PostFormBuilder builder = new PostFormBuilder();
+        for (int i = 0; i < selectList.size(); i++) {
+            builder.addFile("file[]", new File(selectList.get(i).getPath()).getName(), new File(selectList.get(i).getPath()));
+        }
+        builder.url("https://api.jjedd.net:9000/v1/uploadImg")
+                .addHeader("token", App.userInfo.getToken())
+                .addHeader("user", App.userInfo.getUser().getUser())
+                .addHeader("Content-Type", "multipart/form-data")
+                .build()
+                .execute(new StringCallback() {
+
                     @Override
-                    public void accept(BaseBean bean) throws Exception {
-                        if (bean.getCode()==0&&activity.id==12){
-                            LoadingDialog.disDialog();
-                            Toast.makeText(getActivity(), "修改成功!", Toast.LENGTH_SHORT).show();
-                            disposable.dispose();
-                            EventBus.getDefault().post("1");
-                            Objects.requireNonNull(getActivity()).finish();
-                        }
+                    public void onError(Call call, Exception e, int id, int code) {
+                        closeDialog();
+                        UIUtils.t("图片上传失败",false,UIUtils.T_ERROR);
                     }
-                }).observeOn(Schedulers.io())
-                .flatMap(new Function<BaseBean, ObservableSource<BaseBean>>() {
+
                     @Override
-                    public ObservableSource<BaseBean> apply(BaseBean bean) throws Exception {
-                        MultipartBody.Part[] part = new MultipartBody.Part[BaseselectList.size()];
-                        for (int i = 0; i < BaseselectList.size(); i++) {
-                            createFilePart(part, i, new File(BaseselectList.get(i).getPath()));
-                        }
-                        return Network.getPoliceApi(false).uploadImage("accident/uploadImg",part);
-                    }
-                }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<BaseBean>() {
-                    @Override
-                    public void accept(BaseBean bean) throws Exception {
-                        if (bean.getCode()==0){
-                            LoadingDialog.disDialog();
-                            Toast.makeText(getActivity(), "提交成功...", Toast.LENGTH_SHORT).show();
-                            Objects.requireNonNull(getActivity()).finish();
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.e("accept: ","" );
+                    public void onResponse(String response, int id) {
+                        com.alibaba.fastjson.JSONObject json = JSON.parseObject(response);
+                        DoNet doNet = new DoNet() {
+                            @Override
+                            public void doWhat(String response, int id) {
+                                closeDialog();
+                                if (!GsonUtil.verifyResult_show(response)) {
+                                    return;
+                                }
+                                UIUtils.t(JSON.parseObject(response).getString("message"), false, UIUtils.T_SUCCESS);
+                                Objects.requireNonNull(getActivity()).finish();
+                                startActivity(new Intent(getActivity(),ManageActivity.class).putExtra("type",5));
+                            }
+                        };
+                        doNet.setOnErrorListener(new DoNet.OnErrorListener() {
+                            @Override
+                            public void onError(int code) {
+                                closeDialog();
+                            }
+                        });
+                        com.alibaba.fastjson.JSONObject jsonObject =new com.alibaba.fastjson.JSONObject();
+
+                        jsonObject.put("work_time",sg_time.getText().toString());
+                        jsonObject.put("users_id", users_id);
+                        jsonObject.put("longitude", App.getInstance().getLocationBean().getLongitude());
+                        jsonObject.put("latitude", App.getInstance().getLocationBean().getLatitude());
+                        jsonObject.put("accident_id", String.valueOf(accident_id));
+                        jsonObject.put("participant_id", String.valueOf(participant_id));
+                        jsonObject.put("injured_id", String.valueOf(injured_id));
+                        jsonObject.put("vehicledamage_id", String.valueOf(vehicledamage_id));
+                        jsonObject.put("detail",ds_context.getText().toString() );
+                        jsonObject.put("pic", json.getJSONObject("data").getString("filepath"));
+                        doNet.doPost(jsonObject, Consts.URL_ACCIDENTADD, getActivity(), true);
                     }
                 });
     }
@@ -271,11 +327,7 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.sg_add_submit:
-                try {
-                    submit();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                submit();
                 break;
             case R.id.sg_select_time:
                 DatePickDialog dialog = new DatePickDialog(getActivity());
@@ -284,14 +336,14 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
                 //设置标题
                 dialog.setTitle("选择时间");
                 //设置类型
-                dialog.setType(DateType.TYPE_YMD);
+                dialog.setType(DateType.TYPE_YMDHM);
                 //设置消息体的显示格式，日期格式
-                dialog.setMessageFormat("yyyy-MM-dd");
+                dialog.setMessageFormat("yyyy-MM-dd hh:mm");
                 //设置点击确定按钮回调
                 dialog.setOnSureLisener(new OnSureLisener() {
                     @Override
                     public void onSure(Date date) {
-                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd").format(date);
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date);
                         sg_time.setText(string);
                     }
                 });
@@ -300,8 +352,11 @@ public class ShiGuFragment extends BaseFragment implements View.OnClickListener 
         }
     }
 
+    private List<LocalMedia> selectList=new ArrayList<>();
     @Override
     public void getPhoto(List<LocalMedia> selectList) {
-        tv_photo.setText(String.format(getResources().getString(R.string.photo),selectList.size()+""));
+        tv_photo.setText(String.format(getResources().getString(R.string.photo), selectList.size() + ""));
+        this.selectList.addAll(selectList);
+        selectList.clear();
     }
 }

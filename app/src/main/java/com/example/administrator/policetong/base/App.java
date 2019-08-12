@@ -1,18 +1,33 @@
 package com.example.administrator.policetong.base;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.example.administrator.policetong.bean.LocationBean;
 import com.example.administrator.policetong.bean.new_bean.UserInfo;
 import com.example.administrator.policetong.utils.GsonUtil;
+import com.example.administrator.policetong.utils.LocationUtils;
 import com.example.administrator.policetong.utils.SPUtils;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 public class App extends Application {
     private static App mContext;
 
     public static UserInfo userInfo=new UserInfo();
+    private LocationBean locationBean;
+
+    public static App getInstance() {
+        return mContext;
+    }
 
     @Override
     public void onCreate() {
@@ -35,4 +50,13 @@ public class App extends Application {
             SPUtils.setUserToken(App.getApplication(),userInfo.getToken());
         }
     }
+
+    public LocationBean getLocationBean() {
+        return locationBean;
+    }
+
+    public void setLocationBean(LocationBean locationBean) {
+        this.locationBean = locationBean;
+    }
+
 }

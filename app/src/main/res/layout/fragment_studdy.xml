@@ -3,193 +3,278 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/text_white"
-    android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
+    android:paddingStart="10dp"
     android:paddingTop="10dp"
-    tools:context="com.example.administrator.policetong.fragment.SafetyChecks">
+    tools:ignore="RtlSymmetry">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_time" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="学习时间："
-            android:textSize="18sp" />
+            android:layout_marginStart="10dp"
+            android:text="学习时间"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/stu_study_time"
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_marginEnd="5dp"
-            >
+            android:textColor="#333333"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@null"
+            android:ellipsize="end"
+            android:enabled="false"
+            android:hint="请选择学习时间"
+            android:textAlignment="textEnd"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text_commonbig" />
 
-            <EditText
-                android:paddingLeft="5dp"
-                android:id="@+id/stu_study_time"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/k_height"
-                android:layout_centerVertical="true"
-                android:background="@drawable/kuang"
-                android:inputType="text" />
-
-            <Button
-                android:id="@+id/stu_study_time_btn"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/icon_xiala" />
-        </RelativeLayout>
+        <Button
+            android:id="@+id/stu_study_time_btn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/icon_path_select" />
     </LinearLayout>
 
+    <include layout="@layout/line_horizontal" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_path_lc" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="学习地点："
-            android:textSize="18sp" />
+            android:layout_marginStart="10dp"
+            android:text="学习地点"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
 
         <EditText
             android:id="@+id/stu_study_site"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp" />
+            android:textColor="#333333"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@null"
+            android:ellipsize="end"
+            android:hint="请输入学习地点"
+            android:textAlignment="textEnd"
+            android:textCursorDrawable="@null"
+            android:layout_marginEnd="35dp"
+            android:textSize="@dimen/text_commonbig" />
+
     </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_path_xz" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="所属中队"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
+
+        <EditText
+            android:id="@+id/stu_zd"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="#333333"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@null"
+            android:ellipsize="end"
+            android:enabled="false"
+            android:hint="请选择所属中队"
+            android:textAlignment="textEnd"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text_commonbig" />
+
+        <Button
+            android:id="@+id/btn_study_zd"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/icon_path_select" />
+
+    </LinearLayout>
+
+    <include layout="@layout/line_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_path_zd" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="参与人员"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
+
+
+        <Button
+            android:id="@+id/btn_ds_police"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/icon_path_select" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/ds_police"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:textColor="#333333"
+        android:enabled="false"
+        android:background="@null"
+        android:hint="请选择学习人员"
+        android:paddingStart="30dp"
+        android:textCursorDrawable="@null"
+        android:textSize="@dimen/text_commonbig" />
+
+    <include layout="@layout/line_horizontal" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_path_type" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="所属中队："
-            android:textSize="18sp" />
+            android:layout_marginStart="10dp"
+            android:text="学习内容"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
 
-        <EditText
-            android:id="@+id/stu_zd"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:paddingLeft="5dp"  />
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/stu_context"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
+        android:gravity="top|left"
+        android:hint="请输入学习内容"
+        android:padding="5dp"
+        android:background="@drawable/kuang"
+        tools:ignore="RtlHardcoded" />
 
-
+    <include layout="@layout/line_horizontal" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:text="学习内容："
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/stu_context"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/kuang"
-            android:gravity="top|left"
-            android:paddingLeft="5dp"
-            tools:ignore="RtlHardcoded" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llyt_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:gravity="center_vertical"
-        >
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_path_zk" />
 
         <TextView
             android:id="@+id/tv_photo"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
             android:text="@string/photo"
-            />
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_commonbig" />
 
-        <ImageView
-            android:id="@+id/iv_take_photo"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/icon_take_photo"
-            android:layout_marginEnd="10dp"
-             />
 
         <Button
-            android:id="@+id/btn_preview"
-            android:text="预览"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:background="@color/mycolor"
-            android:textColor="@color/text_white"
-            android:layout_marginEnd="10dp"
-            />
-
+            android:id="@+id/iv_take_photo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/icon_take_photo" />
     </LinearLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/ds_add_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/stu_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_margin="20dp"
-            android:background="@color/mycolor"
-            android:text="提交"
-            android:textColor="@color/text_white" />
-
-        <Button
-            android:id="@+id/stu_cancle"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:background="@color/mycolor"
-            android:text="取消"
-            android:textColor="@color/text_white"
-            android:visibility="gone" />
-
-    </LinearLayout>
+        android:background="@drawable/member_btn_bg"
+        android:text="提交"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 </LinearLayout>

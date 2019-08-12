@@ -21,13 +21,12 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.fragment.DailyService;
-import com.example.administrator.policetong.fragment.Fragment_manage;
 import com.example.administrator.policetong.fragment.ParkManageFragment;
 import com.example.administrator.policetong.fragment.PathParameter;
 import com.example.administrator.policetong.fragment.PoliceFragment;
 import com.example.administrator.policetong.fragment.SafetyChecks;
 import com.example.administrator.policetong.fragment.ShiGuFragment;
-import com.example.administrator.policetong.fragment.StuddyFragment;
+import com.example.administrator.policetong.fragment.StudyFragment;
 import com.example.administrator.policetong.fragment.VisitRectification;
 import com.example.administrator.policetong.utils.Utils;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -108,7 +107,7 @@ public class ModulesActivity extends AppCompatActivity implements View.OnClickLi
 //                    ac_tv_title.setText("管理/查看我的提交");
 //                    break;
                 case 8:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new StuddyFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.ac_context, new StudyFragment()).commit();
                     ac_tv_title.setText("学习台账");
                     break;
                 case 12:

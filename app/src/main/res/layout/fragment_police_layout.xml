@@ -4,193 +4,249 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:overScrollMode="never"
+    android:background="@color/white"
     android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        tools:ignore="RtlSymmetry">
+        android:orientation="vertical">
 
-
-        <TextView
-            android:id="@+id/tv_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:text="第二大队XX月XX日安全保卫工作方案"
-            android:textColor="#ff0000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:padding="15dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="组织领导："
-            android:layout_marginTop="10dp"
-            android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_path_jl" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="任务标题"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_commonbig" />
+
+        </LinearLayout>
 
         <EditText
-            android:id="@+id/jb_lingdao"
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/k_height"
-            android:background="@drawable/kuang"
-            android:paddingStart="5dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:textColor="#333333"
+            android:background="@null"
+            android:hint="请输入任务标题"
+            android:paddingStart="30dp"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text_commonbig"
             tools:ignore="RtlSymmetry" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="任务时间以及到岗时间："
-            android:layout_marginTop="10dp"
-            android:textSize="16sp" />
+        <include layout="@layout/line_horizontal" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/magrgin_txt_5"
-            >
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_time" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="任务时间"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_commonbig" />
 
             <EditText
-                android:paddingStart="5dp"
-                android:id="@+id/pc_add_time"
+                android:id="@+id/tvPoliceTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ellipsize="end"
                 android:enabled="false"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/k_height"
-                android:layout_centerVertical="true"
-                android:background="@drawable/kuang"
-                android:inputType="text" />
+                android:hint="请选择时间"
+                android:textAlignment="textEnd"
+                android:textColor="#333333"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/text_commonbig" />
 
             <Button
-                android:id="@+id/pc_time"
-                android:layout_width="25dp"
-                android:layout_centerVertical="true"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/icon_xiala"
+                android:id="@+id/btnPoliceTime"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/icon_path_select" />
+        </LinearLayout>
+
+        <include layout="@layout/line_horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_time" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="到岗时间"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_commonbig" />
+
+            <EditText
+                android:id="@+id/tvPoliceOnTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ellipsize="end"
+                android:enabled="false"
+                android:hint="请选择时间"
+                android:textAlignment="textEnd"
+                android:textColor="#333333"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/text_commonbig" />
+
+            <Button
+                android:id="@+id/btnPoliceOnTime"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/icon_path_select" />
+        </LinearLayout>
+
+        <include layout="@layout/line_horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_path_jl" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="任务详情"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_commonbig" />
+
+            <TextView
+                android:id="@+id/tvAddInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="添加岗点任务"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:drawableEnd="@drawable/icon_add_police"
+                android:drawablePadding="5dp"
                 />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="任务线路："
-                android:layout_weight="1"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/btn_path"
-                android:text="生成路线"
-                android:background="@color/mycolor"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
 
         </LinearLayout>
 
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_RecyclerView"
-            android:overScrollMode="never"
+        <TextView
+            android:id="@+id/tvContext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:paddingStart="30dp"
+            android:layout_marginStart="15dp"
+            tools:ignore="RtlSymmetry" />
 
+        <include layout="@layout/line_horizontal" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="警力安排："
-                android:layout_weight="1"
-                android:textSize="16sp" />
+            android:padding="15dp">
 
-            <Button
-                android:id="@+id/btn_jingli"
-                android:text="生成表单"
-                android:background="@color/mycolor"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_path_type" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="备注信息"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_commonbig" />
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_RecyclerView2"
-            android:overScrollMode="never"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="方案描述："
-            android:layout_marginTop="10dp"
-            android:textSize="16sp" />
-
         <EditText
-            android:id="@+id/et_miaoshu"
+            android:id="@+id/tvContent"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp"
+            android:gravity="top|left"
+            android:hint="请输入备注内容"
+            android:padding="5dp"
             android:background="@drawable/kuang"
-            android:paddingStart="5dp"
-            android:gravity="left|top"
-            android:layout_marginTop="10dp"
-            tools:ignore="RtlHardcoded,RtlSymmetry" />
+            tools:ignore="RtlHardcoded" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="备注："
-            android:layout_marginTop="10dp"
-            android:textSize="16sp" />
+        <include layout="@layout/line_horizontal" />
 
-        <EditText
-            android:id="@+id/et_beizhu"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@drawable/kuang"
-            android:paddingStart="5dp"
-            android:gravity="left|top"
-            android:layout_marginTop="10dp"
-            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
         <Button
-            android:id="@+id/btn_submit"
+            android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:background="@drawable/member_btn_bg"
             android:text="提交"
-            android:background="@color/mycolor"
+            android:layout_marginTop="50dp"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            />
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginBottom="50dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
 
     </LinearLayout>
+
+
 </ScrollView>

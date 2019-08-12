@@ -15,254 +15,283 @@
         android:overScrollMode="never"
         >
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
-            <TextView
-                android:text="走访时间:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/txt_color"
-                android:textSize="18sp"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_5"
-                />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_5"
-                android:layout_marginEnd="@dimen/magrgin_txt_5"
-                >
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_time" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="走访时间"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_commonbig" />
 
                 <EditText
-                    android:paddingStart="5dp"
                     android:id="@+id/visit_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/k_height"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textColor="#333333"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@null"
+                    android:ellipsize="end"
                     android:enabled="false"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/kuang"
-                    android:inputType="text" />
+                    android:hint="请选择学习时间"
+                    android:textAlignment="textEnd"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_commonbig" />
 
                 <Button
                     android:id="@+id/vr_select_time"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/icon_xiala" />
-            </RelativeLayout>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/icon_path_select" />
+            </LinearLayout>
 
-            <TextView
-                android:text="走访单位:"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/txt_color"
-                android:textSize="18sp"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_5"
-                />
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_5"
-                android:layout_marginEnd="@dimen/magrgin_txt_5"
-                >
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_path_dj" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="走访单位"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_commonbig" />
 
                 <EditText
-                    android:paddingStart="5dp"
                     android:id="@+id/visit_unitname"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/k_height"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textColor="#333333"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@null"
+                    android:ellipsize="end"
                     android:enabled="false"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/kuang"
-                    android:inputType="text" />
+                    android:hint="请选择学习时间"
+                    android:textAlignment="textEnd"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_commonbig" />
 
                 <Button
                     android:id="@+id/vr_unit"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/icon_xiala" />
-            </RelativeLayout>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/icon_path_select" />
+            </LinearLayout>
 
 
-            <TextView
-                android:text="单位性质:"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/txt_color"
-                android:textSize="18sp"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_5"
-                />
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_5"
-                android:layout_marginEnd="@dimen/magrgin_txt_5"
-                >
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_path_xz" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="单位性质"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_commonbig" />
 
                 <EditText
-                    android:paddingStart="5dp"
                     android:id="@+id/visit_unit"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/k_height"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textColor="#333333"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@null"
+                    android:ellipsize="end"
                     android:enabled="false"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/kuang"
-                    android:inputType="text" />
+                    android:hint="请选择学习时间"
+                    android:textAlignment="textEnd"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_commonbig" />
 
                 <Button
                     android:id="@+id/vr_unit_xz"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/icon_xiala" />
-            </RelativeLayout>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/icon_path_select" />
+            </LinearLayout>
 
-            <TextView
-                android:text="走访目的:"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/txt_color"
-                android:textSize="18sp"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_5"
-                />
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_5"
-                android:layout_marginEnd="@dimen/magrgin_txt_5"
-                >
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_path_zd" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="走访目的"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_commonbig" />
 
                 <EditText
-                    android:paddingStart="5dp"
                     android:id="@+id/visit_purpose"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/k_height"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/kuang"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textColor="#333333"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@null"
+                    android:ellipsize="end"
                     android:enabled="false"
-                    android:inputType="text" />
+                    android:hint="请选择学习时间"
+                    android:textAlignment="textEnd"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_commonbig" />
 
                 <Button
                     android:id="@+id/vr_mudi"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/icon_xiala" />
-            </RelativeLayout>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/icon_path_select" />
+            </LinearLayout>
 
 
-
-            <TextView
-                android:text="简要内容:"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/txt_color"
-                android:textSize="18sp"
-                android:layout_marginStart="@dimen/magrgin_txt_5"
-                android:layout_marginTop="@dimen/magrgin_txt_1"
-                />
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_path_type" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="简要内容"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_commonbig" />
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/visit_context"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_margin="@dimen/magrgin_txt_5"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/kuang"
+                android:layout_marginStart="35dp"
+                android:layout_marginEnd="35dp"
                 android:gravity="top|left"
-                android:paddingLeft="5dp"
+                android:hint="请输入学习内容"
+                android:padding="5dp"
+                android:background="@drawable/kuang"
                 tools:ignore="RtlHardcoded" />
 
+            <include layout="@layout/line_horizontal" />
+
             <LinearLayout
-                android:id="@+id/llay_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:gravity="center_vertical"
-                >
+                android:padding="15dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_path_zk" />
 
                 <TextView
                     android:id="@+id/tv_photo"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/magrgin_txt_5"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
                     android:text="@string/photo"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_commonbig" />
 
-                <ImageView
-                    android:id="@+id/iv_take_photo"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/icon_take_photo"
-                    android:layout_marginEnd="10dp"
-                    />
 
                 <Button
-                    android:id="@+id/btn_preview"
-                    android:text="预览"
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
-                    android:background="@color/mycolor"
-                    android:visibility="gone"
-                    android:textColor="@color/text_white"
-                    android:layout_marginEnd="10dp"
-                    />
-
+                    android:id="@+id/iv_take_photo"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/icon_take_photo" />
             </LinearLayout>
 
-            <LinearLayout
+
+            <Button
+                android:id="@+id/visit_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:background="@drawable/member_btn_bg"
+                android:text="提交"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/white"
+                android:layout_marginStart="70dp"
+                android:layout_marginEnd="70dp"
+                android:layout_marginBottom="30dp"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/visit_submit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_margin="20dp"
-                    android:background="@color/mycolor"
-                    android:text="提交"
-                    android:textColor="@color/text_white" />
 
-                <Button
-                    android:id="@+id/visit_cancle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:background="@color/mycolor"
-                    android:text="取消"
-                    android:textColor="@color/text_white"
-                    android:visibility="gone" />
-
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

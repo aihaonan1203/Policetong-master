@@ -54,7 +54,7 @@ public class VisitRectification_manage extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_visitrectification_manage, container, false);
-        ((TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.title_name)).setText("安全排查台账");
+        ((TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.title_name)).setText("走访宣传整改台账列表");
         view.setClickable(true);
         initView(view);
         getNetData(true);

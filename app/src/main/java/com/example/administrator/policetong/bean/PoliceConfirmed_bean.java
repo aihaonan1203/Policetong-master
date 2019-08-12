@@ -5,97 +5,89 @@ package com.example.administrator.policetong.bean;
  */
 
 public class PoliceConfirmed_bean {
-    private String userid;
-    private String place;
-    private String unit;
-    private String turn;
-    private String date;
-    private String other;
-    private String latitude;
-    private String longitude;
 
+    /**
+     * id : 21
+     * title : dawdadd
+     * task_time : 2019-08-11 07:20:00
+     * work_time : 2019-08-11 07:20:00
+     * content : 1.八里湖北大道与环湖四路由特勤中队负责,需要1人,需要调灯
+     2.八里湖北大道与沙阎路信号灯由四中队负责,需要7人,不需调灯
+     * remarks :
+     * user_id : 超级管理员
+     * create_time : 2019-08-11 15:20:15
+     */
 
-    public PoliceConfirmed_bean(String userid, String place, String unit, String turn, String date, String other, String latitude, String longitude) {
-        this.userid = userid;
-        this.place = place;
-        this.unit = unit;
-        this.turn = turn;
-        this.date = date;
-        this.other = other;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    private int id;
+    private String title;
+    private String task_time;
+    private String work_time;
+    private String content;
+    private String remarks;
+    private String user_id;
+    private String create_time;
+
+    public int getId() {
+        return id;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
+    public String getTitle() {
+        return title;
     }
 
-    public String getLongitude() {
-        return longitude;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public String getTask_time() {
+        return task_time;
     }
 
-    public PoliceConfirmed_bean(String userid, String place, String unit, String turn, String date, String other) {
-        this.userid = userid;
-        this.place = place;
-        this.unit = unit;
-        this.turn = turn;
-        this.date = date;
-        this.other = other;
+    public void setTask_time(String task_time) {
+        this.task_time = task_time;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getWork_time() {
+        return work_time;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setWork_time(String work_time) {
+        this.work_time = work_time;
     }
 
-    public String getPlace() {
-        return place;
+    public String getContent() {
+        return content;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getRemarks() {
+        return remarks;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
-    public String getTurn() {
-        return turn;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setTurn(String turn) {
-        this.turn = turn;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public String getDate() {
-        return date;
+    public String getCreate_time() {
+        return create_time;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getOther() {
-        return other;
-    }
-
-    public void setOther(String other) {
-        this.other = other;
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 }

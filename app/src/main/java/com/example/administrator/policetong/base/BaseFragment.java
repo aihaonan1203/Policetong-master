@@ -1,13 +1,17 @@
 package com.example.administrator.policetong.base;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Window;
 
+import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.new_bean.UserBean;
 import com.example.administrator.policetong.utils.SPUtils;
+import com.example.administrator.policetong.utils.UIUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -39,6 +43,7 @@ public abstract class BaseFragment extends Fragment {
 
 
     protected UserBean userInfo;
+    private Dialog dialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,6 +111,29 @@ public abstract class BaseFragment extends Fragment {
         if (EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    public void setDialog() {
+        dialog = new Dialog(Objects.requireNonNull(getActivity()));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setContentView(R.layout.dialog_loading);
+        if (dialog.isShowing()) {
+            return;
+        }
+        UIUtils.doDialog(getActivity(), dialog);
+//        dialog.setCanceledOnTouchOutside(false);  //能取消
+        dialog.setCancelable(false);
+    }
+
+    public void closeDialog() {
+        if (dialog == null) {
+            return;
+        }
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        UIUtils.closeDialog(getActivity(), dialog);
     }
 
     //

@@ -1,5 +1,6 @@
 package com.example.administrator.policetong.base;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 
 
 import com.example.administrator.policetong.R;
@@ -29,6 +31,7 @@ import org.greenrobot.eventbus.EventBusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.transform.Transformer;
 
@@ -54,6 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected UserInfo userInfo;
     private List<LocalMedia> selectList;
+    private Dialog dialog;
 
     /**
      * 封装的findViewByID方法
@@ -141,6 +145,37 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .compress(true)// 是否压缩
                 .selectionMedia(selectList)
                 .forResult(CHOOSE_REQUEST);
+    }
+
+    protected void takeOnePhoto(){
+        PictureSelector.create(this)
+                .openCamera(PictureMimeType.ofImage())
+                .compress(true)// 是否压缩
+                .selectionMedia(selectList)
+                .forResult(CHOOSE_REQUEST);
+    }
+
+    public void setDialog() {
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setContentView(R.layout.dialog_loading);
+        if (dialog.isShowing()) {
+            return;
+        }
+        UIUtils.doDialog(this, dialog);
+//        dialog.setCanceledOnTouchOutside(false);  //能取消
+        dialog.setCancelable(false);
+    }
+
+    public void closeDialog() {
+        if (dialog == null) {
+            return;
+        }
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        UIUtils.closeDialog(this, dialog);
     }
 
     @Override

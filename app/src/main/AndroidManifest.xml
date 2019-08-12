@@ -45,9 +45,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="yqQbGCYzGHh3frRmZzrCc80GECUa3tis" />
 
         <activity android:name=".activity.RegActivity">
             <intent-filter>
@@ -69,11 +66,11 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="0f7190b90f2b6591cf0a5472fbc9aae4" />
+            android:value="6493a83635c1a57d739ccddd74e745f3" />
 
-        <activity android:name=".activity.ParkActivity" />
-        <activity android:name=".activity.ParkOutActivity" />
-        <activity android:name=".activity.AccidentActivity" />
+        <activity android:name=".fragment.carpark.ParkActivity" />
+        <activity android:name=".fragment.carpark.ParkOutActivity" />
+        <activity android:name=".fragment.manage.Accident_Manage" />
         <activity android:name=".activity.pass_card.one.OnePassCardActivity" />
         <activity android:name=".activity.pass_card.one.OnePassCardInfoActivity" />
         <activity android:name=".activity.pass_card.PassCardPhotoActivity" />

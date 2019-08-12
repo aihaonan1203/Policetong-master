@@ -22,6 +22,14 @@
             tools:ignore="RtlSymmetry" />
 
         <TextView
+            android:id="@+id/tv_title"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="德瓦达就安排我的安外大街哦啊怕我到家哦怕打巫婆决斗盘哇哦大家舰炮觉得"
+            />
+
+        <TextView
             android:id="@+id/tv_msg"
             android:padding="15dp"
             android:layout_width="match_parent"

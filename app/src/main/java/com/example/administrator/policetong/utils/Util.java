@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -149,10 +150,98 @@ public class Util {
         });
     }
 
+    public static void setRadioDateIntoDialog(final Activity context, final List<PointBean> list, final SelectStringCallBack callBack){
+        RecyclerView recyclerView=new RecyclerView(context);
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        recyclerView.setLayoutParams(params);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        final BaseQuickAdapter<PointBean, BaseViewHolder> adapter = new BaseQuickAdapter<PointBean, BaseViewHolder>(R.layout.layout_bottom_dialog, list) {
+            @Override
+            protected void convert(BaseViewHolder helper, PointBean item) {
+                helper.setText(R.id.tv_album, item.getName());
+            }
+        };
+        recyclerView.setAdapter(adapter);
+        final PopupWindow pop = new PopupWindow(recyclerView, -1, -2);
+        pop.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        pop.setOutsideTouchable(true);
+        pop.setFocusable(true);
+        WindowManager.LayoutParams lp = Objects.requireNonNull(context).getWindow().getAttributes();
+        lp.alpha = 0.5f;
+        context.getWindow().setAttributes(lp);
+        pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = context.getWindow().getAttributes();
+                lp.alpha = 1f;
+                context.getWindow().setAttributes(lp);
+            }
+        });
+        pop.setAnimationStyle(R.style.main_menu_photo_anim);
+        pop.showAtLocation(context.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter mAdapter, View view, int position) {
+                if (callBack!=null){
+                    callBack.selectItem(adapter.getData().get(position).getName());
+                }
+                pop.dismiss();
+            }
+        });
+    }
+
+
+
+    public static void setRadioDateIntoDialog(final Activity context, TextView button, final List<PointBean> list, final SelectStringCallBack callBack){
+        RecyclerView recyclerView=new RecyclerView(context);
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        recyclerView.setLayoutParams(params);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        final BaseQuickAdapter<PointBean, BaseViewHolder> adapter = new BaseQuickAdapter<PointBean, BaseViewHolder>(R.layout.layout_bottom_dialog, list) {
+            @Override
+            protected void convert(BaseViewHolder helper, PointBean item) {
+                helper.setText(R.id.tv_album, item.getName());
+            }
+        };
+        recyclerView.setAdapter(adapter);
+        final PopupWindow pop = new PopupWindow(recyclerView, -1, -2);
+        pop.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        pop.setOutsideTouchable(true);
+        pop.setFocusable(true);
+        WindowManager.LayoutParams lp = Objects.requireNonNull(context).getWindow().getAttributes();
+        lp.alpha = 0.5f;
+        context.getWindow().setAttributes(lp);
+        pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = context.getWindow().getAttributes();
+                lp.alpha = 1f;
+                context.getWindow().setAttributes(lp);
+            }
+        });
+        pop.setAnimationStyle(R.style.main_menu_photo_anim);
+        pop.showAtLocation(context.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter mAdapter, View view, int position) {
+                if (callBack!=null){
+                    callBack.selectItem(adapter.getData().get(position).getName());
+                }
+                pop.dismiss();
+            }
+        });
+    }
+
 
 
     public interface SelectOpintCallBack{
         void selectItem(int itemId);
+    }
+
+    public interface SelectStringCallBack{
+        void selectItem(String item);
     }
 
     public static void setMultiSelectDateIntoDialog(final Context context, final EditText editText, Button button, final String[] items){

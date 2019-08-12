@@ -54,15 +54,15 @@ import okhttp3.Call;
  */
 public class VisitRectification extends BaseFragment implements View.OnClickListener {
 
-    private Button btn_preview;
-    private ImageView iv_take_photo;
     private TextView tv_photo;
     private EditText visit_unitname;
     private EditText visit_unit;
     private EditText visit_purpose;
     private EditText visit_context;
     private EditText visit_time;
-    private Button visit_submit,vr_danwei,vr_mudi,vr_xz,visit_select_time;
+    private Button vr_danwei;
+    private Button vr_mudi;
+    private Button vr_xz;
     private int biunitnature_id;
     private int bivisitpurpose_id;
 
@@ -90,22 +90,18 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
         visit_unit =  view.findViewById(R.id.visit_unit);
         visit_purpose =  view.findViewById(R.id.visit_purpose);
         visit_context =  view.findViewById(R.id.visit_context);
-        visit_submit =  view.findViewById(R.id.visit_submit);
+        Button visit_submit = view.findViewById(R.id.visit_submit);
         vr_danwei =  view.findViewById(R.id.vr_unit);
         vr_mudi =  view.findViewById(R.id.vr_mudi);
         vr_xz =  view.findViewById(R.id.vr_unit_xz);
         visit_time=view.findViewById(R.id.visit_time);
-        visit_select_time=view.findViewById(R.id.vr_select_time);
+        Button visit_select_time = view.findViewById(R.id.vr_select_time);
         visit_submit.setOnClickListener(this);
         visit_select_time.setOnClickListener(this);
-        btn_preview =  view.findViewById(R.id.btn_preview);
-        iv_take_photo=view.findViewById(R.id.iv_take_photo);
         tv_photo=view.findViewById(R.id.tv_photo);
-        btn_preview =  view.findViewById(R.id.btn_preview);
-        iv_take_photo=view.findViewById(R.id.iv_take_photo);
         tv_photo=view.findViewById(R.id.tv_photo);
         tv_photo.setText(String.format(getResources().getString(R.string.photo),"0"));
-        iv_take_photo.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.iv_take_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takeOnePhoto();
@@ -184,14 +180,14 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                 //设置标题
                 dialog.setTitle("选择时间");
                 //设置类型
-                dialog.setType(DateType.TYPE_YMD);
+                dialog.setType(DateType.TYPE_YMDHM);
                 //设置消息体的显示格式，日期格式
-                dialog.setMessageFormat("yyyy-MM-dd");
+                dialog.setMessageFormat("yyyy-MM-dd hh:mm");
                 //设置点击确定按钮回调
                 dialog.setOnSureLisener(new OnSureLisener() {
                     @Override
                     public void onSure(Date date) {
-                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd").format(date);
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date);
                         visit_time.setText(string);
                     }
                 });
@@ -233,10 +229,10 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
             Toast.makeText(getContext(), "单位性质不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        setDialog();
         PostFormBuilder builder = new PostFormBuilder();
         for (int i = 0; i < selectList.size(); i++) {
-            builder.addFile("file[]", new File(selectList.get(0).getPath()).getName(), new File(selectList.get(i).getPath()));
+            builder.addFile("file[]", new File(selectList.get(i).getPath()).getName(), new File(selectList.get(i).getPath()));
         }
         builder.url("https://api.jjedd.net:9000/v1/uploadImg")
                 .addHeader("token", App.userInfo.getToken())
@@ -246,7 +242,8 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id, int code) {
-
+                        closeDialog();
+                        UIUtils.t("图片上传失败",false,UIUtils.T_ERROR);
                     }
 
                     @Override
@@ -255,6 +252,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                         DoNet doNet = new DoNet() {
                             @Override
                             public void doWhat(String response, int id) {
+                                closeDialog();
                                 if (!GsonUtil.verifyResult_show(response)) {
                                     return;
                                 }
@@ -263,6 +261,12 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                                 startActivity(new Intent(getActivity(), ManageActivity.class).putExtra("type", 3));
                             }
                         };
+                        doNet.setOnErrorListener(new DoNet.OnErrorListener() {
+                            @Override
+                            public void onError(int code) {
+                                closeDialog();
+                            }
+                        });
                         JSONObject jsonObject =new JSONObject();
 //                        jsonObject.put("work_time", time);
                         jsonObject.put("zfunit", unitname);
@@ -270,7 +274,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                         jsonObject.put("bivisitpurpose_id", bivisitpurpose_id);
                         jsonObject.put("detail", context);
                         jsonObject.put("pic", json.getJSONObject("data").getString("filepath"));
-                        doNet.doPost(jsonObject, Consts.URL_ZFXCZGADD, getActivity(), true);
+                        doNet.doPost(jsonObject, Consts.URL_ZFXCZGADD, getActivity(), false);
                     }
                 });
     }

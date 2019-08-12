@@ -299,6 +299,7 @@
                     android:enabled="false"
                     android:background="@null"
                     android:hint="请选择出动警力"
+                    android:paddingStart="30dp"
                     android:textCursorDrawable="@null"
                     android:textSize="@dimen/text_commonbig" />
 
@@ -345,6 +346,7 @@
                     android:textColor="#333333"
                     android:background="@null"
                     android:hint="请选择重点查处违法行为"
+                    android:paddingStart="30dp"
                     android:enabled="false"
                     android:textCursorDrawable="@null"
                     android:textSize="@dimen/text_commonbig" />
@@ -382,6 +384,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:textColor="#333333"
+                    android:paddingStart="30dp"
                     android:background="@null"
                     android:text="检查车辆X台，其中X多少X台，X多少X台，X多少X台，二三轮车X台，查扣XX台"
                     android:textCursorDrawable="@null"

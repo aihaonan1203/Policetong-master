@@ -31,6 +31,16 @@ public class Consts {
     public static final String URL_ZFXCZGLIST=COMMOM_URL+"zfxczgList";
     public static final String URL_RCQWADD=COMMOM_URL+"rcqwAdd";
     public static final String URL_RCQWLIST=COMMOM_URL+"rcqwList";
+    public static final String URL_ACCIDENTADD=COMMOM_URL+"accidentAdd";
+    public static final String URL_ACCIDENTLIST=COMMOM_URL+"accidentList";
+    public static final String URL_STUDYADD=COMMOM_URL+"studyAdd";
+    public static final String URL_STUDYLIST=COMMOM_URL+"studyList";
+    public static final String URL_CAR_IN=COMMOM_URL+"in";
+    public static final String URL_VEHICLELIST=COMMOM_URL+"vehicleList";
+    public static final String URL_CAR_OUT=COMMOM_URL+"out";
+    public static final String URL_JBWEDIT=COMMOM_URL+"jbwEdit";
+    public static final String URL_JBWLIST=COMMOM_URL+"jbwList";
+    public static final String URL_NOTICELIST=COMMOM_URL+"noticeList";
 
 
 

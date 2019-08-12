@@ -4,48 +4,26 @@ public class StudyBean {
 
 
     /**
-     * id : 1
-     * userId : test1
-     * content : 测试
-     * place : 测试地点
-     * studyTime : 2019-04-14
-     * squId : 2
+     * id : 5
+     * department_id : 秩序中队
+     * work_time : 2019-08-11
+     * place : sadawd
+     * users : 孙严,朱晓明,陈前志,单学铮
+     * content : dwadwadawd
+     * pic : 20190811/f4aebb9024474b16bfca1f4681c03c8e.JPEG,
+     * user_id : 超级管理员
+     * create_time : 2019-08-11 09:21:15
      */
 
     private int id;
-    private String userId;
-    private String content;
+    private String department_id;
+    private String work_time;
     private String place;
-    private String studyTime;
-    private int squId;
-    private String operate;
-
-    public StudyBean(String userId, String content, String place, String studyTime, int squId, String operate) {
-        this.userId = userId;
-        this.content = content;
-        this.place = place;
-        this.studyTime = studyTime;
-        this.squId = squId;
-        this.operate = operate;
-    }
-
-    public StudyBean(int id, String userId, String content, String place, String studyTime, int squId, String operate) {
-        this.id = id;
-        this.userId = userId;
-        this.content = content;
-        this.place = place;
-        this.studyTime = studyTime;
-        this.squId = squId;
-        this.operate = operate;
-    }
-
-    public String getOperate() {
-        return operate;
-    }
-
-    public void setOperate(String operate) {
-        this.operate = operate;
-    }
+    private String users;
+    private String content;
+    private String pic;
+    private String user_id;
+    private String create_time;
 
     public int getId() {
         return id;
@@ -55,20 +33,20 @@ public class StudyBean {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getDepartment_id() {
+        return department_id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setDepartment_id(String department_id) {
+        this.department_id = department_id;
     }
 
-    public String getContent() {
-        return content;
+    public String getWork_time() {
+        return work_time;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setWork_time(String work_time) {
+        this.work_time = work_time;
     }
 
     public String getPlace() {
@@ -79,19 +57,43 @@ public class StudyBean {
         this.place = place;
     }
 
-    public String getStudyTime() {
-        return studyTime;
+    public String getUsers() {
+        return users;
     }
 
-    public void setStudyTime(String studyTime) {
-        this.studyTime = studyTime;
+    public void setUsers(String users) {
+        this.users = users;
     }
 
-    public int getSquId() {
-        return squId;
+    public String getContent() {
+        return content;
     }
 
-    public void setSquId(int squId) {
-        this.squId = squId;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 }

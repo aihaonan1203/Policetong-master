@@ -301,9 +301,10 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
     String time, paddr, licheng, unit, fxunit, shangbao, zhenggai, zgtime;
 
     private void set_data_into_server() {
+        setDialog();
         PostFormBuilder builder = new PostFormBuilder();
         for (int i = 0; i < selectList.size(); i++) {
-            builder.addFile("file[]", new File(selectList.get(0).getPath()).getName(), new File(selectList.get(i).getPath()));
+            builder.addFile("file[]", new File(selectList.get(i).getPath()).getName(), new File(selectList.get(i).getPath()));
         }
         builder.url("https://api.jjedd.net:9000/v1/uploadImg")
                 .addHeader("token", App.userInfo.getToken())
@@ -313,7 +314,8 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id, int code) {
-
+                        closeDialog();
+                        UIUtils.t("图片上传失败",false,UIUtils.T_ERROR);
                     }
 
                     @Override
@@ -326,10 +328,16 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
                                     return;
                                 }
                                 UIUtils.t(JSON.parseObject(response).getString("message"), false, UIUtils.T_SUCCESS);
-                                getActivity().finish();
+                                Objects.requireNonNull(getActivity()).finish();
                                 startActivity(new Intent(getActivity(), ManageActivity.class).putExtra("type", 2));
                             }
                         };
+                        doNet.setOnErrorListener(new DoNet.OnErrorListener() {
+                            @Override
+                            public void onError(int code) {
+                                closeDialog();
+                            }
+                        });
                         com.alibaba.fastjson.JSONObject jsonObject = new com.alibaba.fastjson.JSONObject();
                         jsonObject.put("work_time", time);
                         jsonObject.put("biroad_id", biroad_id);

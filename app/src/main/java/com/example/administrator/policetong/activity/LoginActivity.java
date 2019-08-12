@@ -26,6 +26,7 @@ import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.CommonThrowable;
 import com.example.administrator.policetong.base.VerifyConsumer;
 import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.utils.LocationUtils;
 import com.example.administrator.policetong.utils.RequestBodyUtils;
 import com.example.administrator.policetong.utils.SPUtils;
 import com.master.permissionhelper.BuildConfig;
@@ -88,7 +89,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         permissionHelper.request(new PermissionHelper.PermissionCallback() {
             @Override
             public void onPermissionGranted() {
-
+                LocationUtils.getInstance().startLocalService();
             }
 
             @Override

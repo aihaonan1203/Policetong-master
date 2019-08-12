@@ -108,11 +108,17 @@
         <item>其他</item>
     </string-array>
 
-    <string-array name="path">
-        <item>城市道路</item>
-        <item>国道道路</item>
-        <item>县道</item>
-        <item>村村通道路</item>
+    <string-array name="personNumber">
+        <item>1人</item>
+        <item>2人</item>
+        <item>3人</item>
+        <item>4人</item>
+        <item>5人</item>
+        <item>6人</item>
+        <item>7人</item>
+        <item>8人</item>
+        <item>9人</item>
+        <item>10人</item>
     </string-array>
 
     <string-array name="num">

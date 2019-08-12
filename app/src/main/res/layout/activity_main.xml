@@ -369,7 +369,6 @@
                             android:id="@+id/iv_shigu"
                             android:layout_width="40dp"
                             android:layout_height="50dp"
-                            android:onClick="help"
                             android:src="@drawable/icon_shigu" />
 
                         <TextView
@@ -392,7 +391,6 @@
                             android:id="@+id/iv_tingchecgang"
                             android:layout_width="40dp"
                             android:layout_height="50dp"
-                            android:onClick="help"
                             android:src="@drawable/icon_tingchechang" />
 
                         <TextView
@@ -415,7 +413,6 @@
                             android:id="@+id/tv_help"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:onClick="help"
                             android:src="@drawable/ic_help_black_24dp" />
 
                         <TextView

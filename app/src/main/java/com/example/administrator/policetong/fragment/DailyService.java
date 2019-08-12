@@ -4,6 +4,7 @@ package com.example.administrator.policetong.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,6 @@ import com.codbking.widget.bean.DateType;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.activity.LabelManageActivity;
 import com.example.administrator.policetong.activity.ManageActivity;
-import com.example.administrator.policetong.activity.ModulesActivity;
 import com.example.administrator.policetong.base.App;
 import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.base.Consts;
@@ -62,9 +62,6 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
     private Button ds_add_submit;
     private Button ds_start_select_time;
     private Button ds_end_select_time;
-    private ModulesActivity activity;
-
-    boolean state;
     private Button iv_take_photo;
     private TextView tv_photo;
     private ArrayList<String> idPoliceList=new ArrayList<>();
@@ -75,7 +72,7 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
     private int bidutytype_id;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_daily, container, false);
         initView(view);
@@ -258,9 +255,10 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "您的网络出现了问题", Toast.LENGTH_SHORT).show();
             return;
         }
+        setDialog();
         PostFormBuilder builder = new PostFormBuilder();
         for (int i = 0; i < selectList.size(); i++) {
-            builder.addFile("file[]", new File(selectList.get(0).getPath()).getName(), new File(selectList.get(i).getPath()));
+            builder.addFile("file[]", new File(selectList.get(i).getPath()).getName(), new File(selectList.get(i).getPath()));
         }
         builder.url("https://api.jjedd.net:9000/v1/uploadImg")
                 .addHeader("token", App.userInfo.getToken())
@@ -271,7 +269,8 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
 
                     @Override
                     public void onError(Call call, Exception e, int id, int code) {
-
+                        closeDialog();
+                        UIUtils.t("图片上传失败",false,UIUtils.T_ERROR);
                     }
 
                     @Override
@@ -280,6 +279,7 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
                         DoNet doNet = new DoNet() {
                             @Override
                             public void doWhat(String response, int id) {
+                                closeDialog();
                                 if (!GsonUtil.verifyResult_show(response)) {
                                     return;
                                 }
@@ -288,6 +288,12 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
                                 startActivity(new Intent(getActivity(), ManageActivity.class).putExtra("type", 4));
                             }
                         };
+                        doNet.setOnErrorListener(new DoNet.OnErrorListener() {
+                            @Override
+                            public void onError(int code) {
+                                closeDialog();
+                            }
+                        });
                         com.alibaba.fastjson.JSONObject jsonObject =new com.alibaba.fastjson.JSONObject();
 
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -302,7 +308,7 @@ public class DailyService extends BaseFragment implements View.OnClickListener {
                         jsonObject.put("biillegalacts_id", biillegalacts_id);
                         jsonObject.put("content", context);
                         jsonObject.put("pic", json.getJSONObject("data").getString("filepath"));
-                        doNet.doPost(jsonObject, Consts.URL_RCQWADD, getActivity(), true);
+                        doNet.doPost(jsonObject, Consts.URL_RCQWADD, getActivity(), false);
                     }
                 });
     }

@@ -9,50 +9,9 @@
 
 
 
-    <RelativeLayout
-        android:padding="7dp"
-        android:background="#3291FF"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-        <ImageView
-            android:id="@+id/ac_arrow_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back_black_24dp"
-            />
-
-        <TextView
-            android:id="@+id/ac_tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_centerInParent="true"
-            android:text="事故接警记录"
-            android:textColor="@color/text_white"
-            />
-
-        <ImageView
-            android:id="@+id/ac_tv_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:visibility="invisible"
-            android:src="@drawable/icon_lishi"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/text_white"
-            />
-
-    </RelativeLayout>
-
-    <ListView
-        android:id="@+id/lv_tcc"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

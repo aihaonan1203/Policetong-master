@@ -4,7 +4,10 @@ package com.example.administrator.policetong.fragment.manage;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,24 +25,35 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.BaseBean;
 import com.example.administrator.policetong.base.BaseFragment;
+import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.fragment.Fragment_manage;
+import com.example.administrator.policetong.network.DoNet;
 import com.example.administrator.policetong.network.Network;
+import com.example.administrator.policetong.new_bean.AccidentBean;
 import com.example.administrator.policetong.new_bean.StudyBean;
+import com.example.administrator.policetong.new_bean.VisitBean;
 import com.example.administrator.policetong.new_bean.ZDBean;
+import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
+import com.example.administrator.policetong.view.NoDataOrNetError;
 import com.google.gson.Gson;
 import com.luck.picture.lib.entity.LocalMedia;
 
 import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
@@ -51,25 +65,69 @@ import okhttp3.RequestBody;
 public class Study_manage extends BaseFragment {
 
     List<StudyBean> listbean;
-    private ListView pc_manage_listview;
-    private TextView nodata;
-    private MyAdapter myAdapter;
-    private HashMap<Object, Object> map;
+    private RecyclerView mRecyclerView;
+    private MyAdapter adapter;
+    private View notDataView;
+    private View NetErrorView;
+    private int pageSize = 10;
+    private int pageIndex = 1;
 
     public Study_manage() {
-        // Required empty public constructor
+
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_study_manage, container, false);
+        View view = inflater.inflate(R.layout.fragment_visitrectification_manage, container, false);
+        ((TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.title_name)).setText("学习台账台账");
+        view.setClickable(true);
         initView(view);
-        getSqu();
+        getNetData(true);
         return view;
     }
+
+    public void getNetData(boolean needDialog) {
+        if (needDialog) {
+            pageIndex = 1;
+        }
+        DoNet doNet = new DoNet() {
+            @Override
+            public void doWhat(String response, int id) {
+                if (!GsonUtil.verifyResult_show(response)) {
+                    return;
+                }
+                Log.e("doWhat: ", response);
+                com.alibaba.fastjson.JSONObject json = JSON.parseObject(response).getJSONObject("data");
+                if (json.getIntValue("total") == 0) {
+                    adapter.setEmptyView(notDataView);
+                    return;
+                }
+                com.alibaba.fastjson.JSONArray jsonArray = json.getJSONArray("data");
+                List<StudyBean> data = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), StudyBean.class);
+                adapter.setNewData(data);
+                if (data.size() < pageSize) {
+                    adapter.loadMoreEnd();
+                } else {
+                    adapter.loadMoreComplete();
+                    pageIndex++;
+                }
+            }
+        };
+        doNet.setOnErrorListener(new DoNet.OnErrorListener() {
+            @Override
+            public void onError(int code) {
+                adapter.setEmptyView(NetErrorView);
+            }
+        });
+        RequestParams requestParams = new RequestParams(Consts.URL_RCQWLIST);
+        requestParams.addParameter("limit", pageSize);
+        requestParams.addParameter("page", pageIndex);
+        doNet.doGet(Consts.URL_STUDYLIST, getActivity(), needDialog);
+    }
+
 
 
     @SuppressLint("SetTextI18n")
@@ -87,7 +145,6 @@ public class Study_manage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
-                showDialog(id);
             }
 
         });
@@ -100,259 +157,70 @@ public class Study_manage extends BaseFragment {
         //popupWindow消失屏幕变为不透明
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             public void onDismiss() {
-                WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+                WindowManager.LayoutParams lp = Objects.requireNonNull(getActivity()).getWindow().getAttributes();
                 lp.alpha = 1.0f;
                 getActivity().getWindow().setAttributes(lp);
             }
         });
         //popupWindow出现屏幕变为半透明
-        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        WindowManager.LayoutParams lp = Objects.requireNonNull(getActivity()).getWindow().getAttributes();
         lp.alpha = 0.5f;
         getActivity().getWindow().setAttributes(lp);
         popupWindow.showAtLocation(popView, Gravity.BOTTOM, 0, 0);
 
     }
 
-    private void initValues() {
-        listbean = new ArrayList<>();
-        LoadingDialog.showDialog(getActivity(), "正在获取数据");
-        getNetData();
-    }
-
-    private void getSqu() {
-        disposable = Network.getPoliceApi(false).getSqu()
-                .compose(BaseActivity.<BaseBean<List<ZDBean>>>applySchedulers())
-                .subscribe(new Consumer<BaseBean<List<ZDBean>>>() {
-                    @SuppressLint("UseSparseArrays")
-                    @Override
-                    public void accept(BaseBean<List<ZDBean>> bean) throws Exception {
-                        if (bean.getCode() != 0) {
-                            Toast.makeText(getActivity(), "获取中队信息失败", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        List<ZDBean> data = bean.getData();
-                        map = new HashMap<>();
-                        for (int i = 0; i <data.size() ; i++) {
-                            ZDBean zdBean = data.get(i);
-                            map.put(zdBean.getId(),zdBean.getSquName());
-                        }
-                        initValues();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                    }
-                });
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void showDialog(final int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = View.inflate(getActivity(), R.layout.fragment_studdy, null);
-        Button cancle = view.findViewById(R.id.stu_cancle);
-        Button submit = view.findViewById(R.id.stu_submit);
-        submit.setText("修改");
-        cancle.setVisibility(View.VISIBLE);
-        final EditText stu_study_time = view.findViewById(R.id.stu_study_time);
-        final EditText stu_zd = view.findViewById(R.id.stu_zd);
-        final EditText stu_context = view.findViewById(R.id.stu_context);
-        final EditText stu_study_site = view.findViewById(R.id.stu_study_site);
-        final LinearLayout llyt_photo = view.findViewById(R.id.llyt_photo);
-        llyt_photo.setVisibility(View.GONE);
-        final StudyBean bean = listbean.get(id);
-        stu_study_time.setText(bean.getStudyTime());
-        Object o = map.get(bean.getSquId());
-        if (o!=null){
-            stu_zd.setText("所属中队:"+o.toString());
-        }else
-        {
-            stu_zd.setText(String.valueOf(bean.getSquId()));
-        }
-
-        stu_context.setText(bean.getContent());
-        stu_study_site.setText(bean.getPlace());
-        builder.setView(view);
-        final AlertDialog dialog = builder.create();
-        cancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name = stu_study_time.getText().toString().trim();
-                if (TextUtils.isEmpty(name)) {
-                    Toast.makeText(getContext(), "学习时间不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String zd = stu_zd.getText().toString().trim();
-                if (TextUtils.isEmpty(zd)) {
-                    Toast.makeText(getContext(), "所属中队不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String site = stu_study_site.getText().toString().trim();
-                if (TextUtils.isEmpty(zd)) {
-                    Toast.makeText(getContext(), "学习地点不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String context = stu_context.getText().toString().trim();
-                if (TextUtils.isEmpty(context)) {
-                    Toast.makeText(getContext(), "学习内容不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                LoadingDialog.showDialog(getActivity(), "正在提交...");
-                StudyBean bean1=new StudyBean(bean.getId(),userInfo.getUserId(),context,site,name,userInfo.getSquId(),"2");
-                String s = new Gson().toJson(bean1);
-                disposable= Network.getPoliceApi(false).addStudy(RequestBody.create(MediaType.parse("application/json"),s))
-                        .compose(BaseActivity.<BaseBean>applySchedulers()).subscribe(new Consumer<BaseBean>() {
-                            @Override
-                            public void accept(BaseBean bean) throws Exception {
-                                if (bean.getCode()==0){
-                                    LoadingDialog.disDialog();
-                                    Toast.makeText(getActivity(), "提交成功...", Toast.LENGTH_SHORT).show();
-                                    shuaxinListview();
-                                }
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                LoadingDialog.disDialog();
-                                Toast.makeText(getActivity(), "提交失败...", Toast.LENGTH_SHORT).show();
-                                Log.e("accept: ","" );
-                            }
-                        });
-            }
-        });
-        dialog.show();
-    }
-
 
 
     private void initView(View view) {
-        pc_manage_listview =view.findViewById(R.id.pc_manage_listview);
-        nodata = view.findViewById(R.id.nodata);
-        pc_manage_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        notDataView= NoDataOrNetError.noData(mRecyclerView, getActivity(), "当前没有数据呦！");
+        listbean=new ArrayList<>();
+        mRecyclerView =view.findViewById(R.id.mRecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new MyAdapter();
+        mRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showPopueWindow(i);
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                showPopueWindow(position);
             }
         });
-        (getActivity().findViewById(R.id.ac_arrow_back)).setOnClickListener(new View.OnClickListener() {
+        NetErrorView = NoDataOrNetError.netError(mRecyclerView, getActivity());
+        NetErrorView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getParentFragment().getChildFragmentManager().beginTransaction().replace(R.id.pc_context,new Fragment_manage()).commit();
+                getNetData(true);
             }
         });
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getNetData(false);
+            }
+        },mRecyclerView);
     }
 
-    public void getNetData() {
-        Map map = new HashMap();
-        map.put("userId",userInfo.getUserId());
-        disposable= Network.getPoliceApi(false).getStudy(RequestBody.create(MediaType.parse("application/json"),new JSONObject(map).toString()))
-                .compose(BaseActivity.<BaseBean<List<StudyBean>>>applySchedulers())
-                .subscribe(new Consumer<BaseBean<List<StudyBean>>>() {
-                    @Override
-                    public void accept(BaseBean<List<StudyBean>> listBaseBean) throws Exception {
-                        LoadingDialog.disDialog();
-                        if (listBaseBean.getCode()==0){
-                            if (listbean!=null) {
-                                listbean.clear();
-                            }
-                            assert listbean != null;
-                            listbean.addAll(listBaseBean.getData());
-                            shuaxinListview();
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                    }
-                });
-    }
-
-    public void shuaxinListview() {
-        if (myAdapter == null) {
-            myAdapter = new MyAdapter();
-            pc_manage_listview.setAdapter(myAdapter);
-        } else {
-            myAdapter.notifyDataSetChanged();
-        }
-    }
 
     @Override
     public void getPhoto(List<LocalMedia> selectList) {
 
     }
 
-    private class MyAdapter extends BaseAdapter {
+    private class MyAdapter extends BaseQuickAdapter<StudyBean,BaseViewHolder> {
 
-        @Override
-        public int getCount() {
-            return listbean.size();
+
+        public MyAdapter() {
+            super(R.layout.visitrectification_item);
         }
 
         @Override
-        public Object getItem(int i) {
-            return listbean.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = View.inflate(getActivity(), R.layout.visitrectification_item, null);
-                view.setTag(new MyAdapter.ViewHolder(view));
-            }
-            set_data_into_layout(i, listbean.get(i), (ViewHolder) view.getTag());
-            return view;
-        }
-
-        @SuppressLint("SetTextI18n")
-        private void set_data_into_layout(int i, StudyBean bean, MyAdapter.ViewHolder holder) {
-            holder.pc_item_id.setText(i + 1 + "");
-            holder.pc_item_txt1.setText("学习时间："+bean.getStudyTime());
-            holder.pc_item_txt2.setText("记录地点："+bean.getPlace());
-            Object o = map.get(bean.getSquId());
-            if (o!=null){
-                holder.pc_item_txt3.setText("所属中队："+o.toString());
-            }else
-            {
-                holder.pc_item_txt3.setText("所属中队："+bean.getSquId());
-            }
-            holder.pc_item_txt4.setText("学习内容："+bean.getContent());
-            holder.pc_item_txt5.setVisibility(View.GONE);
-        }
-
-        private class ViewHolder {
-            public View rootView;
-            public TextView pc_item_id;
-            public TextView pc_item_txt1;
-            public TextView pc_item_txt2;
-            public TextView pc_item_txt3;
-            public TextView pc_item_txt4;
-            public TextView pc_item_txt5;
-
-            public ViewHolder(View rootView) {
-                this.rootView = rootView;
-                this.pc_item_id = rootView.findViewById(R.id.pc_item_id);
-                this.pc_item_txt1 = rootView.findViewById(R.id.pc_item_txt1);
-                this.pc_item_txt2 = rootView.findViewById(R.id.pc_item_txt2);
-                this.pc_item_txt3 = rootView.findViewById(R.id.pc_item_txt3);
-                this.pc_item_txt4 = rootView.findViewById(R.id.pc_item_txt4);
-                this.pc_item_txt5 = rootView.findViewById(R.id.pc_item_txt5);
-            }
-
+        protected void convert(BaseViewHolder helper, StudyBean bean) {
+            helper.setText(R.id.pc_item_txt1,"学习时间："+bean.getWork_time());
+            helper.setText(R.id.pc_item_txt2,"学习地点："+bean.getPlace());
+            helper.setText(R.id.pc_item_txt3,"所属中队："+bean.getDepartment_id());
+            helper.setText(R.id.pc_item_txt4,"学习人员："+bean.getUsers());
+            helper.setText(R.id.pc_item_txt5,"学习内容："+bean.getContent());
         }
     }
 }
+
