@@ -70,7 +70,6 @@
 
         <activity android:name=".fragment.carpark.ParkActivity" />
         <activity android:name=".fragment.carpark.ParkOutActivity" />
-        <activity android:name=".fragment.manage.Accident_Manage" />
         <activity android:name=".activity.pass_card.one.OnePassCardActivity" />
         <activity android:name=".activity.pass_card.one.OnePassCardInfoActivity" />
         <activity android:name=".activity.pass_card.PassCardPhotoActivity" />
@@ -84,6 +83,7 @@
         <activity android:name=".activity.pass_card.more.SureCheckActivity" />
         <activity android:name=".activity.ManageActivity"/>
         <activity android:name=".activity.LabelManageActivity"/>
+        <activity android:name=".activity.FilePictureActivity"/>
     </application>
 
 </manifest>

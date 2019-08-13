@@ -134,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="里程"
+                    android:text="路段"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_commonbig" />
 
@@ -147,7 +147,7 @@
                     android:background="@null"
                     android:textColor="#333333"
                     android:ellipsize="end"
-                    android:hint="请输入里程"
+                    android:hint="请输入路段"
                     android:textAlignment="textEnd"
                     android:layout_marginEnd="35dp"
                     android:textCursorDrawable="@null"
@@ -270,7 +270,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="是否上报"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_commonbig" />
@@ -280,7 +280,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:background="@null"
                     android:ellipsize="end"
                     android:hint="请输入是否上报"
@@ -311,7 +311,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="是否整改"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_commonbig" />
@@ -321,7 +321,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:background="@null"
                     android:ellipsize="end"
                     android:hint="请输入是否整改"
@@ -454,7 +454,12 @@
                     android:background="@drawable/icon_take_photo" />
             </LinearLayout>
 
-
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mPhotoRecyclerView"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:overScrollMode="never"
+                android:layout_height="120dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -484,7 +489,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:background="@color/mycolor"
                     android:text="取消"
                     android:textColor="@color/text_white"

@@ -1,10 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/text_white"
-    android:orientation="vertical"
-    tools:context="com.example.administrator.policetong.fragment.CarInFragment">
+    android:orientation="vertical">
 
 
     <ScrollView
@@ -84,7 +82,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="性质"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_commonbig" />
@@ -227,7 +225,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="起点"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_commonbig" />
@@ -237,7 +235,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:background="@null"
                     android:ellipsize="end"
                     android:hint="请输入道路起点"
@@ -268,7 +266,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:text="终点"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_commonbig" />
@@ -278,7 +276,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:background="@null"
                     android:ellipsize="end"
                     android:hint="请输入道路终点"
@@ -308,8 +306,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="里程"
+                    android:layout_marginStart="10dp"
+                    android:text="路段"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_commonbig" />
 
@@ -318,10 +316,10 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:background="@null"
                     android:ellipsize="end"
-                    android:hint="请输入道路里程"
+                    android:hint="请输入道路路段"
                     android:textAlignment="textEnd"
                     android:textCursorDrawable="@null"
                     android:layout_marginEnd="34dp"
@@ -361,7 +359,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:background="@color/mycolor"
                     android:text="取消"
                     android:textColor="@color/text_white"

@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.Window;
 
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.activity.FilePictureActivity;
+import com.example.administrator.policetong.activity.PictureActivity;
 import com.example.administrator.policetong.new_bean.UserBean;
 import com.example.administrator.policetong.utils.SPUtils;
 import com.example.administrator.policetong.utils.UIUtils;
@@ -20,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusException;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,6 +60,30 @@ public abstract class BaseFragment extends Fragment {
         userInfo = SPUtils.getUserInfo(Objects.requireNonNull(getActivity()));
     }
 
+    //    -------------------------------------新页面展示图片------------------------------------------------------------
+    //显示图片
+    public void showPicture(String imageUrlcurrent, ArrayList<String> imageUrls, int position) {
+        if (imageUrls == null) {
+            imageUrls = new ArrayList<>();
+        }
+        if (TextUtils.isEmpty(imageUrlcurrent)) {
+            UIUtils.t("图片链接为空", false, UIUtils.T_ERROR);
+            return;
+        }
+        Intent intent = new Intent(getActivity(), FilePictureActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("image", imageUrlcurrent);
+        bundle.putStringArrayList("images", imageUrls);
+        bundle.putInt("position", position);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    //一张图片
+    public void showPicture(String imageUrlcurrent) {
+        showPicture(imageUrlcurrent, null, 0);
+    }
+
 
     //创建Multipart, fieldName为表单字段名
     public static void createFilePart(MultipartBody.Part[] part, int i, File file) {
@@ -63,7 +91,7 @@ public abstract class BaseFragment extends Fragment {
         part[i] = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
     }
 
-    protected List<LocalMedia> BaseselectList;
+    protected List<LocalMedia> BaseSelectList;
 
     protected void takePhoto(){
         PictureSelector.create(this)
@@ -71,15 +99,30 @@ public abstract class BaseFragment extends Fragment {
                 .maxSelectNum(9)
                 .isCamera(true)
                 .compress(true)// 是否压缩
-                .selectionMedia(BaseselectList)
+                .selectionMedia(BaseSelectList)
                 .forResult(CHOOSE_REQUEST);
     }
 
     protected void takeOnePhoto(){
         PictureSelector.create(this)
-                .openCamera(PictureMimeType.ofImage())
+                .openGallery(PictureMimeType.ofImage())
+                .maxSelectNum(5)
+                .previewImage(false)
+                .isCamera(true)
                 .compress(true)// 是否压缩
-                .selectionMedia(BaseselectList)
+                .selectionMedia(BaseSelectList)
+                .forResult(CHOOSE_REQUEST);
+    }
+
+
+    protected void takeOnePhoto(int num){
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .maxSelectNum(num)
+                .previewImage(false)
+                .isCamera(true)
+                .compress(true)// 是否压缩
+                .selectionMedia(BaseSelectList)
                 .forResult(CHOOSE_REQUEST);
     }
 
@@ -90,8 +133,8 @@ public abstract class BaseFragment extends Fragment {
             switch (requestCode) {
                 case CHOOSE_REQUEST:
                     // 图片、视频、音频选择结果回调
-                    BaseselectList = PictureSelector.obtainMultipleResult(data);
-                    getPhoto(BaseselectList);
+                    BaseSelectList = PictureSelector.obtainMultipleResult(data);
+                    getPhoto(BaseSelectList);
                     break;
             }
         }

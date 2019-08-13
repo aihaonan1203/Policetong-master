@@ -4,6 +4,7 @@ package com.example.administrator.policetong.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -60,7 +61,6 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
     private EditText visit_purpose;
     private EditText visit_context;
     private EditText visit_time;
-    private Button vr_danwei;
     private Button vr_mudi;
     private Button vr_xz;
     private int biunitnature_id;
@@ -71,7 +71,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_visitrectification_add, container, false);
         view.setClickable(true);
@@ -91,7 +91,6 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
         visit_purpose =  view.findViewById(R.id.visit_purpose);
         visit_context =  view.findViewById(R.id.visit_context);
         Button visit_submit = view.findViewById(R.id.visit_submit);
-        vr_danwei =  view.findViewById(R.id.vr_unit);
         vr_mudi =  view.findViewById(R.id.vr_mudi);
         vr_xz =  view.findViewById(R.id.vr_unit_xz);
         visit_time=view.findViewById(R.id.visit_time);
@@ -119,7 +118,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                         }
                     });
                 } else {
-                    vr_danwei.setOnClickListener(new View.OnClickListener() {
+                    vr_xz.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
@@ -140,23 +139,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                         }
                     });
                 } else {
-                    vr_danwei.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-        });
-
-        Util.RequestOption(getActivity(), "biOrganization", new Util.OptionCallBack() {
-            @Override
-            public void CallBack(List<PointBean> list) {
-                if (list.size() != 0) {
-                    Util.setRadioDateIntoDialog(getActivity(), visit_unitname, vr_danwei, list,null);
-                } else {
-                    vr_danwei.setOnClickListener(new View.OnClickListener() {
+                    vr_mudi.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Toast.makeText(getActivity(), "服务器没有数据，无法选择，请手动输入", Toast.LENGTH_SHORT).show();
@@ -225,7 +208,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
             return;
         }
         unit=visit_unit.getText().toString();
-        if (TextUtils.isEmpty(unitname)) {
+        if (TextUtils.isEmpty(unit)) {
             Toast.makeText(getContext(), "单位性质不能为空", Toast.LENGTH_SHORT).show();
             return;
         }

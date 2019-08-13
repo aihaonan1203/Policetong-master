@@ -85,10 +85,10 @@ public class PoliceFragment extends BaseFragment implements View.OnClickListener
                 }
             }
         });
-        getDpt(true);
+        getDpt();
     }
 
-    public void getDpt(boolean needDialog) {
+    public void getDpt() {
         DoNet doNet = new DoNet() {
             @Override
             public void doWhat(String response, int id) {
@@ -105,7 +105,7 @@ public class PoliceFragment extends BaseFragment implements View.OnClickListener
 
             }
         });
-        doNet.doGet(Consts.URL_GETDPT, getActivity(), needDialog);
+        doNet.doGet(Consts.URL_GETDPT, getActivity(), true);
     }
 
     private void initView(View view) {

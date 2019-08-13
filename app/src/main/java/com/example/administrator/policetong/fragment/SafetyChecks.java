@@ -2,20 +2,28 @@ package com.example.administrator.policetong.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
@@ -30,6 +38,7 @@ import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LoadingDialog;
 import com.example.administrator.policetong.utils.UIUtils;
 import com.example.administrator.policetong.utils.Util;
+import com.example.administrator.policetong.utils.imageloader.ILFactory;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -48,7 +57,6 @@ import okhttp3.Call;
  */
 public class SafetyChecks extends BaseFragment implements View.OnClickListener {
 
-    private Button safety_add_submit;
     private EditText safety_time;
     private EditText safety_paddr;
     private EditText safety_licheng;
@@ -57,16 +65,15 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
     private EditText safety_shangbao;
     private EditText safety_zhenggai;
     private EditText safety_zgtime;
-    private Button safety_select_time;
-    private Button sg_select_zgtime;
     private EditText safety_xq;
     private Button unit_btn, fxunit_btn, paddr_btn;
-    private Button iv_take_photo;
     private TextView tv_photo;
     private int biroad_id;
     private int biorganization_id;
     private int biunitnature_id;
     private String xiangqing;
+    private RecyclerView mPhotoRecyclerView;
+    private BaseQuickAdapter<LocalMedia,BaseViewHolder> photoAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -80,12 +87,51 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), ManageActivity.class).putExtra("type", 2));
             }
         });
+        init();
         return view;
     }
 
+    private void init() {
+        photoAdapter=new BaseQuickAdapter<LocalMedia, BaseViewHolder>(R.layout.photo_item_layout) {
+            @Override
+            protected void convert(BaseViewHolder helper, LocalMedia item) {
+                Glide.with(mContext).asBitmap().load(new File(item.getPath())).into((ImageView) helper.getView(R.id.ivImage));
+            }
+        };
+        mPhotoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        mPhotoRecyclerView.setAdapter(photoAdapter);
+        photoAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter mAdapter, View view, int position) {
+                showPicture(photoAdapter.getData().get(position).getPath());
+            }
+        });
+        photoAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, final int position) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("确认操作")
+                        .setMessage("是否删除该张照片！")
+                        .setPositiveButton("取消", null)
+                        .setNegativeButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                photoAdapter.remove(position);
+                                selectList.remove(position);
+                                if (selectList.size()==0){
+                                    mPhotoRecyclerView.setVisibility(View.GONE);
+                                }
+                            }
+                        })
+                        .create().show();
+                return true;
+            }
+        });
+    }
+
     private void initView(View view) {
-        safety_add_submit = view.findViewById(R.id.sg_add_submit);
-        safety_add_submit.setOnClickListener(this);
+        view.findViewById(R.id.sg_add_submit).setOnClickListener(this);
+        mPhotoRecyclerView = view.findViewById(R.id.mPhotoRecyclerView);
         safety_time = view.findViewById(R.id.sg_time);
         safety_paddr = view.findViewById(R.id.sg_type);
         safety_xq = view.findViewById(R.id.safety_xq);
@@ -95,16 +141,13 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
         safety_shangbao = view.findViewById(R.id.sg_chesun);
         safety_zhenggai = view.findViewById(R.id.safety_zhenggai);
         safety_zgtime = view.findViewById(R.id.safety_zgtime);
-        safety_select_time = view.findViewById(R.id.sg_select_time);
-        sg_select_zgtime = view.findViewById(R.id.sg_select_zgtime);
-        safety_select_time.setOnClickListener(this);
-        sg_select_zgtime.setOnClickListener(this);
+        view.findViewById(R.id.sg_select_time).setOnClickListener(this);
+        view.findViewById(R.id.sg_select_zgtime).setOnClickListener(this);
         safety_time.setText(LoadingDialog.getTime5());
         safety_zgtime.setText(LoadingDialog.getTime5());
         fxunit_btn = view.findViewById(R.id.sg_shoushang_s);
         paddr_btn = view.findViewById(R.id.sg_type_btn);
         unit_btn = view.findViewById(R.id.safety_car_type_select);
-        iv_take_photo = view.findViewById(R.id.iv_take_photo);
         tv_photo = view.findViewById(R.id.tv_photo);
         tv_photo.setText(String.format(getResources().getString(R.string.photo), "0"));
         Util.RequestOption(getActivity(), "biRoad", new Util.OptionCallBack() {
@@ -168,10 +211,15 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
                 }
             }
         });
-        iv_take_photo.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.iv_take_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takeOnePhoto();
+                int num = photoAdapter.getData().size();
+                if (num>=5){
+                    UIUtils.t("您最多只能选择5张照片上传！",false,UIUtils.T_WARNING);
+                    return;
+                }
+                takeOnePhoto(5-num);
             }
         });
     }
@@ -363,11 +411,12 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
     }
 
     private List<LocalMedia> selectList = new ArrayList<>();
-
     @Override
     public void getPhoto(List<LocalMedia> selectList) {
+        mPhotoRecyclerView.setVisibility(View.VISIBLE);
         this.selectList.addAll(selectList);
         tv_photo.setText(String.format(getResources().getString(R.string.photo), this.selectList.size() + ""));
+        photoAdapter.addData(selectList);
         selectList.clear();
     }
 }

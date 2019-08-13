@@ -3,21 +3,19 @@ package com.example.administrator.policetong.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.administrator.policetong.R;
+import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.bean.NoticeBean;
-import com.example.administrator.policetong.new_bean.GongGaoBean;
-import com.example.administrator.policetong.new_bean.JingBaoBean;
-import com.example.administrator.policetong.utils.Utils;
 import com.github.nukc.stateview.StateView;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -29,21 +27,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NoticeActivity extends AppCompatActivity implements View.OnClickListener {
+public class NoticeActivity extends BaseActivity implements View.OnClickListener {
 
 
-    private ImageView acArrowBack;
     private ListView listView;
-    private List<NoticeBean> list=new ArrayList<>();
+    private List<NoticeBean> list = new ArrayList<>();
     private StateView mStateView;
     private LinearLayout frameLayout;
+    private TextView title_name;
+    private Toolbar tl_custom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_notice);
         initView();
+        setupToolBar(tl_custom,false);
+        title_name.setText("公告列表");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -53,8 +53,6 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initView() {
         frameLayout = findViewById(R.id.f_content);
-        acArrowBack = findViewById(R.id.ac_arrow_back);
-        acArrowBack.setOnClickListener(this);
         initmStateView(frameLayout);
         mStateView.showEmpty();
         if (list == null) {
@@ -69,22 +67,24 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    showDialog(list.get(i).getContent(),list.get(i).getCreate_time()+"");
+                    showDialog(list.get(i).getContent(), list.get(i).getCreate_time() + "");
                 }
             });
         }
 
+        title_name =  findViewById(R.id.title_name);
+        tl_custom =  findViewById(R.id.tl_custom);
     }
 
-    private void showDialog(String msg,String time){
+    private void showDialog(String msg, String time) {
         new LovelyStandardDialog(NoticeActivity.this, LovelyStandardDialog.ButtonLayout.VERTICAL)
                 .setTopColorRes(R.color.ic_launcher_background)
                 .setButtonsColorRes(R.color.ic_launcher_background)
                 .setIcon(R.mipmap.ic_launcher)
-                .setTitle(getString(R.string.app_name)+"-公告")
-                .setMessage(msg+"\n\n"+time)
-                .setPositiveButton(android.R.string.ok,null)
-                .setPositiveButton("退出",null)
+                .setTitle(getString(R.string.app_name) + "-公告")
+                .setMessage(msg + "\n\n" + time)
+                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton("退出", null)
                 .show();
     }
 
@@ -118,19 +118,19 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
         @SuppressLint("SetTextI18n")
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            ViewHolder holder=null;
-            if (view==null){
+            ViewHolder holder = null;
+            if (view == null) {
                 view = LayoutInflater.from(NoticeActivity.this).inflate(R.layout.notice_layout_item, viewGroup, false);
-                holder=new ViewHolder(view);
+                holder = new ViewHolder(view);
                 view.setTag(holder);
-            }else {
-                holder= (ViewHolder) view.getTag();
+            } else {
+                holder = (ViewHolder) view.getTag();
             }
             NoticeBean bean = list.get(i);
-            holder.taskDate.setText("发布者:"+bean.getUser_id());
-            holder.tv_title.setText("标题:"+bean.getTitle());
-            holder.tv_msg.setText("公告内容:"+bean.getContent());
-            holder.tv_time.setText("发布日期:"+bean.getCreate_time());
+            holder.taskDate.setText("发布者:" + bean.getUser_id());
+            holder.tv_title.setText("标题:" + bean.getTitle());
+            holder.tv_msg.setText("公告内容:" + bean.getContent());
+            holder.tv_time.setText("发布日期:" + bean.getCreate_time());
             return view;
         }
 

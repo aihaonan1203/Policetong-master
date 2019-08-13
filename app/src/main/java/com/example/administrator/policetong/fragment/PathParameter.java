@@ -3,6 +3,7 @@ package com.example.administrator.policetong.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -39,14 +40,13 @@ public class PathParameter extends Fragment implements View.OnClickListener {
     private EditText pp_start;
     private EditText pp_end;
     private EditText pp_distance;
-    private Button pp_add_submit;
     private Button p_name,p_nature,p_pavement,p_grade;
     private int road_id,biroadtype_id,biroadgrade_id;
 
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_path_parameter, container, false);
@@ -56,16 +56,15 @@ public class PathParameter extends Fragment implements View.OnClickListener {
 
 
     private void initView(View view) {
-        pp_name = (EditText) view.findViewById(R.id.pp_name);
-        pp_nature = (EditText) view.findViewById(R.id.pp_nature);
-        pp_grade = (EditText) view.findViewById(R.id.pp_grade);
-        pp_pavement = (EditText) view.findViewById(R.id.pp_pavement);
-        pp_start = (EditText) view.findViewById(R.id.pp_start);
-        pp_end = (EditText) view.findViewById(R.id.pp_end);
-        pp_distance = (EditText) view.findViewById(R.id.pp_distance);
-        pp_add_submit = (Button) view.findViewById(R.id.pp_add_submit);
-        p_grade = (Button) view.findViewById(R.id.p_grade);
-        pp_add_submit.setOnClickListener(this);
+        pp_name =  view.findViewById(R.id.pp_name);
+        pp_nature =  view.findViewById(R.id.pp_nature);
+        pp_grade =  view.findViewById(R.id.pp_grade);
+        pp_pavement =  view.findViewById(R.id.pp_pavement);
+        pp_start =  view.findViewById(R.id.pp_start);
+        pp_end =  view.findViewById(R.id.pp_end);
+        pp_distance =  view.findViewById(R.id.pp_distance);
+        p_grade =  view.findViewById(R.id.p_grade);
+        view.findViewById(R.id.pp_add_submit).setOnClickListener(this);
         p_name=view.findViewById(R.id.pp_btn_name);
         p_nature=view.findViewById(R.id.pp_btn_nature);
         p_pavement=view.findViewById(R.id.pp_btn_pavement);
