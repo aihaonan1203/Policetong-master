@@ -11,6 +11,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.example.administrator.policetong.bean.LocationBean;
 import com.example.administrator.policetong.bean.new_bean.UserInfo;
+import com.example.administrator.policetong.utils.CrashHandler;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.LocationUtils;
 import com.example.administrator.policetong.utils.SPUtils;
@@ -37,6 +38,7 @@ public class App extends Application {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
         }
+        CrashHandler.getInstance().init();
     }
 
     public static App getApplication() {
