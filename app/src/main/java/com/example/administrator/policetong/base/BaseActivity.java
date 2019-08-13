@@ -23,6 +23,7 @@ import com.example.administrator.policetong.utils.SPUtils;
 import com.example.administrator.policetong.utils.UIUtils;
 import com.example.administrator.policetong.utils.Utils;
 import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
@@ -149,7 +150,21 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void takeOnePhoto(){
         PictureSelector.create(this)
-                .openCamera(PictureMimeType.ofImage())
+                .openGallery(PictureMimeType.ofImage())
+                .selectionMode(PictureConfig.SINGLE)
+                .previewImage(false)
+                .isCamera(true)
+                .compress(true)// 是否压缩
+                .selectionMedia(selectList)
+                .forResult(CHOOSE_REQUEST);
+    }
+
+    protected void takeOnePhoto(int num){
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .maxSelectNum(num)
+                .previewImage(false)
+                .isCamera(true)
                 .compress(true)// 是否压缩
                 .selectionMedia(selectList)
                 .forResult(CHOOSE_REQUEST);
@@ -234,6 +249,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
+    //一张图片
+    public void showPicture(String imageUrlcurrent) {
+        showPicture(imageUrlcurrent, null, 0);
+    }
     //显示图片
     public void showPicture(String imageUrlcurrent, ArrayList<String> imageUrls, int position) {
         if (imageUrls == null) {

@@ -118,6 +118,7 @@ public class SafetyChecks extends BaseFragment implements View.OnClickListener {
                             public void onClick(DialogInterface dialog, int which) {
                                 photoAdapter.remove(position);
                                 selectList.remove(position);
+                                tv_photo.setText(String.format(getResources().getString(R.string.photo), selectList.size() + ""));
                                 if (selectList.size()==0){
                                     mPhotoRecyclerView.setVisibility(View.GONE);
                                 }

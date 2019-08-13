@@ -433,6 +433,14 @@
                 android:background="@drawable/icon_take_photo" />
         </LinearLayout>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mPhotoRecyclerView"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:overScrollMode="never"
+            android:layout_marginStart="10dp"
+            android:layout_height="120dp"/>
+
         <Button
             android:id="@+id/ds_add_submit"
             android:layout_width="match_parent"

@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/text_white"
-    android:orientation="vertical"
-    tools:context="com.example.administrator.policetong.fragment.CarInFragment">
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -424,6 +423,14 @@
                         android:layout_marginStart="10dp"
                         android:background="@drawable/icon_take_photo" />
                 </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mPhotoRecyclerView"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:overScrollMode="never"
+                    android:layout_marginStart="10dp"
+                    android:layout_height="120dp"/>
 
 
                 <Button

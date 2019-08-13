@@ -371,6 +371,13 @@
                 android:background="@drawable/icon_take_photo" />
         </LinearLayout>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mPhotoRecyclerView"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:overScrollMode="never"
+            android:layout_height="120dp"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
