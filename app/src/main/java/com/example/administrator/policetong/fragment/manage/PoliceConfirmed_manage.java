@@ -105,12 +105,16 @@ public class PoliceConfirmed_manage extends BaseFragment {
                 }
                 com.alibaba.fastjson.JSONArray jsonArray = json.getJSONArray("data");
                 List<PoliceConfirmed_bean> data = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), PoliceConfirmed_bean.class);
-                adapter.setNewData(data);
-                if (data.size() < pageSize) {
-                    adapter.loadMoreEnd();
-                } else {
-                    adapter.loadMoreComplete();
-                    pageIndex++;
+                if (data==null||data.size()==0){
+                    adapter.setEmptyView(notDataView);
+                }else {
+                    adapter.addData(data);
+                    if (data.size() < pageSize) {
+                        adapter.loadMoreEnd();
+                    } else {
+                        adapter.loadMoreComplete();
+                        pageIndex++;
+                    }
                 }
             }
         };
@@ -120,10 +124,10 @@ public class PoliceConfirmed_manage extends BaseFragment {
                 adapter.setEmptyView(NetErrorView);
             }
         });
-        RequestParams requestParams = new RequestParams(Consts.URL_RCQWLIST);
+        RequestParams requestParams = new RequestParams(Consts.URL_JBWLIST);
         requestParams.addParameter("limit", pageSize);
         requestParams.addParameter("page", pageIndex);
-        doNet.doGet(Consts.URL_JBWLIST, getActivity(), needDialog);
+        doNet.doGet(requestParams.toString(), getActivity(), needDialog);
     }
 
 

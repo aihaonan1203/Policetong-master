@@ -95,12 +95,17 @@ public class ParkActivity extends BaseActivity {
                 com.alibaba.fastjson.JSONArray jsonArray = json.getJSONArray("data");
                 List<CarParkBean> data = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), CarParkBean.class);
                 adapter.setNewData(data);
-                if (data.size() < pageSize) {
-                    adapter.loadMoreEnd();
-                } else {
-                    adapter.loadMoreComplete();
-                    pageIndex++;
+                if (data==null||data.size()==0){
+                    adapter.setEmptyView(notDataView);
+                }else {
+                    if (data.size() < pageSize) {
+                        adapter.loadMoreEnd();
+                    } else {
+                        adapter.loadMoreComplete();
+                        pageIndex++;
+                    }
                 }
+
             }
         };
         doNet.setOnErrorListener(new DoNet.OnErrorListener() {
@@ -117,16 +122,14 @@ public class ParkActivity extends BaseActivity {
 
     @SuppressLint("SetTextI18n")
     private void showPopueWindow(final int id) {
-        View popView = View.inflate(this, R.layout.buttonpopwind, null);
-        Button bt_camera = popView.findViewById(R.id.btn_pop_camera);
-        Button bt_cancle = popView.findViewById(R.id.btn_pop_cancel);
-        bt_camera.setText("车辆驶出登记");
+        final CarParkBean carParkBean = adapter.getData().get(id);
+        View popView = View.inflate(this, R.layout.buttonpopwind_car_park, null);
         ((TextView) popView.findViewById(R.id.number)).setText(id + 1 + "");
         final PopupWindow popupWindow = new PopupWindow(popView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.setAnimationStyle(R.style.anim_menu_bottombar);
         popupWindow.setOutsideTouchable(true);
-        bt_camera.setOnClickListener(new View.OnClickListener() {
+        popView.findViewById(R.id.tvItem1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
@@ -139,7 +142,26 @@ public class ParkActivity extends BaseActivity {
             }
 
         });
-        bt_cancle.setOnClickListener(new View.OnClickListener() {
+        popView.findViewById(R.id.tvItem2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                showPicture(carParkBean.getInpic().get(0),carParkBean.getInpic(),0);
+            }
+        });
+        if (carParkBean.getOutpic()==null||carParkBean.getOutpic().size()==0){
+            popView.findViewById(R.id.tvItem3).setVisibility(View.GONE);
+        }else {
+            popView.findViewById(R.id.tvItem3).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindow.dismiss();
+                    showPicture(carParkBean.getOutpic().get(0),carParkBean.getOutpic(),0);
+                }
+
+            });
+        }
+        popView.findViewById(R.id.tvItem4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();

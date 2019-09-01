@@ -50,6 +50,7 @@ import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,12 +108,16 @@ public class Study_manage extends BaseFragment {
                 }
                 com.alibaba.fastjson.JSONArray jsonArray = json.getJSONArray("data");
                 List<StudyBean> data = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), StudyBean.class);
-                adapter.setNewData(data);
-                if (data.size() < pageSize) {
-                    adapter.loadMoreEnd();
-                } else {
-                    adapter.loadMoreComplete();
-                    pageIndex++;
+                if (data==null||data.size()==0){
+                    adapter.setEmptyView(notDataView);
+                }else {
+                    adapter.addData(data);
+                    if (data.size() < pageSize) {
+                        adapter.loadMoreEnd();
+                    } else {
+                        adapter.loadMoreComplete();
+                        pageIndex++;
+                    }
                 }
             }
         };
@@ -122,10 +127,10 @@ public class Study_manage extends BaseFragment {
                 adapter.setEmptyView(NetErrorView);
             }
         });
-        RequestParams requestParams = new RequestParams(Consts.URL_RCQWLIST);
+        RequestParams requestParams = new RequestParams(Consts.URL_STUDYLIST);
         requestParams.addParameter("limit", pageSize);
         requestParams.addParameter("page", pageIndex);
-        doNet.doGet(Consts.URL_STUDYLIST, getActivity(), needDialog);
+        doNet.doGet(requestParams.toString(), getActivity(), needDialog);
     }
 
 
@@ -144,6 +149,10 @@ public class Study_manage extends BaseFragment {
         bt_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StudyBean bean = adapter.getData().get(id);
+                String[] photos = bean.getPic().split(",");
+                ArrayList<String> photoList = new ArrayList<>(Arrays.asList(photos));
+                showManyPicture(photoList.get(0),photoList,0);
                 popupWindow.dismiss();
             }
 
@@ -182,7 +191,7 @@ public class Study_manage extends BaseFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                showPopueWindow(position);
+                showPopueWindow(position);
             }
         });
         NetErrorView = NoDataOrNetError.netError(mRecyclerView, getActivity());

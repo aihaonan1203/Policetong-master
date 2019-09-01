@@ -94,7 +94,7 @@
                     android:padding="5dp"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="欢迎使用二大中队台账APP，祝您工作顺利，生活愉快"
+                    android:text="欢迎使用九江市公安局交通管理支队第二大队台账APP，祝您工作顺利，生活愉快"
                     android:textColor="#666666"
                     android:textSize="12sp" />
 

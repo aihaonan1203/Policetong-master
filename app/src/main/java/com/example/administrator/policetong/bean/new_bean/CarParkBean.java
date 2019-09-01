@@ -1,24 +1,27 @@
 package com.example.administrator.policetong.bean.new_bean;
 
+import java.util.ArrayList;
+
 public class CarParkBean {
 
-
     /**
-     * id : 1
-     * ownername : 车主1
-     * tel : 13912345678
-     * parkid : 2号停车场
-     * plateno : 没有车牌号
-     * typeid : 小型轿车
-     * engineno : 没有发动机号
-     * frameno : 没有车架号
-     * intime : 2019-06-01 11:50:36
-     * indesc : 发生交通事故，待进一步处理。
-     * inuid : 超级管理员
+     * id : 7
+     * ownername : 吴献伟
+     * tel : 吴献伟
+     * parkid : 八里湖北大桥下停车场
+     * plateno : 无
+     * typeid : 三轮电动车
+     * engineno : 无
+     * frameno : 无
+     * intime : 2019-08-13 03:39:18
+     * indesc : 超载
+     * inuid : 徐倩玲
+     * inpic : ["20190813/d88047dbd51263629822b853f7df1c60.JPEG"]
      * outtime :
      * outdesc :
      * outuid :
      * voucher :
+     * outpic :
      * isdel : 0
      * status : 0
      */
@@ -38,8 +41,10 @@ public class CarParkBean {
     private String outdesc;
     private String outuid;
     private String voucher;
+    private ArrayList<String> outpic;
     private int isdel;
     private int status;
+    private ArrayList<String> inpic;
 
     public int getId() {
         return id;
@@ -161,6 +166,14 @@ public class CarParkBean {
         this.voucher = voucher;
     }
 
+    public ArrayList<String> getOutpic() {
+        return outpic;
+    }
+
+    public void setOutpic(ArrayList<String> outpic) {
+        this.outpic = outpic;
+    }
+
     public int getIsdel() {
         return isdel;
     }
@@ -175,5 +188,13 @@ public class CarParkBean {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public ArrayList<String> getInpic() {
+        return inpic;
+    }
+
+    public void setInpic(ArrayList<String> inpic) {
+        this.inpic = inpic;
     }
 }

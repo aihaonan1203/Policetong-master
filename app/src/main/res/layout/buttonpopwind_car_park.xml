@@ -47,16 +47,37 @@
 
         <Button
             android:layout_marginTop="1dp"
-            android:id="@+id/btn_pop_camera"
+            android:id="@+id/tvItem1"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:text="查看照片"
+            android:text="车辆驶出登记"
             android:textColor="@color/text_white"
             android:background="@color/mycolor"
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/btn_pop_cancel"
+            android:id="@+id/tvItem2"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_white"
+            android:background="@color/mycolor"
+            android:text="查看车辆入场照片"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/tvItem3"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_white"
+            android:background="@color/mycolor"
+            android:text="查看车辆出场照片"
+            android:textSize="18sp" />
+
+
+        <Button
+            android:id="@+id/tvItem4"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="2dp"

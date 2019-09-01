@@ -23,6 +23,8 @@ import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.utils.Utils;
 import com.example.administrator.policetong.view.NoDataOrNetError;
 
+import org.xutils.http.RequestParams;
+
 import java.util.List;
 
 public class OnePassCardActivity extends BaseActivity {
@@ -34,6 +36,8 @@ public class OnePassCardActivity extends BaseActivity {
     private BaseQuickAdapter<PassCardBean,BaseViewHolder> adapter;
     private View notDataView;
     private View NetErrorView;
+    private int pageSize = 10;
+    private int pageIndex = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,18 @@ public class OnePassCardActivity extends BaseActivity {
                 startActivity(new Intent(OnePassCardActivity.this,OnePassCardInfoActivity.class).putExtra("card_id",String.valueOf(adapter.getData().get(position).getId())));
             }
         });
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getPassList(false);
+            }
+        }, mRecyclerView);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getPassList(true);
+            }
+        });
     }
 
     private void initToolbar() {
@@ -112,7 +128,10 @@ public class OnePassCardActivity extends BaseActivity {
         getPassList(false);
     }
 
-    public void getPassList(boolean needDialog) {
+    public void getPassList(final boolean needDialog) {
+        if (needDialog) {
+            pageIndex = 1;
+        }
         DoNet doNet=new DoNet() {
             @Override
             public void doWhat(String response, int id) {
@@ -129,12 +148,26 @@ public class OnePassCardActivity extends BaseActivity {
                     return;
                 }
                 List<PassCardBean> passCardBeans = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), PassCardBean.class);
-                Log.e("doWhat: ",passCardBeans.size()+"" );
-                if (passCardBeans.size()==0){
+                if (passCardBeans==null||passCardBeans.size()==0){
                     adapter.setEmptyView(notDataView);
-                    return;
+                }else {
+                    if (needDialog){
+                        adapter.setNewData(passCardBeans);
+                        if (passCardBeans.size() < pageSize){
+                            adapter.loadMoreEnd();
+                        }else {
+                            pageIndex++;
+                        }
+                    }else {
+                        adapter.addData(passCardBeans);
+                        if (passCardBeans.size() < pageSize) {
+                            adapter.loadMoreEnd();
+                        } else {
+                            adapter.loadMoreComplete();
+                            pageIndex++;
+                        }
+                    }
                 }
-                adapter.setNewData(passCardBeans);
             }
         };
         doNet.setOnErrorListener(new DoNet.OnErrorListener() {
@@ -147,7 +180,10 @@ public class OnePassCardActivity extends BaseActivity {
                 }
             }
         });
-        doNet.doGet(Consts.URL_ONE_LIST ,this,needDialog);
+        RequestParams requestParams = new RequestParams(Consts.URL_ONE_LIST);
+        requestParams.addParameter("limit", pageSize);
+        requestParams.addParameter("page", pageIndex);
+        doNet.doGet(requestParams.toString(), this, needDialog);
     }
 
     @Override
