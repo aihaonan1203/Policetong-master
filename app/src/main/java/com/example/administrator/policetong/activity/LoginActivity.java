@@ -74,7 +74,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onStart() {
         super.onStart();
         if (SPUtils.getBoolean("isLogin", false)) {
-            userlogin(SPUtils.getString("userId", "1111"), SPUtils.getString("password", "11111"));
+            userLogin(SPUtils.getString("userId", "1111"), SPUtils.getString("password", "11111"));
         }
     }
 
@@ -185,12 +185,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     Toast.makeText(this, "请输入你的密码！", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                userlogin(username, userpwd);
+                userLogin(username, userpwd);
                 break;
         }
     }
 
-    private void userlogin(final String name, final String pwd) {
+    private void userLogin(final String name, final String pwd) {
         Map<String, String> input = new HashMap<>();
         input.put("user", name);
         input.put("password", pwd);
