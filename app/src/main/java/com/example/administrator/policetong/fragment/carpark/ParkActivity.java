@@ -68,9 +68,7 @@ public class ParkActivity extends BaseActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter mAdapter, View view, int position) {
-                if (adapter.getData().get(position).getStatus()==0) {
-                    showPopueWindow(position);
-                }
+                showPopueWindow(position);
             }
         });
     }
@@ -83,6 +81,7 @@ public class ParkActivity extends BaseActivity {
         DoNet doNet = new DoNet() {
             @Override
             public void doWhat(String response, int id) {
+                adapter.loadMoreComplete();
                 if (!GsonUtil.verifyResult_show(response)) {
                     return;
                 }
@@ -94,18 +93,17 @@ public class ParkActivity extends BaseActivity {
                 }
                 com.alibaba.fastjson.JSONArray jsonArray = json.getJSONArray("data");
                 List<CarParkBean> data = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), CarParkBean.class);
-                adapter.setNewData(data);
                 if (data==null||data.size()==0){
                     adapter.setEmptyView(notDataView);
-                }else {
-                    if (data.size() < pageSize) {
-                        adapter.loadMoreEnd();
-                    } else {
-                        adapter.loadMoreComplete();
-                        pageIndex++;
-                    }
+                    adapter.loadMoreEnd();
+                    return;
                 }
-
+                adapter.addData(data);
+                if (data.size() < pageSize) {
+                    adapter.loadMoreEnd();
+                } else {
+                    pageIndex++;
+                }
             }
         };
         doNet.setOnErrorListener(new DoNet.OnErrorListener() {
@@ -114,10 +112,10 @@ public class ParkActivity extends BaseActivity {
                 adapter.setEmptyView(NetErrorView);
             }
         });
-        RequestParams requestParams = new RequestParams(Consts.URL_RCQWLIST);
+        RequestParams requestParams = new RequestParams(Consts.URL_VEHICLELIST);
         requestParams.addParameter("limit", pageSize);
         requestParams.addParameter("page", pageIndex);
-        doNet.doGet(Consts.URL_VEHICLELIST, this, needDialog);
+        doNet.doGet(requestParams.toString(), this, needDialog);
     }
 
     @SuppressLint("SetTextI18n")
@@ -142,16 +140,11 @@ public class ParkActivity extends BaseActivity {
             }
 
         });
-        popView.findViewById(R.id.tvItem2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-                showPicture(carParkBean.getInpic().get(0),carParkBean.getInpic(),0);
-            }
-        });
-        if (carParkBean.getOutpic()==null||carParkBean.getOutpic().size()==0){
+        if (carParkBean.getStatus()==0){
             popView.findViewById(R.id.tvItem3).setVisibility(View.GONE);
+
         }else {
+            popView.findViewById(R.id.tvItem1).setVisibility(View.GONE);
             popView.findViewById(R.id.tvItem3).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -161,6 +154,13 @@ public class ParkActivity extends BaseActivity {
 
             });
         }
+        popView.findViewById(R.id.tvItem2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                showPicture(carParkBean.getInpic().get(0),carParkBean.getInpic(),0);
+            }
+        });
         popView.findViewById(R.id.tvItem4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

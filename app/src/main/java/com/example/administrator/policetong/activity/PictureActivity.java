@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.utils.imageloader.ILFactory;
@@ -123,8 +124,9 @@ public class PictureActivity extends BaseActivity {
         @Override
         public View instantiateItem(@NonNull ViewGroup container, final int position) {
             final PhotoView photoView = new PhotoView(container.getContext());
-            ILFactory.getLoader().loadNet(photoView,String.valueOf("https://pic.jjedd.net:9000/"+urls.get(position)),new ILoader.Options(R.drawable.bg_loading, R.drawable.empty_img));
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            Glide.with(photoView.getContext()).load(String.valueOf("https://pic.jjedd.net:9000/"+urls.get(position))).apply(new RequestOptions().placeholder(R.drawable.bg_loading).error(R.drawable.empty_img)).into(photoView);
+//            ILFactory.getLoader().loadNet(photoView,String.valueOf("https://pic.jjedd.net:9000/"+urls.get(position)),new ILoader.Options(R.drawable.bg_loading, R.drawable.empty_img));
             return photoView;
 
         }

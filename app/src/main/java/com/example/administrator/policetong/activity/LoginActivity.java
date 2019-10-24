@@ -19,12 +19,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.policetong.MainActivity;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.base.App;
 import com.example.administrator.policetong.base.BaseActivity;
 import com.example.administrator.policetong.base.CommonThrowable;
+import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.base.VerifyConsumer;
+import com.example.administrator.policetong.network.DoNet;
 import com.example.administrator.policetong.network.Network;
 import com.example.administrator.policetong.utils.LocationUtils;
 import com.example.administrator.policetong.utils.RequestBodyUtils;
@@ -33,7 +37,6 @@ import com.master.permissionhelper.BuildConfig;
 import com.master.permissionhelper.PermissionHelper;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -191,41 +194,67 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void userLogin(final String name, final String pwd) {
-        Map<String, String> input = new HashMap<>();
-        input.put("user", name);
-        input.put("password", pwd);
-        JSONObject jsonObject = new JSONObject(input);
-        disposable = Network.getPoliceApi(true,this).login(RequestBodyUtils.getRequestBody(jsonObject))
-                .compose(BaseActivity.<ResponseBody>applySchedulers())
-                .subscribe(new VerifyConsumer() {
-                    @Override
-                    public void result(String result) {
-                        try {
-                            JSONObject jsonObject1=new JSONObject(result);
-                            if (jsonObject1.getString("token").isEmpty()){
-                                return;
-                            }
-                            App.initUser(result);
-                            SPUtils.saveBoolean("isLogin", true);
-                            SPUtils.saveString("userId", name);
-                            SPUtils.saveString("password", pwd);
-                            finish();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+        final JSONObject jsonObject = new JSONObject();
+        jsonObject.put("user",name);
+        jsonObject.put("password",pwd);
+        DoNet doNet=new DoNet() {
+            @Override
+            public void doWhat(String response, int id) {
+                try {
+                    JSONObject jsonObject1 = JSON.parseObject(response);
+                    if (jsonObject1.getJSONObject("data").getString("token").isEmpty()) {
+                        return;
                     }
-                }, new CommonThrowable() {
-                    @Override
-                    public void onThrowable(Throwable throwable) {
-                        SPUtils.saveBoolean("isLogin", false);
-                    }
-                });
+                    App.initUser(jsonObject1.getString("data"));
+                    SPUtils.saveBoolean("isLogin", true);
+                    SPUtils.saveString("userId", name);
+                    SPUtils.saveString("password", pwd);
+                    finish();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(App.getApplication(), "登陆失败!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        doNet.setOnErrorListener(new DoNet.OnErrorListener() {
+            @Override
+            public void onError(int code) {
+                Toast.makeText(App.getApplication(), "登陆失败，请检查网络是否连接!", Toast.LENGTH_SHORT).show();
+                SPUtils.saveBoolean("isLogin", false);
+            }
+        });
+        doNet.doPost(jsonObject, Consts.URL_LOGIN,this,true);
+//        disposable = Network.getPoliceApi(true,this).login(RequestBodyUtils.getRequestBody(jsonObject))
+//                .compose(BaseActivity.<ResponseBody>applySchedulers())
+//                .subscribe(new VerifyConsumer() {
+//                    @Override
+//                    public void result(String result) {
+//                        try {
+//                            JSONObject jsonObject1=new JSONObject(result);
+//                            if (jsonObject1.getString("token").isEmpty()){
+//                                return;
+//                            }
+//                            App.initUser(result);
+//                            SPUtils.saveBoolean("isLogin", true);
+//                            SPUtils.saveString("userId", name);
+//                            SPUtils.saveString("password", pwd);
+//                            finish();
+//                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }, new CommonThrowable() {
+//                    @Override
+//                    public void onThrowable(Throwable throwable) {
+//                        SPUtils.saveBoolean("isLogin", false);
+//                    }
+//                });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disposable.dispose();
     }
 }
