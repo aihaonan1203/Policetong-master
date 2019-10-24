@@ -1,15 +1,22 @@
 package com.example.administrator.policetong.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.administrator.policetong.R;
 import com.example.administrator.policetong.base.BaseActivity;
+import com.example.administrator.policetong.utils.imageloader.ILFactory;
+import com.example.administrator.policetong.utils.imageloader.ILoader;
 import com.example.administrator.policetong.view.PhotoViewPager;
 
 import java.util.ArrayList;
@@ -21,8 +28,9 @@ import uk.co.senab.photoview.PhotoView;
 public class PictureActivity extends BaseActivity {
 
 
-    PhotoViewPager mViewPager;
+    private PhotoViewPager mViewPager;
     private TextView title_name;
+    private TextView tvNum;
     private Toolbar tl_custom;
 
 
@@ -45,6 +53,9 @@ public class PictureActivity extends BaseActivity {
     protected void initView() {
 //        1 获取图片地址的List 和当前图片的地址
         mViewPager = findViewById(R.id.picture_viewpager);
+        title_name =  findViewById(R.id.title_name);
+        tvNum =  findViewById(R.id.tvNum);
+        tl_custom =  findViewById(R.id.tl_custom);
 
         List<String> images = getIntent().getStringArrayListExtra("images");
 
@@ -54,6 +65,7 @@ public class PictureActivity extends BaseActivity {
 
         if (images.size() > 0) {
             urls = images;
+            tvNum.setText(String.valueOf("1/"+images.size()));
         } else {
             urls = new ArrayList<>();
             urls.add(currentImage);
@@ -75,14 +87,28 @@ public class PictureActivity extends BaseActivity {
         adapter.setUrls(urls);
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(currentItem);
-        title_name =  findViewById(R.id.title_name);
-        tl_custom =  findViewById(R.id.tl_custom);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                tvNum.setText(String.valueOf((i+1)+"/"+urls.size()));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
 
     static class SamplePagerAdapter extends PagerAdapter {
 
-        public void setUrls(List urls) {
+        public void setUrls(List<String> urls) {
             this.urls = urls;
         }
 
@@ -93,21 +119,18 @@ public class PictureActivity extends BaseActivity {
             return urls.size();
         }
 
+        @NonNull
         @Override
-        public View instantiateItem(ViewGroup container, final int position) {
-
-
+        public View instantiateItem(@NonNull ViewGroup container, final int position) {
             final PhotoView photoView = new PhotoView(container.getContext());
-            Glide.with(container.getContext())
-                    .load(urls.get(position))
-                    .into(photoView);
+            ILFactory.getLoader().loadNet(photoView,String.valueOf("https://pic.jjedd.net:9000/"+urls.get(position)),new ILoader.Options(R.drawable.bg_loading, R.drawable.empty_img));
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             return photoView;
 
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             container.removeView((View) object);
         }
 

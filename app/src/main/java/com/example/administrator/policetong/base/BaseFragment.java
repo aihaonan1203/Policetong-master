@@ -84,6 +84,34 @@ public abstract class BaseFragment extends Fragment {
         showPicture(imageUrlcurrent, null, 0);
     }
 
+    public void showManyPicture(String imageUrlcurrent, ArrayList<String> imageUrls, int position) {
+        if (imageUrls == null) {
+            imageUrls = new ArrayList<>();
+        }
+        if (TextUtils.isEmpty(imageUrlcurrent)) {
+            UIUtils.t("图片链接为空", false, UIUtils.T_ERROR);
+            return;
+        }
+
+//        Dialog dia = new Dialog(this, R.style.alertDialog_style);
+//        dia.setContentView(R.layout.activity_start_dialog);
+//        // 可放大的imageView
+//        MyZoomImageView imageView = (MyZoomImageView ) dia.findViewById(R.area_id.dialog_imageview);
+//        Glide.with(this).load(imageUrlcurrent).into(imageView);
+//        dia.show();
+
+        Intent intent = new Intent(getActivity(), PictureActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("image", imageUrlcurrent);
+        bundle.putStringArrayList("images", imageUrls);
+        bundle.putInt("position", position);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+
+
+
 
     //创建Multipart, fieldName为表单字段名
     public static void createFilePart(MultipartBody.Part[] part, int i, File file) {

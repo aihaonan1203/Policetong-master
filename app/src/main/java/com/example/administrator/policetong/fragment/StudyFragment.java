@@ -227,7 +227,7 @@ public class StudyFragment extends BaseFragment implements View.OnClickListener 
                 dialog.setOnSureLisener(new OnSureLisener() {
                     @Override
                     public void onSure(Date date) {
-                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date);
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
                         stu_study_time.setText(string);
                     }
                 });

@@ -25,11 +25,15 @@ import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.bean.Road_bean;
 import com.example.administrator.policetong.bean.SafetyChecks_bean;
 import com.example.administrator.policetong.network.DoNet;
+import com.example.administrator.policetong.new_bean.AccidentBean;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.view.NoDataOrNetError;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import org.xutils.http.RequestParams;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,6 +47,8 @@ public class SafetyChecks_manage extends BaseFragment {
     private RecyclerView mRecyclerView;
     private MyAdapter adapter;
     private View notDataView;
+    private int pageSize = 10;
+    private int pageIndex = 1;
 
 
     @Override
@@ -71,14 +77,23 @@ public class SafetyChecks_manage extends BaseFragment {
                     return;
                 }
                 List<SafetyChecks_bean> data = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), SafetyChecks_bean.class);
-                if (data.size()==0){
+                if (data==null||data.size()==0){
                     adapter.setEmptyView(notDataView);
-                    return;
+                }else {
+                    adapter.addData(data);
+                    if (data.size() < pageSize) {
+                        adapter.loadMoreEnd();
+                    } else {
+                        adapter.loadMoreComplete();
+                        pageIndex++;
+                    }
                 }
-                adapter.setNewData(data);
             }
         };
-        doNet.doGet(Consts.URL_AQYHPCLIST ,getActivity(),needDialog);
+        RequestParams requestParams = new RequestParams(Consts.URL_AQYHPCLIST);
+        requestParams.addParameter("limit", pageSize);
+        requestParams.addParameter("page", pageIndex);
+        doNet.doGet(requestParams.toString() ,getActivity(),needDialog);
     }
 
 
@@ -97,6 +112,10 @@ public class SafetyChecks_manage extends BaseFragment {
         bt_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SafetyChecks_bean bean = adapter.getData().get(id);
+                String[] photos = bean.getPic().split(",");
+                ArrayList<String> photoList = new ArrayList<>(Arrays.asList(photos));
+                showManyPicture(photoList.get(0),photoList,0);
                 popupWindow.dismiss();
             }
 
@@ -135,9 +154,15 @@ public class SafetyChecks_manage extends BaseFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                showPopueWindow(position);
+                showPopueWindow(position);
             }
         });
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getNetData(false);
+            }
+        }, mRecyclerView);
     }
 
     @Override

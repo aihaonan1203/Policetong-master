@@ -50,7 +50,7 @@
             android:id="@+id/btn_pop_camera"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:text="@string/amend"
+            android:text="查看照片"
             android:textColor="@color/text_white"
             android:background="@color/mycolor"
             android:textSize="18sp" />

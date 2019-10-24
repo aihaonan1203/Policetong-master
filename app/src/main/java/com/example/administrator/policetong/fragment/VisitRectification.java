@@ -225,7 +225,7 @@ public class VisitRectification extends BaseFragment implements View.OnClickList
                 dialog.setOnSureLisener(new OnSureLisener() {
                     @Override
                     public void onSure(Date date) {
-                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date);
+                        @SuppressLint("SimpleDateFormat") String string=new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
                         visit_time.setText(string);
                     }
                 });

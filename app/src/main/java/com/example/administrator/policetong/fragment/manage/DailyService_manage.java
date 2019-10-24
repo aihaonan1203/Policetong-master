@@ -26,6 +26,7 @@ import com.example.administrator.policetong.base.BaseFragment;
 import com.example.administrator.policetong.base.Consts;
 import com.example.administrator.policetong.bean.Daily_bean;
 import com.example.administrator.policetong.network.DoNet;
+import com.example.administrator.policetong.new_bean.AccidentBean;
 import com.example.administrator.policetong.utils.GsonUtil;
 import com.example.administrator.policetong.view.NoDataOrNetError;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -33,6 +34,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,12 +85,16 @@ public class DailyService_manage extends BaseFragment {
                 }
                 com.alibaba.fastjson.JSONArray jsonArray = json.getJSONArray("data");
                 List<Daily_bean> data = GsonUtil.parseJsonArrayWithGson(jsonArray.toString(), Daily_bean.class);
-                adapter.setNewData(data);
-                if (data.size()<pageSize){
-                    adapter.loadMoreEnd();
+                if (data==null||data.size()==0){
+                    adapter.setEmptyView(notDataView);
                 }else {
-                    adapter.loadMoreComplete();
-                    pageIndex++;
+                    adapter.addData(data);
+                    if (data.size() < pageSize) {
+                        adapter.loadMoreEnd();
+                    } else {
+                        adapter.loadMoreComplete();
+                        pageIndex++;
+                    }
                 }
             }
         };
@@ -101,7 +107,7 @@ public class DailyService_manage extends BaseFragment {
         RequestParams requestParams=new RequestParams(Consts.URL_RCQWLIST);
         requestParams.addParameter("limit",pageSize);
         requestParams.addParameter("page",pageIndex);
-        doNet.doGet(Consts.URL_RCQWLIST,getActivity(), needDialog);
+        doNet.doGet(requestParams.toString(),getActivity(), needDialog);
     }
 
 
@@ -120,6 +126,10 @@ public class DailyService_manage extends BaseFragment {
         bt_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Daily_bean bean = adapter.getData().get(id);
+                String[] photos = bean.getPic().split(",");
+                ArrayList<String> photoList = new ArrayList<>(Arrays.asList(photos));
+                showManyPicture(photoList.get(0),photoList,0);
                 popupWindow.dismiss();
             }
 
@@ -165,7 +175,7 @@ public class DailyService_manage extends BaseFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                showPopueWindow(position);
+                showPopueWindow(position);
             }
         });
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {

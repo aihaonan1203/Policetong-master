@@ -72,7 +72,7 @@ public class PassCardPhotoActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                showPicture("https://pic.jjedd.net:9000/"+mAdapter.getData().get(position).getImage(),null,0);
+                showPicture(mAdapter.getData().get(position).getImage(),null,0);
             }
         });
     }
@@ -103,7 +103,7 @@ public class PassCardPhotoActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                showPicture("https://pic.jjedd.net:9000/"+mAdapter.getData().get(position).getImage(),null,0);
+                showPicture(mAdapter.getData().get(position).getImage(),null,0);
             }
         });
     }
